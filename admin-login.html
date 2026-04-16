@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin Login — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    /* Login page specific — centred floating card */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 16px 40px;
+      background: var(--bg);
+    }
+
+    .login-card {
+      background: var(--bg);
+      border: 1px solid rgba(30,100,65,0.14);
+      border-radius: 24px;
+      padding: 52px 48px 44px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .login-logo {
+      text-align: center;
+      font-size: 32px;
+      color: var(--accent);
+      opacity: 0.5;
+    }
+
+    .login-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .login-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .login-input-wrap input {
+      padding: 13px 18px;
+      border: 1.5px solid rgba(30,100,65,0.2);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Raleway', sans-serif;
+      font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .login-input-wrap input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(30,100,65,0.1);
+    }
+    .login-input-wrap input::placeholder { color: var(--muted); }
+
+    .login-error {
+      font-size: 13px;
+      color: var(--danger);
+      min-height: 18px;
+      text-align: center;
+    }
+
+    .login-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Simple header — same look, no nav -->
+  <header class="site-header" style="display:flex; justify-content:space-between; align-items:center; padding:0 20px;">
+    <div class="brand"><a href="index.html" style="color:#fff;text-decoration:none;font-weight:bold;font-size:20px;">Tranquility.com</a></div>
+    <div style="display:flex;justify-content:center;">
+      <div class="logo-placeholder" style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);display:grid;place-items:center;font-size:18px;color:#fff;">✦</div>
+    </div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="login-page">
+    <div class="login-card">
+
+      <div class="login-logo">✦</div>
+
+      <div class="login-fields">
+        <div class="login-input-wrap">
+          <input type="text" id="adminId" placeholder="ID" autocomplete="off" />
+        </div>
+        <div class="login-input-wrap">
+          <input type="password" id="adminPassword" placeholder="Password" autocomplete="off" />
+        </div>
+      </div>
+
+      <p class="login-error" id="loginError"></p>
+
+      <div class="login-actions">
+        <a href="index.html" class="btn btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </a>
+        <button class="btn btn-primary" onclick="attemptLogin()">
+          Next
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty footer -->
+  <footer style="height:1px;"></footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    // Allow Enter key to submit
+    document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') attemptLogin();
+    });
+
+    function attemptLogin() {
+      const id  = document.getElementById('adminId').value.trim();
+      const pw  = document.getElementById('adminPassword').value.trim();
+      const err = document.getElementById('loginError');
+
+      if (!id || !pw) {
+        err.textContent = 'Please fill in both fields.';
+        return;
+      }
+
+      err.textContent = '';
+
+      /*
+       * BACKEND NOTE:
+       * Replace this fetch with your actual authentication servlet.
+       *
+       * fetch('AdminLoginServlet', {
+       *   method: 'POST',
+       *   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+       *   body: `adminId=${encodeURIComponent(id)}&password=${encodeURIComponent(pw)}`
+       * })
+       * .then(r => r.json())
+       * .then(data => {
+       *   if (data.success) {
+       *     sessionStorage.setItem('adminLoggedIn', 'true');
+       *     sessionStorage.setItem('adminId', id);
+       *     window.location.href = 'admin-main.html';
+       *   } else {
+       *     err.textContent = data.message || 'Invalid credentials.';
+       *   }
+       * });
+       *
+       * TEMPORARY — remove when backend is ready:
+       */
+      if (id === 'admin' && pw === 'tranquility123') {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        sessionStorage.setItem('adminId', id);
+        window.location.href = 'admin-main.html';
+      } else {
+        err.textContent = 'Invalid ID or password.';
+      }
+    }
+  </script>
+</body>
+</html>

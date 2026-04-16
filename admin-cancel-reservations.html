@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cancel Reservation — Tranquility Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    .step-indicator {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(30,100,65,0.15);
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+    .step.active { background: var(--danger); color: #fff; }
+
+    .reason-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1.5px solid rgba(30,100,65,0.15);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    .reason-option:hover { border-color: var(--accent); }
+    .reason-option input[type="radio"] { accent-color: var(--accent); }
+    .reason-option.selected { border-color: var(--accent); background: var(--soft-green); }
+
+    .cancel-warning {
+      background: rgba(192,57,43,0.06);
+      border: 1.5px solid rgba(192,57,43,0.2);
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-size: 14px;
+      color: var(--danger);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <span class="admin-brand">Tranquility.com</span>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="admin-page">
+
+    <div class="admin-banner" style="background:linear-gradient(135deg,#1a0a0a 0%,#8b2020 100%);">
+      <div class="banner-badge">🚫</div>
+      <h1>Cancel Reservation</h1>
+    </div>
+
+    <div class="admin-content">
+
+      <div class="step-indicator">
+        <div class="step active" id="step1-ind">1. Verify Guest</div>
+        <div class="step" id="step2-ind">2. Review</div>
+        <div class="step" id="step3-ind">3. Confirm</div>
+      </div>
+
+      <!-- STEP 1: VERIFY -->
+      <div id="step1">
+        <div class="admin-card">
+          <h3 style="font-size:20px;color:var(--accent);margin:0 0 6px;">Guest Verification</h3>
+          <p style="color:var(--muted);font-size:14px;margin:0 0 24px;">Verify the guest's identity before cancelling their reservation.</p>
+          <div class="admin-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Verification Method</label>
+                <select id="verifyMethod" onchange="toggleVerify()">
+                  <option value="email">Email</option>
+                  <option value="otp">OTP (Phone)</option>
+                </select>
+              </div>
+              <div class="form-group" id="emailWrap">
+                <label>Guest Email</label>
+                <input type="email" id="guestEmail" placeholder="guest@email.com" />
+              </div>
+              <div class="form-group" id="phoneWrap" style="display:none;">
+                <label>Guest Phone</label>
+                <input type="tel" id="guestPhone" placeholder="+1 555 0102" />
+              </div>
+            </div>
+            <div class="btn-row">
+              <a href="admin-main.html" class="back-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Back
+              </a>
+              <button class="btn btn-primary" onclick="verifyGuest()">Retrieve Reservation →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: REVIEW & REASON -->
+      <div id="step2" style="display:none;">
+        <div class="admin-card" style="margin-bottom:20px;">
+          <h3 style="font-size:18px;color:var(--accent);margin:0 0 20px;">Reservation Summary</h3>
+          <table class="detail-table">
+            <tr><th>Reservation ID</th><td id="c-resId">—</td></tr>
+            <tr><th>Room Number</th><td id="c-roomNum">—</td></tr>
+            <tr><th>Suite</th><td id="c-suite">—</td></tr>
+            <tr><th>Guest</th><td id="c-guest">—</td></tr>
+            <tr><th>Check-in</th><td id="c-checkin">—</td></tr>
+            <tr><th>Check-out</th><td id="c-checkout">—</td></tr>
+            <tr><th>Total Paid</th><td id="c-total">—</td></tr>
+            <tr><th>Refund (70%)</th><td id="c-refund" style="color:var(--success);font-weight:600;">—</td></tr>
+          </table>
+        </div>
+
+        <!-- REASON (optional) -->
+        <div class="admin-card" style="margin-bottom:20px;">
+          <h3 style="font-size:18px;color:var(--accent);margin:0 0 6px;">Reason for Cancellation</h3>
+          <p style="color:var(--muted);font-size:13px;margin:0 0 18px;">Optional — the guest may skip this.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;" id="reasonList">
+            <label class="reason-option"><input type="radio" name="reason" value="change-plans"> Change of plans</label>
+            <label class="reason-option"><input type="radio" name="reason" value="emergency"> Personal emergency</label>
+            <label class="reason-option"><input type="radio" name="reason" value="found-better"> Found alternative accommodation</label>
+            <label class="reason-option"><input type="radio" name="reason" value="health"> Health reasons</label>
+            <label class="reason-option"><input type="radio" name="reason" value="other"> Other</label>
+          </div>
+          <div class="form-group" style="margin-top:14px;">
+            <label>Additional Comments (optional)</label>
+            <textarea id="cancelComment" rows="2" placeholder="Any additional details..."></textarea>
+          </div>
+        </div>
+
+        <div class="cancel-warning">
+          ⚠️ A cancellation confirmation will be sent to the guest via their registered email or phone.
+          The guest must confirm with the provided code before the cancellation is processed.
+          <strong>70% of the total payment will be refunded.</strong>
+        </div>
+
+        <div class="btn-row" style="margin-top:20px;">
+          <button class="back-btn" onclick="backToStep1()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back — log out guest
+          </button>
+          <button class="btn btn-danger" onclick="sendCancelCode()">Send Cancellation Code →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: ENTER CODE -->
+      <div id="step3" style="display:none;">
+        <div class="admin-card">
+          <h3 style="font-size:20px;color:var(--danger);margin:0 0 8px;">Guest Confirmation Required</h3>
+          <p style="color:var(--muted);font-size:14px;margin:0 0 24px;">A cancellation code has been sent to the guest. Ask them to provide it below to proceed.</p>
+          <div class="form-group" style="max-width:260px;">
+            <label>Cancellation Code</label>
+            <input type="text" id="cancelCode" placeholder="6-digit code" maxlength="6" />
+          </div>
+          <p class="modal-warn" id="codeWarn" style="margin-top:8px;font-size:13px;color:var(--danger);"></p>
+          <div class="btn-row" style="margin-top:24px;">
+            <button class="back-btn" onclick="backToStep2()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Back
+            </button>
+            <button class="btn btn-danger" onclick="verifyCancelCode()">Cancel &amp; Refund →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty footer -->
+  <footer class="admin-footer-empty"></footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    if (!sessionStorage.getItem('adminLoggedIn')) window.location.href = 'admin-login.html';
+
+    let currentRes = null;
+    let sentCode   = null;
+
+    function toggleVerify() {
+      const m = document.getElementById('verifyMethod').value;
+      document.getElementById('emailWrap').style.display = m==='email' ? 'flex' : 'none';
+      document.getElementById('phoneWrap').style.display = m==='otp'   ? 'flex' : 'none';
+    }
+
+    function verifyGuest() {
+      /*
+       * BACKEND NOTE:
+       * fetch(`GetReservationServlet?...`).then(r=>r.json()).then(data => { currentRes=data; loadStep2(); });
+       */
+      // PLACEHOLDER
+      currentRes = {
+        reservationId: 'RES-001',
+        roomNumber:    'FRPA.A56.03',
+        suiteLabel:    'Executive Suite',
+        guestName:     'Emily Clarke',
+        guestEmail:    'emily@email.com',
+        checkin:       '2026-04-10',
+        checkout:      '2026-04-15',
+        totalPrice:    1755,
+      };
+      loadStep2();
+    }
+
+    function loadStep2() {
+      const refund = Math.round(currentRes.totalPrice * 0.7);
+      document.getElementById('c-resId').textContent   = currentRes.reservationId;
+      document.getElementById('c-roomNum').textContent = currentRes.roomNumber;
+      document.getElementById('c-suite').textContent   = currentRes.suiteLabel;
+      document.getElementById('c-guest').textContent   = currentRes.guestName + ' (' + currentRes.guestEmail + ')';
+      document.getElementById('c-checkin').textContent = currentRes.checkin;
+      document.getElementById('c-checkout').textContent= currentRes.checkout;
+      document.getElementById('c-total').textContent   = '$' + currentRes.totalPrice.toLocaleString();
+      document.getElementById('c-refund').textContent  = '$' + refund.toLocaleString();
+      setStep(2);
+    }
+
+    function sendCancelCode() {
+      /*
+       * BACKEND NOTE:
+       * fetch(`SendCancelCodeServlet`, { method:'POST', body:`resId=${currentRes.reservationId}` })
+       * The servlet generates a 6-digit code, stores it server-side, and sends to guest.
+       */
+      sentCode = '123456'; // PLACEHOLDER — real code sent by backend
+      showToast('Cancellation code sent to guest.', 'warn');
+      setStep(3);
+    }
+
+    function verifyCancelCode() {
+      const entered = document.getElementById('cancelCode').value.trim();
+      const warn    = document.getElementById('codeWarn');
+      if (!entered) { warn.textContent = 'Please enter the code.'; return; }
+
+      /*
+       * BACKEND NOTE:
+       * fetch(`VerifyCancelCodeServlet`, { method:'POST', body:`resId=${currentRes.reservationId}&code=${entered}` })
+       * .then(r=>r.json()).then(data => {
+       *   if (data.success) processCancel();
+       *   else warn.textContent = 'Incorrect code. Cancellation failed.';
+       * });
+       */
+      if (entered === sentCode) {
+        processCancel();
+      } else {
+        warn.textContent = 'Incorrect code. Cancellation failed.';
+        showToast('Cancellation failed — incorrect code.', 'error');
+      }
+    }
+
+    function processCancel() {
+      /*
+       * BACKEND NOTE:
+       * fetch(`ProcessCancelServlet`, { method:'POST', body:`resId=${currentRes.reservationId}` })
+       * Then redirect to refund page.
+       */
+      showToast('Reservation cancelled. Redirecting to refund...', 'success');
+      setTimeout(() => {
+        window.location.href = `refund.html?res=${currentRes.reservationId}&type=cancel`;
+      }, 1800);
+    }
+
+    function setStep(n) {
+      [1,2,3].forEach(i => {
+        document.getElementById(`step${i}`).style.display = i===n ? 'block' : 'none';
+        document.getElementById(`step${i}-ind`).classList.toggle('active', i===n);
+      });
+    }
+
+    function backToStep1() { setStep(1); currentRes = null; }
+    function backToStep2() { setStep(2); }
+
+    function showToast(msg, type='success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast toast-${type} show`;
+      setTimeout(() => t.classList.remove('show'), 3200);
+    }
+
+    // Style reason options on select
+    document.addEventListener('change', function(e) {
+      if (e.target.name === 'reason') {
+        document.querySelectorAll('.reason-option').forEach(el => el.classList.remove('selected'));
+        e.target.closest('.reason-option')?.classList.add('selected');
+      }
+    });
+  </script>
+</body>
+</html>

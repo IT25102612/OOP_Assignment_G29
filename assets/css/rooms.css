@@ -1,0 +1,513 @@
+/* ================================================================
+   rooms.css  —  styles for available-rooms.html
+   Import after style.css
+   ================================================================ */
+
+/* ---------------------------------------------------------------
+   FONTS + ROOT VARS (mirrors home.css)
+--------------------------------------------------------------- */
+body {
+  font-family: 'Raleway', sans-serif;
+}
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+:root {
+  --accent:       #1e6441;
+  --accent-light: #2d8a5e;
+  --soft-green:   #e8f3ed;
+  --ink:          #1a2a1e;
+  --muted:        #7a8c80;
+  --card-shadow:  0 8px 40px rgba(0,0,0,0.10);
+}
+.theme-dark {
+  --soft-green: #0f1f14;
+  --ink:        #d4e8da;
+  --muted:      #7aab8a;
+  --card-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+
+/* Header logo grid (same fix as home.css) */
+.site-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 20px;
+}
+.header-logo { display: flex; justify-content: center; align-items: center; }
+#themeToggle  { justify-self: end; }
+
+.logo-placeholder {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.4);
+  display: grid; place-items: center;
+  font-size: 18px; color: #fff;
+}
+
+/* ---------------------------------------------------------------
+   PAGE LAYOUT
+--------------------------------------------------------------- */
+.rooms-page {
+  padding-top: 56px; /* height of fixed header */
+  min-height: 100vh;
+}
+
+/* ---------------------------------------------------------------
+   FILTER PANEL
+--------------------------------------------------------------- */
+.filter-panel {
+  position: sticky;
+  top: 56px;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(30,100,65,0.12);
+  padding: 20px 32px 20px 24px;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+/* Filter grid: row 1 = 4 cols, row 2 = 4 cols (3 selects + date) */
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px 16px;
+  flex: 1;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-group label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.filter-group select,
+.filter-group input[type="date"] {
+  padding: 9px 14px;
+  border: 1.5px solid rgba(30,100,65,0.2);
+  border-radius: 999px;       /* pill shape */
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%231e6441' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-group select:focus,
+.filter-group input[type="date"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(30,100,65,0.1);
+}
+
+/* Date range: spans 1 column, two inputs side by side */
+.filter-dates {
+  grid-column: span 1;
+}
+
+.date-inputs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.date-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.date-wrap span {
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding-left: 12px;
+}
+
+.date-wrap input[type="date"] {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 12px;
+  padding: 8px 12px;
+  padding-right: 12px;
+  background-image: none;
+}
+
+/* ---------------------------------------------------------------
+   SEARCH FAB (circular magnifying glass button)
+--------------------------------------------------------------- */
+.search-fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(30,100,65,0.35);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  align-self: flex-end;
+  margin-bottom: 2px;
+}
+
+.search-fab:hover {
+  background: var(--accent-light);
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(30,100,65,0.45);
+}
+
+.search-fab:active {
+  transform: scale(0.96);
+}
+
+/* ---------------------------------------------------------------
+   RESULTS AREA
+--------------------------------------------------------------- */
+.results-area {
+  flex: 1;
+  padding: 48px 48px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  gap: 16px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 40px;
+  opacity: 0.3;
+}
+
+.empty-state p {
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.7;
+  max-width: 320px;
+}
+
+.suite-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ---------------------------------------------------------------
+   SUITE CARD
+--------------------------------------------------------------- */
+.suite-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(30,100,65,0.10);
+  display: flex;
+  min-height: 260px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+
+  /* Animate in */
+  opacity: 0;
+  transform: translateY(24px);
+  animation: cardReveal 0.5s ease forwards;
+}
+
+.suite-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 56px rgba(0,0,0,0.15);
+}
+
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered delays */
+.suite-card:nth-child(1) { animation-delay: 0.05s; }
+.suite-card:nth-child(2) { animation-delay: 0.12s; }
+.suite-card:nth-child(3) { animation-delay: 0.19s; }
+.suite-card:nth-child(4) { animation-delay: 0.26s; }
+.suite-card:nth-child(5) { animation-delay: 0.33s; }
+
+/* ---- Image collage (left 45%) ---- */
+.card-images {
+  flex: 0 0 45%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 3px;
+  background: #000;
+  min-height: 260px;
+}
+
+/* First image takes full left column */
+.card-img-main {
+  grid-row: span 2;
+  background: var(--soft-green);
+  overflow: hidden;
+}
+
+.card-img-main img,
+.card-img-small img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.suite-card:hover .card-img-main img,
+.suite-card:hover .card-img-small img {
+  transform: scale(1.04);
+}
+
+.card-img-small {
+  background: var(--soft-green);
+  overflow: hidden;
+}
+
+/* Placeholder tint when images missing */
+.card-img-main,
+.card-img-small {
+  position: relative;
+}
+.card-img-main::after,
+.card-img-small::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(30,100,65,0.06);
+  pointer-events: none;
+}
+
+/* ---- Text content (right 55%) ---- */
+.card-content {
+  flex: 1;
+  padding: 28px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Suite name badge — top left corner of card */
+.suite-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Tags row */
+.suite-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.suite-tag {
+  background: var(--soft-green);
+  color: var(--accent);
+  border: 1px solid rgba(30,100,65,0.18);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Brief description */
+.suite-desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--muted);
+  flex: 1;
+  margin: 0 0 16px;
+}
+
+/* Price — inline with title */
+.suite-price {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.price-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.price-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.price-nights {
+  font-size: 12px;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+/* ---------------------------------------------------------------
+   BACK BUTTON
+--------------------------------------------------------------- */
+.back-btn-wrap {
+  padding: 20px 48px 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border: 1.5px solid rgba(30,100,65,0.3);
+  border-radius: 999px;
+  color: var(--accent);
+  background: transparent;
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.back-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateX(-2px);
+}
+
+@media (max-width: 600px) {
+  .back-btn-wrap { padding: 16px 16px 0; }
+}
+
+/* ---------------------------------------------------------------
+   SLIM FOOTER
+--------------------------------------------------------------- */
+.site-footer-slim {
+  background: var(--soft-green);
+  border-top: 1px solid rgba(30,100,65,0.12);
+  padding: 40px 48px;
+  display: flex;
+  justify-content: center;
+}
+
+.site-footer-slim .footer-contact h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: var(--accent);
+  margin-bottom: 14px;
+  font-weight: 300;
+}
+
+.site-footer-slim .footer-contact ul {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.site-footer-slim .footer-contact li {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.site-footer-slim .footer-contact a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.site-footer-slim .footer-contact a:hover { text-decoration: underline; }
+
+/* ---------------------------------------------------------------
+   RESPONSIVE
+--------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .filter-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-fab {
+    align-self: center;
+    margin-top: 8px;
+  }
+  .suite-card {
+    flex-direction: column;
+  }
+  .card-images {
+    flex: none;
+    width: 100%;
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .filter-grid { grid-template-columns: 1fr; }
+  .results-area { padding: 24px 16px 60px; }
+  .card-content { padding: 20px 18px 60px; }
+  .suite-price { bottom: 16px; right: 18px; }
+}

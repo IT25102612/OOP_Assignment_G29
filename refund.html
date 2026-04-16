@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Refund — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/rooms.css">
+  <style>
+    body { font-family:'Raleway',sans-serif; background:var(--bg); color:var(--text); }
+    .refund-header { position:fixed;top:0;left:0;right:0;z-index:1000;background:#111a14;height:56px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 20px;box-shadow:0 2px 12px rgba(0,0,0,0.3); }
+    .refund-brand  { font-family:'Cormorant Garamond',serif;font-size:20px;color:rgba(255,255,255,0.7);letter-spacing:0.04em;user-select:none; }
+    .logo-placeholder { width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);display:grid;place-items:center;font-size:16px;color:#fff; }
+    #themeToggle { justify-self:end;background:transparent;border:none;cursor:pointer;color:#fff;font-size:20px; }
+
+    .refund-banner { margin-top:56px;height:100px;background:linear-gradient(135deg,#0d2010,#27ae60);display:flex;align-items:center;justify-content:center;gap:14px;position:relative;overflow:hidden; }
+    .refund-banner::before { content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 24px,rgba(255,255,255,0.025) 24px,rgba(255,255,255,0.025) 48px); }
+    .refund-banner h1 { color:#fff;font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,32px);letter-spacing:0.14em;text-transform:uppercase;margin:0;font-weight:300;position:relative;z-index:1; }
+    .banner-icon { font-size:24px;position:relative;z-index:1; }
+
+    .refund-page { min-height:100vh;display:flex;flex-direction:column; }
+    .refund-content { flex:1;padding:40px 48px 80px;max-width:700px;margin:0 auto;width:100%;box-sizing:border-box; }
+
+    /* Success card at top */
+    .success-card {
+      background:linear-gradient(135deg,#1e6441,#27ae60);
+      border-radius:20px;padding:32px;text-align:center;
+      color:#fff;margin-bottom:28px;
+    }
+    .success-icon { font-size:48px;margin-bottom:10px; }
+    .success-card h2 { font-family:'Cormorant Garamond',serif;font-size:28px;margin:0 0 6px;font-weight:300; }
+    .success-card p { font-size:14px;opacity:0.8;margin:0; }
+
+    /* Refund amount display */
+    .refund-amount-box {
+      background:var(--soft-green,#e8f3ed);
+      border:1px solid rgba(30,100,65,0.18);
+      border-radius:16px;padding:28px;text-align:center;
+      margin-bottom:24px;
+    }
+    .refund-amount-label { font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px; }
+    .refund-amount-value { font-family:'Cormorant Garamond',serif;font-size:52px;color:#27ae60;font-weight:300;line-height:1; }
+    .refund-amount-sub   { font-size:13px;color:var(--muted);margin-top:8px; }
+
+    /* Method selector */
+    .method-label { font-size:16px;font-weight:600;color:var(--text);margin:0 0 16px; }
+    .refund-methods { display:flex;flex-direction:column;gap:12px;margin-bottom:28px; }
+    .refund-method-btn {
+      width:100%;padding:16px 22px;border:2px solid rgba(30,100,65,0.15);
+      border-radius:14px;background:var(--bg);display:flex;align-items:center;gap:16px;
+      cursor:pointer;transition:all 0.2s;text-align:left;font-family:'Raleway',sans-serif;
+    }
+    .refund-method-btn:hover { border-color:var(--accent,#1e6441);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,0.07); }
+    .refund-method-btn.selected { border-color:#27ae60;background:#f0fdf4; }
+    .method-icon { font-size:26px;width:38px;text-align:center;flex-shrink:0; }
+    .method-name { font-size:15px;font-weight:600; }
+    .method-desc { font-size:12px;color:var(--muted);margin-top:2px; }
+
+    /* Processing time note */
+    .processing-note { font-size:13px;color:var(--muted);line-height:1.7;border-left:3px solid rgba(30,100,65,0.2);padding-left:14px;margin-bottom:28px; }
+
+    .btn { display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:999px;font-family:'Raleway',sans-serif;font-size:14px;font-weight:500;letter-spacing:0.06em;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none; }
+    .btn-success { background:#27ae60;color:#fff; }
+    .btn-success:hover { background:#219a52;transform:translateY(-1px); }
+    .btn-outline { background:transparent;border:1.5px solid rgba(30,100,65,0.3);color:var(--accent,#1e6441); }
+    .btn-outline:hover { background:var(--accent,#1e6441);color:#fff; }
+    .btn-row { display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap; }
+    .back-btn { display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border:1.5px solid rgba(30,100,65,0.3);border-radius:999px;color:var(--accent,#1e6441);background:transparent;font-family:'Raleway',sans-serif;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;transition:background 0.2s,color 0.2s; }
+    .back-btn:hover { background:var(--accent,#1e6441);color:#fff; }
+
+    .toast { position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);padding:12px 28px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.3s;z-index:5000;white-space:nowrap; }
+    .toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+    .toast-success { background:#27ae60;color:#fff; }
+    .toast-error   { background:#c0392b;color:#fff; }
+
+    /* Processing overlay */
+    .processing-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;pointer-events:none;transition:opacity 0.3s; }
+    .processing-overlay.show { opacity:1;pointer-events:auto; }
+    .spinner { width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,0.2);border-top-color:#fff;animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .processing-text { color:#fff;font-size:16px;letter-spacing:0.06em; }
+
+    @media(max-width:700px) { .refund-content{padding:24px 16px 60px;} }
+  </style>
+</head>
+<body>
+
+  <header class="refund-header">
+    <span class="refund-brand">Tranquility.com</span>
+    <div style="display:flex;justify-content:center;"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="refund-page">
+
+    <div class="refund-banner">
+      <span class="banner-icon">💚</span>
+      <h1 id="bannerTitle">Refund</h1>
+    </div>
+
+    <div class="refund-content">
+
+      <!-- SUCCESS CARD -->
+      <div class="success-card">
+        <div class="success-icon" id="successIcon">✅</div>
+        <h2 id="successTitle">Reservation Cancelled</h2>
+        <p id="successSub">Your cancellation has been processed. Your refund is ready to be issued.</p>
+      </div>
+
+      <!-- REFUND AMOUNT -->
+      <div class="refund-amount-box">
+        <div class="refund-amount-label">Refund Amount</div>
+        <div class="refund-amount-value" id="refundAmount">$0</div>
+        <div class="refund-amount-sub" id="refundCalcNote">70% of total payment</div>
+      </div>
+
+      <!-- CHOOSE METHOD -->
+      <p class="method-label">How would you like to receive your refund?</p>
+      <div class="refund-methods">
+        <button class="refund-method-btn" onclick="selectMethod(this,'paypal')">
+          <div class="method-icon">🅿️</div>
+          <div><div class="method-name">PayPal</div><div class="method-desc">Refunded to your PayPal account within 1–3 business days</div></div>
+        </button>
+        <button class="refund-method-btn" onclick="selectMethod(this,'applepay')">
+          <div class="method-icon">🍎</div>
+          <div><div class="method-name">Apple Pay</div><div class="method-desc">Refunded to your Apple Pay wallet within 1–5 business days</div></div>
+        </button>
+        <button class="refund-method-btn" onclick="selectMethod(this,'koko')">
+          <div class="method-icon">🪙</div>
+          <div><div class="method-name">Koko</div><div class="method-desc">Refunded to your Koko account within 2–4 business days</div></div>
+        </button>
+      </div>
+
+      <p class="processing-note">
+        Refunds typically arrive within the timeframe shown above. A confirmation will be sent to your registered
+        email or phone once the refund has been issued. Original fees incurred during your stay (if any) may be
+        deducted from the refund amount.
+      </p>
+
+      <div class="btn-row">
+        <a href="index.html" class="back-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Home
+        </a>
+        <button class="btn btn-success" onclick="submitRefund()">
+          Confirm Refund →
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Processing overlay -->
+  <div class="processing-overlay" id="processingOverlay">
+    <div class="spinner"></div>
+    <div class="processing-text">Processing refund…</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <footer style="height:1px;"></footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    const params   = new URLSearchParams(window.location.search);
+    const type     = params.get('type') || 'cancel'; // 'cancel' or 'update'
+    const allRes   = JSON.parse(sessionStorage.getItem('allReservations') || '[]');
+    const grand    = allRes.reduce((s,r)=>s+r.total,0);
+    let selectedMethod = null;
+
+    // Configure page based on type
+    if (type === 'cancel') {
+      const refund = Math.round(grand * 0.7);
+      document.getElementById('refundAmount').textContent    = '$' + refund.toLocaleString();
+      document.getElementById('refundCalcNote').textContent  = '70% of $' + grand.toLocaleString() + ' total paid';
+      document.getElementById('bannerTitle').textContent     = 'Refund';
+      document.getElementById('successTitle').textContent    = 'Reservation Cancelled';
+      document.getElementById('successSub').textContent      = 'Your cancellation has been processed. Your refund is ready to be issued.';
+    } else {
+      // Update flow — refund amount stored in sessionStorage
+      const updateRefund = parseFloat(sessionStorage.getItem('updateRefundAmount') || '0');
+      document.getElementById('refundAmount').textContent    = '$' + updateRefund.toLocaleString();
+      document.getElementById('refundCalcNote').textContent  = 'Difference from reservation update';
+      document.getElementById('bannerTitle').textContent     = 'Receive Refund';
+      document.getElementById('successTitle').textContent    = 'Reservation Updated';
+      document.getElementById('successSub').textContent      = 'Your reservation has been updated. A refund for the price difference is ready.';
+      document.getElementById('successIcon').textContent     = '✏️';
+    }
+
+    function selectMethod(btn, method) {
+      document.querySelectorAll('.refund-method-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedMethod = method;
+    }
+
+    function submitRefund() {
+      if (!selectedMethod) { showToast('Please select a refund method.','error'); return; }
+      const overlay = document.getElementById('processingOverlay');
+      overlay.classList.add('show');
+
+      /*
+       * BACKEND NOTE:
+       * fetch('ProcessRefundServlet', {
+       *   method: 'POST',
+       *   headers: { 'Content-Type': 'application/json' },
+       *   body: JSON.stringify({
+       *     type: type,
+       *     refundMethod: selectedMethod,
+       *     reservationIds: allRes.map(r => r.reservationId || 'RES-001'),
+       *     contact: sessionStorage.getItem('verifyContact'),
+       *   })
+       * })
+       * .then(r=>r.json())
+       * .then(data => {
+       *   overlay.classList.remove('show');
+       *   if (data.success) {
+       *     showToast('Refund issued! Check your ' + selectedMethod + ' account.','success');
+       *     setTimeout(() => window.location.href = 'index.html', 2500);
+       *   } else {
+       *     showToast('Refund failed. Please contact support.','error');
+       *   }
+       * });
+       */
+
+      // PLACEHOLDER
+      setTimeout(() => {
+        overlay.classList.remove('show');
+        showToast('Refund issued! Check your account shortly.','success');
+        setTimeout(() => window.location.href = 'index.html', 2500);
+      }, 2200);
+    }
+
+    function showToast(msg,type='success'){
+      const t=document.getElementById('toast');
+      t.textContent=msg; t.className=`toast toast-${type} show`;
+      setTimeout(()=>t.classList.remove('show'),3500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* Remove spacing */
+html, body { margin: 0; padding: 0; overflow-x: hidden; }
+
+/* Theme variables */
+:root {
+  --bg: #ffffff;
+  --text: #0f172a;
+  --header-bg: #1e6441;
+  --header-text: #ffffff;
+}
+.theme-dark {
+  --bg: #0b1220;
+  --text: #e2e8f0;
+  --header-bg: #1e6441;
+  --header-text: #eaf6ff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+}
+
+/* HEADER */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: var(--header-bg);
+  color: var(--header-text);
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.slim-footer {
+  background: var(--soft-green);
+  border-top: 1px solid rgba(30,100,65,0.12);
+  padding: 24px 48px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+.slim-footer a { 
+  color: var(--accent); 
+  text-decoration: none; 
+}
+
+.slim-footer a:hover { 
+  text-decoration: underline; 
+}
+
+.brand a {
+  color: var(--header-text);
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+/* THEME BUTTON (ICON ONLY) */
+#themeToggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--header-text);
+  font-size: 22px;
+}
+
+/* Push content below header */
+.page {
+  padding: 80px 16px;
+}
+
+/* ===== Hero Banner (Carousel) ===== */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 60vh;           /* taller banner */
+  min-height: 360px;      /* keep it big on small screens */
+  margin-top: 56px;       /* sits right under the fixed header (no visible gap) */
+  overflow: hidden;
+  background: #000;       /* fallback color while image loads */
+}
+
+.hero-slides, .hero-slide { position: absolute; inset: 0; }
+.hero-slides { isolation: isolate; }
+
+.hero-slide {
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+.hero-slide.is-active { opacity: 1; }
+
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* fill full width and height */
+  display: block;
+}
+
+/* Overlay text stays constant */
+.hero-overlay {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.35);   /* translucent bg for readability */
+  backdrop-filter: blur(2px);
+}
+.hero-overlay h2 {
+  margin: 0;
+  font-size: clamp(20px, 3vw + 8px, 40px);
+  letter-spacing: 0.5px;
+}
+
+/* Tiny translucent arrows */
+.hero-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px;
+  border: 0; border-radius: 999px;
+  background: rgba(255,255,255,0.35);
+  color: #000;
+  display: grid; place-items: center;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  backdrop-filter: blur(4px);
+  transition: background 150ms ease, transform 80ms ease;
+}
+.hero-arrow:hover { background: rgba(255,255,255,0.5); }
+.hero-arrow:active { transform: translateY(-50%) scale(0.98); }
+.hero-arrow.prev { left: 12px; }
+.hero-arrow.next { right: 12px; }
+
+/* Dark mode tweak for arrows */
+.theme-dark .hero-arrow {
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+}
+.theme-dark .hero-arrow:hover { background: rgba(0,0,0,0.5); }
+
+/* Make the content below not add extra top gap when banner exists */
+.hero-banner + .page { padding-top: 24px; }
+
+@media (max-width: 600px) {
+  .hero-banner { height: 44vh; min-height: 240px; }
+}

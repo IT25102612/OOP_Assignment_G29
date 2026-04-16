@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Available Rooms — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/rooms.css">
+</head>
+<body>
+
+  <!-- ===== HEADER (same on all pages) ===== -->
+  <header class="site-header">
+    <div class="brand">
+      <a href="index.html">Tranquility.com</a>
+    </div>
+    <div class="header-logo">
+      <div class="logo-placeholder">
+        <!-- Replace with: <img src="assets/images/logo.png" alt="Tranquility Logo" /> -->
+        <span>✦</span>
+      </div>
+    </div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <!-- ===== PAGE BODY ===== -->
+  <div class="rooms-page">
+
+    <!-- ===== STICKY FILTER BAR ===== -->
+    <aside class="filter-panel" id="filterPanel">
+      <div class="filter-grid">
+
+        <!-- ROW 1: 4 filters -->
+        <div class="filter-group">
+          <label for="f-country">Country</label>
+          <select id="f-country" onchange="updateCities()">
+            <option value="">Any</option>
+            <option>France</option>
+            <option>Spain</option>
+            <option>United States</option>
+            <option>Turkey</option>
+            <option>Italy</option>
+            <option>England</option>
+            <option>China</option>
+            <option>Japan</option>
+            <option>Thailand</option>
+            <option>Mexico</option>
+            <option>Brazil</option>
+            <option>Peru</option>
+            <option>Sri Lanka</option>
+            <option>Maldives</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="f-city">City</label>
+          <select id="f-city">
+            <option value="">Any</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="f-beds">Bedrooms</label>
+          <select id="f-beds">
+            <option value="">Any</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="f-baths">Bathrooms</label>
+          <select id="f-baths">
+            <option value="">Any</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+
+        <!-- ROW 2: 3 filters + date range -->
+        <div class="filter-group">
+          <label for="f-balcony">Balcony</label>
+          <select id="f-balcony">
+            <option value="">Any</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="f-joint">Joint Rooms</label>
+          <select id="f-joint">
+            <option value="">Any</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="f-pool">Private Pool</label>
+          <select id="f-pool">
+            <option value="">Any</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <!-- Date range -->
+        <div class="filter-group filter-dates">
+          <label>Dates of Stay</label>
+          <div class="date-inputs">
+            <div class="date-wrap">
+              <span>From</span>
+              <input type="date" id="f-checkin" />
+            </div>
+            <div class="date-wrap">
+              <span>To</span>
+              <input type="date" id="f-checkout" />
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end filter-grid -->
+
+      <!-- Circular search button -->
+      <button class="search-fab" id="searchBtn" aria-label="Search rooms" onclick="searchRooms()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+      </button>
+
+    </aside>
+    <!-- END FILTER PANEL -->
+
+    <!-- ===== RESULTS AREA ===== -->
+    <section class="results-area" id="resultsArea">
+
+      <!-- Empty state shown before any search -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">✦</div>
+        <p>Select your preferences above and press <span>&#x1F50D;</span> to discover your suite.</p>
+      </div>
+
+      <!-- Suite cards injected here by JS -->
+      <div class="suite-list" id="suiteList"></div>
+
+    </section>
+
+  </div>
+  <!-- END ROOMS PAGE -->
+
+  <!-- ===== BACK BUTTON (bottom left) ===== -->
+  <div class="back-btn-wrap">
+    <a href="index.html" class="back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back to Home
+    </a>
+  </div>
+
+  <!-- ===== FOOTER (contact details only on this page) ===== -->
+  <footer class="site-footer-slim">
+    <div class="footer-contact">
+      <h4>Contact Us</h4>
+      <ul>
+        <li>📧 <a href="mailto:hello@tranquility.com">hello@tranquility.com</a></li>
+        <li>📞 +1 (800) 872-6784</li>
+        <li>🕐 24/7 Guest Support</li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/rooms.js"></script>
+</body>
+</html>

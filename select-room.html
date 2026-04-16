@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Select Room — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/rooms.css">
+  <style>
+    /* ---- BANNER (3-image carousel, same style as city page) ---- */
+    .suite-banner {
+      margin-top: 56px;
+      height: 260px;
+      position: relative;
+      overflow: hidden;
+      background: #111;
+    }
+    .suite-banner-slides { display: flex; height: 100%; transition: transform 0.6s ease; }
+    .suite-banner-slide  { min-width: 100%; height: 100%; object-fit: cover; }
+    .suite-banner-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.55));
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 6px;
+    }
+    .suite-banner-overlay h1 {
+      color: #fff; font-size: clamp(22px,4vw,44px);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin: 0; font-weight: 300;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .suite-banner-overlay p {
+      color: rgba(255,255,255,0.75); font-size: 14px;
+      letter-spacing: 0.08em; margin: 0;
+    }
+    .banner-dots {
+      position: absolute; bottom: 14px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 6px;
+    }
+    .banner-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.4); border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .banner-dot.active { background: #fff; transform: scale(1.3); }
+
+    /* ---- FILTER INFO BAR ---- */
+    .filter-info-bar {
+      background: var(--soft-green);
+      border-bottom: 1px solid rgba(30,100,65,0.12);
+      padding: 14px 48px;
+      display: flex; gap: 20px; flex-wrap: wrap; align-items: center;
+    }
+    .filter-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg); border: 1.5px solid rgba(30,100,65,0.2);
+      border-radius: 999px; padding: 5px 14px;
+      font-size: 13px; color: var(--accent);
+    }
+    .filter-tag strong { color: var(--text); }
+
+    /* ---- BUILDING TABS ---- */
+    .building-tabs {
+      display: flex; gap: 0;
+      border-bottom: 2px solid rgba(30,100,65,0.12);
+      padding: 0 48px;
+      background: var(--bg);
+    }
+    .building-tab {
+      padding: 14px 28px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: var(--muted);
+      border: none; background: transparent;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .building-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ---- ROOM GRID ---- */
+    .room-grid-section { padding: 32px 48px 80px; }
+    .floor-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; color: var(--muted);
+      margin: 20px 0 8px;
+      letter-spacing: 0.06em;
+    }
+    .room-grid {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-top: 6px;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(30,100,65,0.3) transparent;
+    }
+    .room-cell {
+      flex-shrink: 0;
+      width: 72px; height: 52px;
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      user-select: none;
+      position: relative;
+    }
+    .room-cell .room-num  { font-size: 11px; font-weight: 700; }
+    .room-cell .room-type { font-size: 9px; opacity: 0.7; margin-top: 2px; }
+
+    /* available */
+    .room-cell.avail-A { background: #d4edda; color: #155724; }
+    .room-cell.avail-B { background: #cce5ff; color: #004085; }
+    .room-cell.avail-C { background: #fff3cd; color: #856404; }
+    .room-cell.avail-A:hover { transform: translateY(-2px); box-shadow: 0 0 0 2px #28a745; border-color: #28a745; }
+    .room-cell.avail-B:hover { transform: translateY(-2px); box-shadow: 0 0 0 2px #007bff; border-color: #007bff; }
+    .room-cell.avail-C:hover { transform: translateY(-2px); box-shadow: 0 0 0 2px #ffc107; border-color: #ffc107; }
+
+    /* booked */
+    .room-cell.booked {
+      background: rgba(0,0,0,0.06); color: rgba(0,0,0,0.3);
+      cursor: not-allowed;
+    }
+    .theme-dark .room-cell.booked { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.2); }
+
+    /* selected — colour matches building */
+    .room-cell.avail-A.selected {
+      border: 2px solid #28a745 !important;
+      outline: 2px solid #28a745 !important;
+      outline-offset: 1px !important;
+      box-shadow: 0 0 0 3px rgba(40,167,69,0.25) !important;
+      transform: translateY(-2px) !important;
+    }
+    .room-cell.avail-B.selected {
+      border: 2px solid #007bff !important;
+      outline: 2px solid #007bff !important;
+      outline-offset: 1px !important;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.25) !important;
+      transform: translateY(-2px) !important;
+    }
+    .room-cell.avail-C.selected {
+      border: 2px solid #ffc107 !important;
+      outline: 2px solid #ffc107 !important;
+      outline-offset: 1px !important;
+      box-shadow: 0 0 0 3px rgba(255,193,7,0.25) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    /* amenity floor */
+    .room-cell.amenity {
+      background: rgba(30,100,65,0.06); color: var(--muted);
+      cursor: default; font-style: italic;
+    }
+
+    /* ---- LEGEND ---- */
+    .legend {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      padding: 20px 48px 20px; align-items: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
+    .legend-dot  { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; }
+
+    /* ---- SELECTED ROOMS TRAY ---- */
+    .selection-tray {
+      position: sticky; bottom: 0; left: 0; right: 0;
+      background: var(--bg);
+      border-top: 1px solid rgba(30,100,65,0.15);
+      padding: 14px 48px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      z-index: 200;
+    }
+    .tray-chips { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+    .tray-chip  {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--soft-green); border: 1px solid rgba(30,100,65,0.2);
+      border-radius: 999px; padding: 5px 12px;
+      font-size: 12px; color: var(--accent);
+    }
+    .tray-chip button {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 14px; line-height: 1;
+      padding: 0; transition: color 0.15s;
+    }
+    .tray-chip button:hover { color: var(--danger); }
+    .tray-empty { color: var(--muted); font-size: 14px; font-style: italic; }
+
+    /* ---- REVIEWS SECTION ---- */
+    .reviews-section {
+      padding: 40px 48px 60px;
+      border-top: 1px solid rgba(30,100,65,0.1);
+    }
+    .reviews-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300;
+      color: var(--accent); margin: 0 0 24px;
+    }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+      gap: 16px;
+    }
+    .review-card {
+      background: var(--bg);
+      border: 1px solid rgba(30,100,65,0.12);
+      border-radius: 14px; padding: 20px;
+      font-size: 14px; line-height: 1.7;
+    }
+    .review-name { font-weight: 600; color: var(--accent); margin-bottom: 2px; }
+    .review-loc  { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .review-reply {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(30,100,65,0.08);
+      font-size: 12px; color: var(--muted); font-style: italic;
+    }
+
+    /* ---- BOTTOM ACTIONS ---- */
+    .page-actions {
+      display: flex; justify-content: space-between;
+      padding: 0 48px 32px; align-items: center;
+    }
+    .back-btn-wrap { padding: 0; }
+
+    @media(max-width:700px) {
+      .filter-info-bar { padding: 12px 16px; }
+      .building-tabs   { padding: 0 12px; }
+      .room-grid-section { padding: 20px 16px 80px; }
+      .selection-tray  { padding: 12px 16px; }
+      .page-actions    { padding: 0 16px 24px; }
+      .reviews-section { padding: 24px 16px 40px; }
+      .legend          { padding: 0 16px 16px; }
+    }
+
+/* ---- BUTTONS ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 28px;
+      border-radius: 999px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-1px);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="brand"><a href="index.html">Tranquility.com</a></div>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <!-- SUITE BANNER (3-image carousel) -->
+  <div class="suite-banner">
+    <div class="suite-banner-slides" id="bannerSlides">
+      <img class="suite-banner-slide" src="assets/images/suites/suite-banner-1.jpg" alt="" onerror="this.style.display='none'" />
+      <img class="suite-banner-slide" src="assets/images/suites/suite-banner-2.jpg" alt="" onerror="this.style.display='none'" />
+      <img class="suite-banner-slide" src="assets/images/suites/suite-banner-3.jpg" alt="" onerror="this.style.display='none'" />
+    </div>
+    <div class="suite-banner-overlay">
+      <h1 id="suiteBannerTitle">Executive Suite</h1>
+      <p id="suiteBannerSub">Select your preferred room</p>
+    </div>
+    <div class="banner-dots">
+      <button class="banner-dot active" onclick="goSlide(0)"></button>
+      <button class="banner-dot" onclick="goSlide(1)"></button>
+      <button class="banner-dot" onclick="goSlide(2)"></button>
+    </div>
+  </div>
+
+  <!-- FILTER INFO BAR -->
+  <div class="filter-info-bar" id="filterInfoBar">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- BUILDING TABS -->
+  <div class="building-tabs">
+    <button class="building-tab active" onclick="switchBuilding('A')">Building A <span style="opacity:0.6;font-size:12px;">(80 floors)</span></button>
+    <button class="building-tab" onclick="switchBuilding('B')">Building B <span style="opacity:0.6;font-size:12px;">(60 floors)</span></button>
+    <button class="building-tab" onclick="switchBuilding('C')">Building C <span style="opacity:0.6;font-size:12px;">(40 floors)</span></button>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#d4edda;border:1px solid #28a745;"></div> Available (Bldg A)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#cce5ff;border:1px solid #007bff;"></div> Available (Bldg B)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fff3cd;border:1px solid #ffc107;"></div> Available (Bldg C)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(0,0,0,0.08);border:1px solid rgba(0,0,0,0.1);"></div> Booked</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(30,100,65,0.06);border:1px solid rgba(30,100,65,0.1);"></div> Amenity / Non-room floor</div>
+  </div>
+
+  <!-- ROOM GRID -->
+  <div class="room-grid-section" id="roomGridSection">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- SELECTED ROOMS TRAY -->
+  <div class="selection-tray">
+    <div id="trayChips" class="tray-chips">
+      <span class="tray-empty">No rooms selected yet</span>
+    </div>
+    <a href="#" id="nextBtn" class="btn btn-primary" onclick="proceedNext(event)">
+      Next →
+    </a>
+  </div>
+
+  <!-- REVIEWS SECTION -->
+  <div class="reviews-section">
+    <h2>What guests say about this suite</h2>
+    <div class="reviews-grid" id="reviewsGrid">
+      <!-- BACKEND: fetch(`ReviewServlet?suiteType=${suiteParam}`).then(r=>r.json()).then(renderReviews) -->
+      <!-- Placeholder reviews -->
+      <div class="review-card">
+        <div class="review-name">TravelerMK</div>
+        <div class="review-loc">📍 Osaka, Japan</div>
+        <p>"The suite exceeded every expectation. The view from floor 58 was breathtaking."</p>
+        <div class="review-reply">🏨 Hotel reply: Thank you for your kind words!</div>
+      </div>
+      <div class="review-card">
+        <div class="review-name">QuietWanderer</div>
+        <div class="review-loc">📍 Paris, France</div>
+        <p>"Exceptionally peaceful and well-appointed. Would return without hesitation."</p>
+        <div class="review-reply">🏨 Hotel reply: We look forward to welcoming you again.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ACTIONS -->
+  <div class="page-actions">
+    <a href="available-rooms.html" class="back-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+  </div>
+
+  <!-- SLIM FOOTER -->
+  <footer class="slim-footer">
+    <p>📞 +1 (800) TRANQUIL &nbsp;|&nbsp; ✉️ <a href="mailto:hello@tranquility.com">hello@tranquility.com</a></p>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/floor-plan.js"></script>
+  <script>
+    // ---- Read URL params ----
+    const params     = new URLSearchParams(window.location.search);
+    const suiteParam = params.get('suite') || 'executive';
+    const country    = decodeURIComponent(params.get('country') || '');
+    const city       = decodeURIComponent(params.get('city')    || '');
+    const checkin    = params.get('checkin') || '';
+    const checkout   = params.get('checkout')|| '';
+    const beds       = params.get('beds')    || '';
+    const baths      = params.get('baths')   || '';
+
+    const SUITE_LABELS = {
+      'presidential':'Presidential Suite','penthouse':'Penthouse Suite',
+      'executive':'Executive Suite','junior':'Junior Suite','family':'Family Suite',
+      'single-regular':'Single Regular','double-regular':'Double Regular','family-regular':'Family Regular',
+    };
+
+    // ---- Banner ----
+    document.getElementById('suiteBannerTitle').textContent = SUITE_LABELS[suiteParam] || suiteParam;
+    document.getElementById('suiteBannerSub').textContent   = city ? `${city}, ${country}` : 'Select your preferred room';
+
+    // ---- Filter info bar ----
+    const bar = document.getElementById('filterInfoBar');
+    const tags = [
+      country  && `<div class="filter-tag">🌍 <strong>${country}</strong></div>`,
+      city     && `<div class="filter-tag">🏙️ <strong>${city}</strong></div>`,
+      checkin  && `<div class="filter-tag">📅 <strong>${checkin} → ${checkout}</strong></div>`,
+      beds     && `<div class="filter-tag">🛏️ <strong>${beds} bed${beds>1?'s':''}</strong></div>`,
+      baths    && `<div class="filter-tag">🚿 <strong>${baths} bath${baths>1?'s':''}</strong></div>`,
+    ].filter(Boolean);
+    bar.innerHTML = tags.join('') || '<span style="color:var(--muted);font-size:14px;">Showing all available rooms for this suite</span>';
+
+    // ---- Banner carousel ----
+    let slide = 0;
+    function goSlide(n) {
+      slide = n;
+      document.getElementById('bannerSlides').style.transform = `translateX(-${n*100}%)`;
+      document.querySelectorAll('.banner-dot').forEach((d,i) => d.classList.toggle('active', i===n));
+    }
+    setInterval(() => goSlide((slide+1)%3), 4000);
+
+    // ---- Building tab logic ----
+    let currentBuilding = 'A';
+    let selectedRooms   = [];
+
+    function switchBuilding(b) {
+      currentBuilding = b;
+      document.querySelectorAll('.building-tab').forEach((t,i) => t.classList.toggle('active', ['A','B','C'][i]===b));
+      renderGrid(b);
+    }
+
+    // ---- Booked rooms (placeholder — replace with backend fetch) ----
+    // BACKEND: fetch(`GetRoomGridServlet?suite=${suiteParam}&city=${city}&checkin=${checkin}&checkout=${checkout}`)
+    //          .then(r=>r.json()).then(data => { bookedRooms = data.booked; renderGrid(currentBuilding); });
+    const bookedRooms = ['FRPA.A56.02', 'FRPA.A56.04', 'FRPA.B43.01', 'FRPA.C12.03']; // PLACEHOLDER
+
+    function renderGrid(building) {
+      const section = document.getElementById('roomGridSection');
+      section.innerHTML = '';
+      const plan = FLOOR_PLAN[`building${building}`];
+      if (!plan) return;
+
+      const allFloors = Object.keys({...plan.amenityFloors, ...plan.roomFloors})
+        .map(Number).sort((a,b) => b-a); // top floor first
+
+      allFloors.forEach(floor => {
+        const amenity  = plan.amenityFloors[floor];
+        const roomInfo = plan.roomFloors[floor];
+
+        const label = document.createElement('div');
+        label.className = 'floor-label';
+
+        if (amenity) {
+          label.textContent = `Floor ${floor} — ${amenity}`;
+          section.appendChild(label);
+          const grid = document.createElement('div');
+          grid.className = 'room-grid';
+          const cell = document.createElement('div');
+          cell.className = 'room-cell amenity';
+          cell.style.width = '220px';
+          cell.innerHTML = `<span class="room-num">${amenity}</span>`;
+          grid.appendChild(cell);
+          section.appendChild(grid);
+          return;
+        }
+
+        if (!roomInfo || roomInfo.roomsPerFloor === 0) return;
+
+        // Only show floors relevant to this suite type
+        const suiteMatch = roomInfo.suite === suiteParam ||
+          (roomInfo.suite === 'mixed' && (suiteParam === 'single-regular' || suiteParam === 'double-regular'));
+        if (!suiteMatch) return;
+
+        label.textContent = `Floor ${floor}`;
+        if (roomInfo.note) label.textContent += ` — ${roomInfo.note}`;
+        section.appendChild(label);
+
+        const grid = document.createElement('div');
+        grid.className = 'room-grid';
+
+        for (let r = 1; r <= roomInfo.roomsPerFloor; r++) {
+          const roomNum = buildRoomNumber(city||'XX', country||'XX', building, floor, r);
+          const isBooked = bookedRooms.includes(roomNum);
+          const isSelected = selectedRooms.some(s => s.roomNumber === roomNum);
+
+          const cell = document.createElement('div');
+          const colorClass = building === 'A' ? 'avail-A' : building === 'B' ? 'avail-B' : 'avail-C';
+          cell.className = `room-cell ${isBooked ? 'booked' : colorClass} ${isSelected ? 'selected' : ''}`;
+          cell.innerHTML = `<span class="room-num">${String(r).padStart(2,'0')}</span><span class="room-type">Fl.${floor}</span>`;
+          cell.dataset.roomNum = roomNum;
+          cell.dataset.floor   = floor;
+          cell.dataset.bldg    = building;
+
+          if (!isBooked) {
+            cell.onclick = () => toggleRoom(cell, roomNum, building, floor, r);
+            cell.title = roomNum;
+          } else {
+            cell.title = 'Already booked for selected dates';
+          }
+          grid.appendChild(cell);
+        }
+        section.appendChild(grid);
+      });
+
+      if (!section.children.length) {
+        section.innerHTML = '<p style="color:var(--muted);padding:20px;">No rooms of this suite type in Building ' + building + '.</p>';
+      }
+    }
+
+    function toggleRoom(cell, roomNum, bldg, floor, num) {
+      const idx = selectedRooms.findIndex(s => s.roomNumber === roomNum);
+      if (idx >= 0) {
+        selectedRooms.splice(idx, 1);
+        cell.classList.remove('selected');
+      } else {
+        selectedRooms.push({ roomNumber: roomNum, building: bldg, floor, roomNum: num });
+        cell.classList.add('selected');
+      }
+      updateTray();
+    }
+
+    function updateTray() {
+      const tray = document.getElementById('trayChips');
+      if (!selectedRooms.length) {
+        tray.innerHTML = '<span class="tray-empty">No rooms selected yet</span>';
+        return;
+      }
+      tray.innerHTML = selectedRooms.map((r,i) => `
+        <div class="tray-chip">
+          ${r.roomNumber}
+          <button onclick="removeRoom(${i})" title="Remove">✕</button>
+        </div>`).join('');
+    }
+
+    function removeRoom(i) {
+      const num = selectedRooms[i].roomNumber;
+      selectedRooms.splice(i, 1);
+      // deselect the cell visually
+      document.querySelectorAll('.room-cell').forEach(c => {
+        if (c.dataset.roomNum === num) c.classList.remove('selected');
+      });
+      updateTray();
+    }
+
+    function proceedNext(e) {
+      e.preventDefault();
+      if (!selectedRooms.length) {
+        alert('Please select at least one room to continue.');
+        return;
+      }
+      // Pass selected rooms to meal options page
+      sessionStorage.setItem('selectedRooms', JSON.stringify(selectedRooms));
+      sessionStorage.setItem('bookingParams', JSON.stringify({ suite: suiteParam, country, city, checkin, checkout }));
+      window.location.href = 'meal-options.html';
+    }
+
+    // Init
+    renderGrid('A');
+  </script>
+</body>
+</html>

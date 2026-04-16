@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Room Detail — Tranquility Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+  <header class="admin-header">
+    <span class="admin-brand">Tranquility.com</span>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="admin-page">
+
+    <div class="admin-banner">
+      <div class="banner-badge">🛏️</div>
+      <h1 id="bannerRoomNum">Room Detail</h1>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- RESERVATION DETAILS CARD -->
+      <div class="admin-card" style="margin-bottom:24px;">
+        <h3 style="font-size:18px;color:var(--accent);margin:0 0 20px;">Reservation Details</h3>
+        <table class="detail-table" id="resDetailTable">
+          <tr><th>Reservation ID</th><td id="d-resId">—</td></tr>
+          <tr><th>Room Number</th><td id="d-roomNum">—</td></tr>
+          <tr><th>Suite Type</th><td id="d-suite">—</td></tr>
+          <tr><th>Building</th><td id="d-building">—</td></tr>
+          <tr><th>Floor</th><td id="d-floor">—</td></tr>
+          <tr><th>Location</th><td id="d-location">—</td></tr>
+          <tr><th>Check-in</th><td id="d-checkin">—</td></tr>
+          <tr><th>Check-out</th><td id="d-checkout">—</td></tr>
+          <tr><th>Nights</th><td id="d-nights">—</td></tr>
+          <tr><th>Status</th><td id="d-status">—</td></tr>
+        </table>
+      </div>
+
+      <!-- GUEST DETAILS CARD -->
+      <div class="admin-card" style="margin-bottom:24px;">
+        <h3 style="font-size:18px;color:var(--accent);margin:0 0 20px;">Guest Details</h3>
+        <table class="detail-table">
+          <tr><th>Full Name</th><td id="d-guestName">—</td></tr>
+          <tr><th>Email</th><td id="d-guestEmail">—</td></tr>
+          <tr><th>Phone</th><td id="d-guestPhone">—</td></tr>
+          <tr><th>Verification Method</th><td id="d-verifyMethod">—</td></tr>
+        </table>
+      </div>
+
+      <!-- PAYMENT & CHARGES CARD -->
+      <div class="admin-card">
+        <h3 style="font-size:18px;color:var(--accent);margin:0 0 20px;">Payment & Additional Charges</h3>
+        <div class="payment-box">
+          <div class="payment-row">
+            <span class="label">Room Rate</span>
+            <span class="amount" id="d-roomRate">—</span>
+          </div>
+          <div class="payment-row">
+            <span class="label">Nights</span>
+            <span class="amount" id="d-nightsCalc">—</span>
+          </div>
+          <div class="payment-row">
+            <span class="label">Base Total</span>
+            <span class="amount" id="d-baseTotal">—</span>
+          </div>
+          <div class="payment-row">
+            <span class="label">Room Service</span>
+            <span class="amount" id="d-roomService">$0.00</span>
+          </div>
+          <div class="payment-row">
+            <span class="label">Additional Charges</span>
+            <span class="amount" id="d-additional">$0.00</span>
+          </div>
+          <div class="payment-row">
+            <span class="label"><strong>Total</strong></span>
+            <span class="amount" id="d-total" style="font-size:22px;">—</span>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px;">
+          * Additional charges (room service, minibar, spa, etc.) will be calculated and updated after the guest's stay is completed.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div class="back-btn-wrap">
+      <a href="#" id="backBtn" class="back-btn" onclick="goBack()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Reservations
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Empty footer -->
+  <footer class="admin-footer-empty"></footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    if (!sessionStorage.getItem('adminLoggedIn')) window.location.href = 'admin-login.html';
+
+    function goBack() {
+      history.back();
+    }
+
+    // Parse reservation ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const resId  = params.get('res');
+
+    /*
+     * BACKEND NOTE:
+     * fetch(`RoomDetailServlet?reservationId=${resId}`)
+     * .then(r => r.json()).then(data => populate(data));
+     *
+     * Expected object:
+     * { reservationId, roomNumber, suiteType, building, floor, city, country,
+     *   checkin, checkout, status, guestName, guestEmail, guestPhone,
+     *   verifyMethod, pricePerNight, totalPrice, roomService, additionalCharges }
+     */
+
+    // PLACEHOLDER — remove when backend ready
+    const PLACEHOLDER_DETAIL = {
+      reservationId: resId || 'RES-001',
+      roomNumber:    'FRPA.A56.03',
+      suiteType:     'Executive Suite',
+      building:      'A',
+      floor:         56,
+      city:          'Paris',
+      country:       'France',
+      checkin:       '2026-04-10',
+      checkout:      '2026-04-15',
+      status:        'Confirmed',
+      guestName:     'Emily Clarke',
+      guestEmail:    'emily@email.com',
+      guestPhone:    '+1 555 0102',
+      verifyMethod:  'Email',
+      pricePerNight: 351,
+      totalPrice:    1755,
+      roomService:   0,
+      additionalCharges: 0,
+    };
+
+    function populate(d) {
+      document.getElementById('bannerRoomNum').textContent = 'Room ' + d.roomNumber;
+      document.getElementById('d-resId').textContent       = d.reservationId;
+      document.getElementById('d-roomNum').textContent     = d.roomNumber;
+      document.getElementById('d-suite').textContent       = d.suiteType;
+      document.getElementById('d-building').textContent    = 'Building ' + d.building;
+      document.getElementById('d-floor').textContent       = 'Floor ' + d.floor;
+      document.getElementById('d-location').textContent    = d.city + ', ' + d.country;
+      document.getElementById('d-checkin').textContent     = d.checkin;
+      document.getElementById('d-checkout').textContent    = d.checkout;
+      const nights = Math.round((new Date(d.checkout)-new Date(d.checkin))/(1000*60*60*24));
+      document.getElementById('d-nights').textContent      = nights + ' nights';
+      document.getElementById('d-status').textContent      = d.status;
+      document.getElementById('d-guestName').textContent   = d.guestName;
+      document.getElementById('d-guestEmail').textContent  = d.guestEmail;
+      document.getElementById('d-guestPhone').textContent  = d.guestPhone;
+      document.getElementById('d-verifyMethod').textContent= d.verifyMethod;
+      document.getElementById('d-roomRate').textContent    = '$' + d.pricePerNight.toLocaleString() + '/night';
+      document.getElementById('d-nightsCalc').textContent  = nights + ' × $' + d.pricePerNight.toLocaleString();
+      document.getElementById('d-baseTotal').textContent   = '$' + d.totalPrice.toLocaleString();
+      document.getElementById('d-roomService').textContent = '$' + d.roomService.toFixed(2);
+      document.getElementById('d-additional').textContent  = '$' + d.additionalCharges.toFixed(2);
+      const grand = d.totalPrice + d.roomService + d.additionalCharges;
+      document.getElementById('d-total').textContent = '$' + grand.toLocaleString();
+    }
+
+    populate(PLACEHOLDER_DETAIL);
+  </script>
+</body>
+</html>

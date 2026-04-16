@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Tranquility — City</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/city.css">
+</head>
+<body>
+
+  <!-- ===== HEADER (same on all pages) ===== -->
+  <header class="site-header">
+    <div class="brand">
+      <a href="index.html">Tranquility.com</a>
+    </div>
+    <div class="header-logo">
+      <div class="logo-placeholder">
+        <!-- <img src="assets/images/logo.png" alt="Tranquility Logo" /> -->
+        <span>✦</span>
+      </div>
+    </div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <!-- ===== CITY BANNER / CAROUSEL ===== -->
+  <section class="hero-banner city-banner" aria-label="City images">
+    <div class="hero-slides" id="citySlides">
+      <!-- Slides injected by JS -->
+    </div>
+    <div class="hero-overlay">
+      <h2 id="cityBannerName"><!-- City name injected by JS --></h2>
+      <p id="cityBannerCountry"><!-- Country injected by JS --></p>
+    </div>
+    <button class="hero-arrow prev" aria-label="Previous">‹</button>
+    <button class="hero-arrow next" aria-label="Next">›</button>
+  </section>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="page city-page">
+
+    <div class="city-content">
+
+      <!-- Intro paragraph -->
+      <section class="city-intro">
+        <p id="cityIntro"><!-- Injected by JS --></p>
+      </section>
+
+      <div class="city-divider"><span>✦</span></div>
+
+      <!-- Things to do list -->
+      <section class="city-things">
+        <h2 class="city-section-title">Things to Do</h2>
+        <ul id="cityThings">
+          <!-- Injected by JS -->
+        </ul>
+      </section>
+
+      <!-- Concluding CTA line -->
+      <div class="city-cta-line">
+        <p>Ready to experience <span id="cityCtaName"></span> in true comfort?
+        Head back to the home page and use the <strong>View Available Rooms</strong>
+        button to find and book your perfect suite at Hotel Tranquility.</p>
+      </div>
+
+    </div>
+
+    <!-- Back button -->
+    <div class="back-btn-wrap">
+      <a href="#" id="backBtn" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back to Home
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ===== FOOTER (contact only — no admin button on this page) ===== -->
+  <footer class="site-footer-slim">
+    <div class="footer-contact">
+      <h4>Contact Us</h4>
+      <ul>
+        <li>📧 <a href="mailto:hello@tranquility.com">hello@tranquility.com</a></li>
+        <li>📞 +1 (800) 872-6784</li>
+        <li>🕐 24/7 Guest Support</li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/city-data.js"></script>
+  <script src="assets/js/city.js"></script>
+</body>
+</html>

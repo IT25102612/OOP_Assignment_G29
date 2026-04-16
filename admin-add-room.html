@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Add Room — Tranquility Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    .room-block {
+      border: 1.5px solid rgba(30,100,65,0.15);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      background: var(--bg);
+      margin-bottom: 20px;
+    }
+    .room-block-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--accent);
+      margin: 0 0 20px;
+      font-weight: 300;
+    }
+    .remove-room-btn {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: rgba(192,57,43,0.1);
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      display: grid; place-items: center;
+      cursor: pointer;
+      color: var(--danger);
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+    .remove-room-btn:hover { background: var(--danger); color: #fff; }
+
+    .add-another-btn {
+      width: 100%;
+      padding: 16px;
+      border: 2px dashed rgba(30,100,65,0.25);
+      border-radius: 14px;
+      background: transparent;
+      color: var(--accent);
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .add-another-btn:hover {
+      background: var(--soft-green);
+      border-color: var(--accent);
+    }
+
+    .auto-tag {
+      display: inline-block;
+      background: var(--soft-green);
+      color: var(--accent);
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
+      border: 1px solid rgba(30,100,65,0.2);
+    }
+
+    #roomsContainer { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- ADMIN HEADER -->
+  <header class="admin-header">
+    <span class="admin-brand">Tranquility.com</span>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="admin-page">
+
+    <!-- BANNER -->
+    <div class="admin-banner">
+      <div class="banner-badge" style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);font-size:22px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;">＋</div>
+      <h1>Add Room</h1>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- LOCATION (applies to all rooms being added) -->
+      <div class="admin-card" style="margin-bottom:24px;">
+        <h3 style="margin:0 0 20px;font-size:18px;color:var(--accent);">Location</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Country</label>
+            <select id="g-country" onchange="updateAddCities()">
+              <option value="">Select country</option>
+              <option>France</option><option>Spain</option><option>United States</option>
+              <option>Turkey</option><option>Italy</option><option>England</option>
+              <option>China</option><option>Japan</option><option>Thailand</option>
+              <option>Mexico</option><option>Brazil</option><option>Peru</option>
+              <option>Sri Lanka</option><option>Maldives</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <select id="g-city">
+              <option value="">Select city</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROOM BLOCKS -->
+      <div id="roomsContainer"></div>
+
+      <!-- ADD ANOTHER ROOM BUTTON -->
+      <button class="add-another-btn" onclick="addRoomBlock()">＋ Add Another Room</button>
+
+      <!-- BOTTOM ACTIONS -->
+      <div class="btn-row" style="margin-top:32px;">
+        <a href="admin-main.html" class="back-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </a>
+        <button class="btn btn-primary" onclick="openAuthModal()">
+          Add to System
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- AUTHENTICATION MODAL -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-box">
+      <h2 class="modal-title">Authentication Required</h2>
+      <p class="modal-subtitle">Enter the room addition password to proceed.</p>
+      <div class="form-group">
+        <label>Authentication Password</label>
+        <input type="password" id="authPassword" placeholder="Enter password" />
+      </div>
+      <p class="modal-warn" id="authWarn"></p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeAuthModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <button class="btn btn-primary" onclick="verifyAuth()">
+          Confirm
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ADMIN FOOTER -->
+  <footer class="admin-footer">
+    <div class="admin-footer-dept"><h5>Guest Services</h5><p><a href="mailto:guests@tranquility.com">guests@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>Reservations</h5><p><a href="mailto:reservations@tranquility.com">reservations@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>IT &amp; Systems</h5><p><a href="mailto:it@tranquility.com">it@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>Regional Manager</h5><p><a href="mailto:regional@tranquility.com">regional@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>Finance</h5><p><a href="mailto:finance@tranquility.com">finance@tranquility.com</a></p></div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/floor-plan.js"></script>
+  <script>
+    if (!sessionStorage.getItem('adminLoggedIn')) window.location.href = 'admin-login.html';
+
+    const CITY_MAP = {
+      'France':['Paris','Nice','Lyon'],'Spain':['Barcelona','Madrid','Seville','Valencia'],
+      'United States':['New York','Las Vegas','Orlando','Los Angeles'],
+      'Turkey':['Istanbul','Antalya'],'Italy':['Rome','Venice','Milan'],
+      'England':['London','Manchester'],'China':['Beijing','Shanghai'],
+      'Japan':['Tokyo','Osaka','Kyoto'],'Thailand':['Bangkok','Phuket','Chiang Mai'],
+      'Mexico':['Cancun','Mexico City'],'Brazil':['Rio de Janeiro','São Paulo'],
+      'Peru':['Lima','Cusco'],'Sri Lanka':['Colombo','Kandy','Galle'],
+      'Maldives':['North Malé Atoll','Baa Atoll'],
+    };
+
+    const SUITE_SPECS = {
+      'presidential': { beds:3, baths:3, balcony:'yes', pool:'yes', joint:'no', price:63600 },
+      'penthouse':    { beds:3, baths:2, balcony:'yes', pool:'no',  joint:'no', price:44200 },
+      'executive':    { beds:2, baths:1, balcony:'yes', pool:'no',  joint:'no', price:351   },
+      'junior':       { beds:1, baths:1, balcony:'no',  pool:'no',  joint:'no', price:420   },
+      'family':       { beds:2, baths:2, balcony:'no',  pool:'no',  joint:'yes',price:560   },
+      'single-regular':{ beds:1, baths:1, balcony:'no', pool:'no',  joint:'no', price:60    },
+      'double-regular':{ beds:2, baths:1, balcony:'no', pool:'no',  joint:'no', price:100   },
+      'family-regular':{ beds:2, baths:1, balcony:'no', pool:'no',  joint:'yes',price:120   },
+    };
+
+    let blockCount = 0;
+    let authAttempts = 0;
+    const MAX_AUTH_ATTEMPTS = 3;
+
+    function updateAddCities() {
+      const country = document.getElementById('g-country').value;
+      const sel = document.getElementById('g-city');
+      sel.innerHTML = '<option value="">Select city</option>';
+      (CITY_MAP[country] || []).forEach(c => {
+        const o = document.createElement('option');
+        o.value = o.textContent = c;
+        sel.appendChild(o);
+      });
+    }
+
+    function addRoomBlock() {
+      blockCount++;
+      const id = blockCount;
+      const div = document.createElement('div');
+      div.classList.add('room-block');
+      div.id = `room-block-${id}`;
+      div.innerHTML = `
+        <h4 class="room-block-title">Room ${id}</h4>
+        ${blockCount > 1 ? `<button class="remove-room-btn" onclick="removeBlock(${id})" title="Remove">✕</button>` : ''}
+        <div class="admin-form">
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Building</label>
+              <select id="r${id}-building" onchange="autoFloorSuite(${id})">
+                <option value="">Select</option>
+                <option value="A">Building A (80 floors)</option>
+                <option value="B">Building B (60 floors)</option>
+                <option value="C">Building C (40 floors)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Floor Number</label>
+              <input type="number" id="r${id}-floor" min="1" placeholder="e.g. 56" onchange="autoFloorSuite(${id})" />
+            </div>
+            <div class="form-group">
+              <label>Room Number on Floor</label>
+              <input type="number" id="r${id}-roomnum" min="1" placeholder="e.g. 03" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Suite Type <span id="r${id}-suitebadge" class="auto-tag" style="display:none;">Auto</span></label>
+              <select id="r${id}-suite" onchange="onSuiteChange(${id})">
+                <option value="">Select or auto-filled</option>
+                <option value="presidential">Presidential Suite</option>
+                <option value="penthouse">Penthouse Suite</option>
+                <option value="executive">Executive Suite</option>
+                <option value="junior">Junior Suite</option>
+                <option value="family">Family Suite</option>
+                <option value="single-regular">Single Regular</option>
+                <option value="double-regular">Double Regular</option>
+                <option value="family-regular">Family Regular</option>
+                <option value="custom">+ Add New Suite</option>
+              </select>
+            </div>
+            <div class="form-group" id="r${id}-customwrap" style="display:none;">
+              <label>New Suite Name</label>
+              <input type="text" id="r${id}-customname" placeholder="e.g. Garden Suite" />
+            </div>
+            <div class="form-group">
+              <label>Price Per Night (USD)</label>
+              <input type="number" id="r${id}-price" placeholder="e.g. 420" min="0" />
+            </div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Bedrooms</label>
+              <select id="r${id}-beds">
+                <option value="">–</option>
+                <option>1</option><option>2</option><option>3</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Bathrooms</label>
+              <select id="r${id}-baths">
+                <option value="">–</option>
+                <option>1</option><option>2</option><option>3</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Quantity (same spec)</label>
+              <input type="number" id="r${id}-qty" value="1" min="1" max="50" />
+            </div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Balcony</label>
+              <select id="r${id}-balcony">
+                <option value="">–</option>
+                <option value="yes">Yes</option><option value="no">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Private Pool</label>
+              <select id="r${id}-pool">
+                <option value="">–</option>
+                <option value="yes">Yes</option><option value="no">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Joint Rooms</label>
+              <select id="r${id}-joint">
+                <option value="">–</option>
+                <option value="yes">Yes</option><option value="no">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Generated Room Number Preview</label>
+            <input type="text" id="r${id}-preview" readonly placeholder="Will generate after fields filled" style="background:var(--soft-green);cursor:default;" />
+          </div>
+        </div>
+      `;
+      document.getElementById('roomsContainer').appendChild(div);
+    }
+
+    function removeBlock(id) {
+      document.getElementById(`room-block-${id}`)?.remove();
+    }
+
+    function autoFloorSuite(id) {
+      const building = document.getElementById(`r${id}-building`).value;
+      const floor    = parseInt(document.getElementById(`r${id}-floor`).value);
+      if (!building || !floor) return;
+
+      const info = getSuiteForFloor(building, floor);
+      const badge = document.getElementById(`r${id}-suitebadge`);
+
+      if (info && info.suite && info.suite !== 'mixed') {
+        document.getElementById(`r${id}-suite`).value = info.suite;
+        badge.style.display = 'inline-block';
+        onSuiteChange(id);
+      } else {
+        badge.style.display = 'none';
+      }
+      updatePreview(id);
+    }
+
+    function onSuiteChange(id) {
+      const suite = document.getElementById(`r${id}-suite`).value;
+      const customWrap = document.getElementById(`r${id}-customwrap`);
+      customWrap.style.display = suite === 'custom' ? 'flex' : 'none';
+
+      if (SUITE_SPECS[suite]) {
+        const s = SUITE_SPECS[suite];
+        document.getElementById(`r${id}-beds`).value   = s.beds;
+        document.getElementById(`r${id}-baths`).value  = s.baths;
+        document.getElementById(`r${id}-balcony`).value = s.balcony;
+        document.getElementById(`r${id}-pool`).value   = s.pool;
+        document.getElementById(`r${id}-joint`).value  = s.joint;
+        document.getElementById(`r${id}-price`).value  = s.price;
+      }
+      updatePreview(id);
+    }
+
+    function updatePreview(id) {
+      const country = document.getElementById('g-country').value;
+      const city    = document.getElementById('g-city').value;
+      const bld     = document.getElementById(`r${id}-building`).value;
+      const floor   = document.getElementById(`r${id}-floor`).value;
+      const roomnum = document.getElementById(`r${id}-roomnum`).value;
+      if (country && city && bld && floor && roomnum) {
+        document.getElementById(`r${id}-preview`).value =
+          buildRoomNumber(city, country, bld, parseInt(floor), parseInt(roomnum));
+      }
+    }
+
+    // Auth modal
+    function openAuthModal() {
+      if (authAttempts >= MAX_AUTH_ATTEMPTS) {
+        sessionStorage.setItem('addRoomDenied', 'true');
+        window.location.href = 'admin-main.html';
+        return;
+      }
+      document.getElementById('authPassword').value = '';
+      document.getElementById('authWarn').textContent = '';
+      const m = document.getElementById('authModal');
+      m.style.display = 'flex';
+      setTimeout(() => m.classList.add('open'), 10);
+    }
+
+    function closeAuthModal() {
+      const m = document.getElementById('authModal');
+      m.classList.remove('open');
+      setTimeout(() => m.style.display = 'none', 300);
+    }
+
+    function verifyAuth() {
+      const pw = document.getElementById('authPassword').value.trim();
+      const warn = document.getElementById('authWarn');
+
+      /*
+       * BACKEND NOTE:
+       * Replace with: fetch('VerifyRoomAuthServlet', { method:'POST', body: `password=${pw}` })
+       * Expected response: { success: true/false }
+       */
+      const CORRECT_PW = 'roomauth456'; // TEMPORARY — replace with servlet call
+
+      if (pw === CORRECT_PW) {
+        closeAuthModal();
+        submitRooms();
+      } else {
+        authAttempts++;
+        const remaining = MAX_AUTH_ATTEMPTS - authAttempts;
+        if (remaining <= 0) {
+          sessionStorage.setItem('addRoomDenied', 'true');
+          warn.textContent = 'Maximum attempts reached. Access denied.';
+          setTimeout(() => { closeAuthModal(); window.location.href = 'admin-main.html'; }, 1800);
+        } else {
+          warn.textContent = `Incorrect password. ${remaining} attempt${remaining===1?'':'s'} remaining.`;
+        }
+      }
+    }
+
+    function submitRooms() {
+      /*
+       * BACKEND NOTE:
+       * Collect all room blocks and POST to AddRoomServlet.
+       * Each room object: { country, city, building, floor, roomNumber, suiteType,
+       *   customSuiteName, beds, baths, balcony, privatePool, jointRooms,
+       *   pricePerNight, quantity }
+       */
+      showToast('Room(s) successfully added to the system.', 'success');
+      setTimeout(() => {
+        document.getElementById('roomsContainer').innerHTML = '';
+        blockCount = 0;
+        addRoomBlock();
+      }, 2000);
+    }
+
+    function showToast(msg, type='success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast toast-${type} show`;
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // Init
+    if (!sessionStorage.getItem('adminLoggedIn')) window.location.href = 'admin-login.html';
+    addRoomBlock();
+
+    // Live preview updates
+    document.addEventListener('input', function(e) {
+      const m = e.target.id?.match(/^r(\d+)-(floor|roomnum|building)$/);
+      if (m) updatePreview(parseInt(m[1]));
+    });
+    document.getElementById('g-city').addEventListener('change', () => {
+      for(let i=1;i<=blockCount;i++) updatePreview(i);
+    });
+  </script>
+</body>
+</html>

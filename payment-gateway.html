@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Payment — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/rooms.css">
+  <style>
+    .gw-page { padding-top: 56px; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg); padding: 80px 16px 40px; }
+    .gw-card {
+      background: var(--bg); border: 1px solid rgba(30,100,65,0.14);
+      border-radius: 24px; padding: 48px 44px 40px;
+      width: 100%; max-width: 500px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.10);
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .gw-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px; color: var(--accent); margin: 0; font-weight: 300; text-align: center;
+    }
+    .gw-amount {
+      text-align: center; font-family: 'Cormorant Garamond', serif;
+      font-size: 44px; color: var(--accent); font-weight: 300;
+    }
+    .gw-amount small { font-size: 18px; opacity: 0.6; }
+
+    .pay-methods { display: flex; flex-direction: column; gap: 12px; }
+    .pay-method-btn {
+      width: 100%; padding: 16px 24px;
+      border: 2px solid rgba(30,100,65,0.15);
+      border-radius: 14px; background: var(--bg);
+      display: flex; align-items: center; gap: 16px;
+      cursor: pointer; transition: all 0.2s;
+      text-align: left; font-family: 'Raleway', sans-serif;
+    }
+    .pay-method-btn:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
+    .pay-method-btn.selected { border-color: var(--accent); background: var(--soft-green); }
+    .pay-method-icon { font-size: 28px; width: 40px; text-align: center; flex-shrink: 0; }
+    .pay-method-name { font-size: 16px; font-weight: 600; }
+    .pay-method-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .gw-error { font-size: 13px; color: var(--danger); text-align: center; min-height: 18px; }
+    .gw-actions { display: flex; justify-content: space-between; gap: 12px; }
+
+    /* Processing overlay */
+    .processing-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px); z-index: 3000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 20px;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .processing-overlay.show { opacity: 1; pointer-events: auto; }
+    .processing-spinner {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.2);
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .processing-text { color: #fff; font-size: 16px; letter-spacing: 0.06em; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="brand"><a href="index.html">Tranquility.com</a></div>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="gw-page">
+    <div class="gw-card">
+      <h2 class="gw-title">Complete Payment</h2>
+
+      <div class="gw-amount">
+        <small>$</small><span id="displayAmount">—</span>
+      </div>
+
+      <div class="pay-methods">
+        <button class="pay-method-btn" onclick="selectPay(this,'paypal')">
+          <div class="pay-method-icon">🅿️</div>
+          <div>
+            <div class="pay-method-name">PayPal</div>
+            <div class="pay-method-desc">Pay securely with your PayPal account</div>
+          </div>
+        </button>
+        <button class="pay-method-btn" onclick="selectPay(this,'applepay')">
+          <div class="pay-method-icon">🍎</div>
+          <div>
+            <div class="pay-method-name">Apple Pay</div>
+            <div class="pay-method-desc">Fast and secure with Touch/Face ID</div>
+          </div>
+        </button>
+        <button class="pay-method-btn" onclick="selectPay(this,'koko')">
+          <div class="pay-method-icon">🪙</div>
+          <div>
+            <div class="pay-method-name">Koko</div>
+            <div class="pay-method-desc">Split your payment with Koko — pay later</div>
+          </div>
+        </button>
+      </div>
+
+      <p class="gw-error" id="gwError"></p>
+
+      <div class="gw-actions">
+        <a href="verify-identity.html" class="btn btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </a>
+        <button class="btn btn-primary" onclick="processPayment()">
+          Pay Now →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing overlay -->
+  <div class="processing-overlay" id="processingOverlay">
+    <div class="processing-spinner"></div>
+    <div class="processing-text">Processing payment…</div>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    let selectedMethod = null;
+
+    // Load grand total from session
+    const allRes = JSON.parse(sessionStorage.getItem('allReservations') || '[]');
+    const grand  = allRes.reduce((sum, r) => sum + r.total, 0);
+    document.getElementById('displayAmount').textContent = grand.toLocaleString();
+
+    function selectPay(btn, method) {
+      document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedMethod = method;
+      document.getElementById('gwError').textContent = '';
+    }
+
+    function processPayment() {
+      if (!selectedMethod) { document.getElementById('gwError').textContent = 'Please select a payment method.'; return; }
+
+      const overlay = document.getElementById('processingOverlay');
+      overlay.classList.add('show');
+
+      /*
+       * BACKEND NOTE:
+       * fetch('SubmitPaymentServlet', {
+       *   method: 'POST',
+       *   headers: { 'Content-Type': 'application/json' },
+       *   body: JSON.stringify({
+       *     reservations: allRes,
+       *     paymentMethod: selectedMethod,
+       *     verifyContact: sessionStorage.getItem('verifyContact'),
+       *     verifyMethod:  sessionStorage.getItem('verifyMethod'),
+       *     grandTotal: grand,
+       *   })
+       * })
+       * .then(r => r.json())
+       * .then(data => {
+       *   if (data.success) {
+       *     sessionStorage.setItem('confirmationData', JSON.stringify(data));
+       *     window.location.href = 'booking-confirmation.html';
+       *   } else {
+       *     overlay.classList.remove('show');
+       *     document.getElementById('gwError').textContent = data.message || 'Payment failed. Please try again.';
+       *   }
+       * });
+       *
+       * The servlet should:
+       * 1. Insert all reservations into the reservations table
+       * 2. Record payment method and mark status = 'paid'
+       * 3. Generate a confirmation email with QR code + booking details
+       * 4. Send email to verifyContact
+       * 5. Send SMS if verifyMethod = 'otp'
+       * 6. Return confirmationId + reservationIds
+       */
+
+      // PLACEHOLDER — simulate 2s processing
+      setTimeout(() => {
+        overlay.classList.remove('show');
+        sessionStorage.setItem('confirmationData', JSON.stringify({
+          confirmationId: 'TRQ-' + Math.random().toString(36).substr(2,8).toUpperCase(),
+          reservationIds: allRes.map((_,i) => 'RES-' + (100 + i)),
+          paymentMethod: selectedMethod,
+          grandTotal: grand,
+        }));
+        window.location.href = 'booking-confirmation.html';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

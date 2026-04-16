@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Tranquility.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="brand">
+      <a href="index.html">Tranquility.com</a>
+    </div>
+
+    <!-- LOGO IN CENTRE OF HEADER -->
+    <div class="header-logo">
+      <!-- Replace with your actual logo image -->
+      <div class="logo-placeholder" title="Tranquility Logo">
+        <!-- <img src="assets/images/logo.png" alt="Tranquility Logo" /> -->
+        <span>✦</span>
+      </div>
+    </div>
+
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <!-- ===== HERO BANNER / CAROUSEL ===== -->
+  <section class="hero-banner" aria-label="Featured images">
+    <div class="hero-slides">
+      <figure class="hero-slide is-active">
+        <img src="assets/images/slide1.jpg" alt="Slide 1" />
+      </figure>
+      <figure class="hero-slide">
+        <img src="assets/images/slide2.jpg" alt="Slide 2" />
+      </figure>
+      <figure class="hero-slide">
+        <img src="assets/images/slide3.jpg" alt="Slide 3" />
+      </figure>
+    </div>
+    <div class="hero-overlay">
+      <h2>Luxury made affordable</h2>
+    </div>
+    <button class="hero-arrow prev" aria-label="Previous">‹</button>
+    <button class="hero-arrow next" aria-label="Next">›</button>
+  </section>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="page">
+
+    <!-- WELCOME SECTION -->
+    <section class="welcome-section">
+      <div class="welcome-heading-row">
+        <h1 class="welcome-heading">Welcome to Hotel Tranquility</h1>
+        <a href="#rooms-cta" class="rooms-scroll-pill" onclick="document.getElementById('rooms-cta').scrollIntoView({behavior:'smooth'});return false;">
+          View Rooms
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+      </div>
+      <p class="welcome-intro">
+        Where the world's most breathtaking destinations meet unmatched comfort and care.
+        At Hotel Tranquility, we believe that luxury is not a privilege — it is a feeling.
+        From the misty mountains of Kyoto to the sun-drenched shores of the Maldives,
+        each of our properties is thoughtfully crafted to offer you peace, beauty, and a sense
+        of belonging. Whether you are travelling for leisure, romance, or simply to discover
+        something new, Tranquility is your home away from home.
+      </p>
+      <div class="welcome-divider">
+        <span>✦</span>
+      </div>
+    </section>
+
+    <!-- LOCATIONS SECTION -->
+    <section class="locations-section">
+      <h2 class="section-title">Our Destinations</h2>
+      <p class="section-subtitle">Discover where Tranquility awaits you</p>
+
+      <!-- FRANCE -->
+      <div class="location-row" id="loc-france">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/france.jpg" alt="France" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">France</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=paris">Paris</a></li>
+            <li><a href="city.html?city=nice">Nice</a></li>
+            <li><a href="city.html?city=lyon">Lyon</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SPAIN -->
+      <div class="location-row reverse" id="loc-spain">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/spain.jpg" alt="Spain" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Spain</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=barcelona">Barcelona</a></li>
+            <li><a href="city.html?city=madrid">Madrid</a></li>
+            <li><a href="city.html?city=seville">Seville</a></li>
+            <li><a href="city.html?city=valencia">Valencia</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- UNITED STATES -->
+      <div class="location-row" id="loc-united-states">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/usa.jpg" alt="United States" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">United States</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=new-york">New York</a></li>
+            <li><a href="city.html?city=las-vegas">Las Vegas</a></li>
+            <li><a href="city.html?city=orlando">Orlando</a></li>
+            <li><a href="city.html?city=los-angeles">Los Angeles</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- TURKEY -->
+      <div class="location-row reverse" id="loc-turkey">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/turkey.jpg" alt="Turkey" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Turkey</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=istanbul">Istanbul</a></li>
+            <li><a href="city.html?city=antalya">Antalya</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ITALY -->
+      <div class="location-row" id="loc-italy">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/italy.jpg" alt="Italy" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Italy</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=rome">Rome</a></li>
+            <li><a href="city.html?city=venice">Venice</a></li>
+            <li><a href="city.html?city=milan">Milan</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ENGLAND -->
+      <div class="location-row reverse" id="loc-england">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/england.jpg" alt="England" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">England</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=london">London</a></li>
+            <li><a href="city.html?city=manchester">Manchester</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHINA -->
+      <div class="location-row" id="loc-china">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/china.jpg" alt="China" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">China</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=beijing">Beijing</a></li>
+            <li><a href="city.html?city=shanghai">Shanghai</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- JAPAN -->
+      <div class="location-row reverse" id="loc-japan">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/japan.jpg" alt="Japan" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Japan</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=tokyo">Tokyo</a></li>
+            <li><a href="city.html?city=osaka">Osaka</a></li>
+            <li><a href="city.html?city=kyoto">Kyoto</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- THAILAND -->
+      <div class="location-row" id="loc-thailand">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/thailand.jpg" alt="Thailand" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Thailand</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=bangkok">Bangkok</a></li>
+            <li><a href="city.html?city=phuket">Phuket</a></li>
+            <li><a href="city.html?city=chiang-mai">Chiang Mai</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- MEXICO -->
+      <div class="location-row reverse" id="loc-mexico">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/mexico.jpg" alt="Mexico" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Mexico</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=cancun">Cancun</a></li>
+            <li><a href="city.html?city=mexico-city">Mexico City</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- BRAZIL -->
+      <div class="location-row" id="loc-brazil">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/brazil.jpg" alt="Brazil" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Brazil</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=rio-de-janeiro">Rio de Janeiro</a></li>
+            <li><a href="city.html?city=sao-paulo">São Paulo</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PERU -->
+      <div class="location-row reverse" id="loc-peru">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/peru.jpg" alt="Peru" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Peru</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=lima">Lima</a></li>
+            <li><a href="city.html?city=cusco">Cusco</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SRI LANKA -->
+      <div class="location-row" id="loc-sri-lanka">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/srilanka.jpg" alt="Sri Lanka" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Sri Lanka</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=colombo">Colombo</a></li>
+            <li><a href="city.html?city=kandy">Kandy</a></li>
+            <li><a href="city.html?city=galle">Galle</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- MALDIVES -->
+      <div class="location-row reverse" id="loc-maldives">
+        <div class="location-image-wrap">
+          <div class="location-img-placeholder">
+            <img src="assets/images/locations/maldives.jpg" alt="Maldives" onerror="this.parentElement.classList.add('no-img')" />
+          </div>
+        </div>
+        <div class="location-text">
+          <h3 class="location-country">Maldives</h3>
+          <ul class="location-cities">
+            <li><a href="city.html?city=north-male-atoll">North Malé Atoll</a></li>
+            <li><a href="city.html?city=baa-atoll">Baa Atoll</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </section>
+    <!-- END LOCATIONS -->
+
+    <!-- REVIEWS SECTION -->
+    <section class="reviews-section">
+      <h2 class="section-title">What Our Guests Say</h2>
+      <p class="section-subtitle">Voices from around the world</p>
+
+      <div class="reviews-carousel" id="reviewsCarousel">
+        <div class="reviews-track" id="reviewsTrack">
+          <!-- Reviews are loaded here dynamically from the backend -->
+          <!-- PLACEHOLDER CARDS (remove once backend is connected) -->
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-codename">WindWalker92</span>
+              <span class="review-location">Tokyo, Japan</span>
+            </div>
+            <p class="review-text">"Absolutely breathtaking. The room overlooked Mount Fuji and the staff were incredibly attentive. I will be back without question."</p>
+            <div class="review-reply">
+              <span class="reply-label">Hotel Tranquility</span>
+              <p>"Thank you so much for your kind words! We look forward to welcoming you back."</p>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-codename">SereneSophia</span>
+              <span class="review-location">Paris, France</span>
+            </div>
+            <p class="review-text">"The most peaceful stay I have ever had. The interiors were elegant, the breakfast divine, and the location perfect."</p>
+            <div class="review-reply">
+              <span class="reply-label">Hotel Tranquility</span>
+              <p>"Merci beaucoup! It was our pleasure. À bientôt!"</p>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-codename">TravellerMike</span>
+              <span class="review-location">Maldives</span>
+            </div>
+            <p class="review-text">"Crystal clear water, overwater bungalow, world-class service. Hotel Tranquility sets the gold standard."</p>
+            <div class="review-reply">
+              <span class="reply-label">Hotel Tranquility</span>
+              <p>"We are so glad the Maldives experience lived up to your expectations. See you soon!"</p>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-codename">LotusBloom</span>
+              <span class="review-location">Bangkok, Thailand</span>
+            </div>
+            <p class="review-text">"Tranquility truly lives up to its name. The spa treatments and the rooftop pool were absolutely magical."</p>
+            <div class="review-reply">
+              <span class="reply-label">Hotel Tranquility</span>
+              <p>"Your happiness is our greatest reward. We hope to see you again!"</p>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-codename">WandererJuan</span>
+              <span class="review-location">Barcelona, Spain</span>
+            </div>
+            <p class="review-text">"From the moment I checked in I felt at ease. The architecture, the food, the warmth of the team — extraordinary."</p>
+            <div class="review-reply">
+              <span class="reply-label">Hotel Tranquility</span>
+              <p>"¡Muchas gracias! Come back anytime — Barcelona will always be waiting."</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carousel controls -->
+        <button class="review-arrow rev-prev" aria-label="Previous review">‹</button>
+        <button class="review-arrow rev-next" aria-label="Next review">›</button>
+        <div class="review-dots" id="reviewDots"></div>
+      </div>
+    </section>
+    <!-- END REVIEWS -->
+
+    <!-- VIEW ROOMS BUTTON -->
+    <div class="cta-wrap" id="rooms-cta">
+      <a href="available-rooms.html" class="cta-btn">View Available Rooms</a>
+    </div>
+
+  </main>
+  <!-- END MAIN -->
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+
+    <!-- LEFT: Contact Us -->
+    <div class="footer-contact">
+      <h4>Contact Us</h4>
+      <ul>
+        <li>📧 <a href="/cdn-cgi/l/email-protection#d3bbb6bfbfbc93a7a1b2bda2a6babfbaa7aafdb0bcbe"><span class="__cf_email__" data-cfemail="6109040d0d0e211513000f1014080d0815184f020e0c">[email&#160;protected]</span></a></li>
+        <li>📞 +1 (800) 872-6784</li>
+        <li>🕐 24/7 Guest Support</li>
+      </ul>
+    </div>
+
+    <!-- MIDDLE: Leave a Review Form -->
+    <div class="footer-review">
+      <h4>Leave a Review</h4>
+      <form id="reviewForm" class="review-form" onsubmit="submitReview(event)">
+        <input
+          type="email"
+          id="reviewEmail"
+          name="email"
+          placeholder="Your email address"
+          required
+        />
+        <input
+          type="text"
+          id="reviewCodename"
+          name="codename"
+          placeholder="Your code name (displayed publicly)"
+          maxlength="30"
+          required
+        />
+        <input
+          type="text"
+          id="reviewLocation"
+          name="location"
+          placeholder="Location visited (e.g. Tokyo, Japan)"
+          required
+        />
+        <textarea
+          id="reviewText"
+          name="reviewText"
+          placeholder="Tell us about your stay..."
+          rows="3"
+          required
+        ></textarea>
+        <button type="submit" class="review-submit-btn">Submit Review</button>
+        <p id="reviewFeedback" class="review-feedback"></p>
+      </form>
+    </div>
+
+    <!-- RIGHT: Secret Admin Button (Logo) -->
+    <div class="footer-logo-wrap">
+      <!--
+        This logo image is a SECRET BUTTON that navigates to the admin login page.
+        Replace the placeholder below with your actual logo image.
+        Keep the href pointing to your admin login/verify page.
+      -->
+      <a href="admin-login.html" class="secret-admin-btn" title="">
+        <!-- Replace with: <img src="assets/images/logo.png" alt="" /> -->
+        <div class="logo-placeholder large">
+          <span>✦</span>
+        </div>
+      </a>
+      <p class="footer-tagline">Peace in every corner of the world.</p>
+    </div>
+  </footer>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/home.js"></script>
+</body>
+</html>

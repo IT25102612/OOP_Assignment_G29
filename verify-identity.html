@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Verify Identity — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/rooms.css">
+  <style>
+    .verify-page {
+      padding-top: 56px; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+    }
+    .verify-card {
+      background: var(--bg);
+      border: 1px solid rgba(30,100,65,0.14);
+      border-radius: 24px;
+      padding: 52px 48px 44px;
+      width: 100%; max-width: 460px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.1);
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .verify-icon { text-align: center; font-size: 40px; color: var(--accent); opacity: 0.6; }
+    .verify-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px; color: var(--accent);
+      margin: 0; text-align: center; font-weight: 300;
+    }
+    .verify-sub { font-size: 14px; color: var(--muted); text-align: center; margin: -14px 0 0; line-height: 1.7; }
+
+    /* Method chooser */
+    .method-tabs { display: flex; gap: 0; border-radius: 12px; overflow: hidden; border: 1.5px solid rgba(30,100,65,0.2); }
+    .method-tab {
+      flex: 1; padding: 12px; text-align: center;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.05em;
+      cursor: pointer; border: none; background: transparent;
+      color: var(--muted); transition: all 0.2s;
+      font-family: 'Raleway', sans-serif;
+    }
+    .method-tab.active { background: var(--accent); color: #fff; }
+
+    .verify-field { display: flex; flex-direction: column; gap: 6px; }
+    .verify-field label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .verify-field input {
+      padding: 13px 18px;
+      border: 1.5px solid rgba(30,100,65,0.2);
+      border-radius: 12px; background: var(--bg); color: var(--text);
+      font-family: 'Raleway', sans-serif; font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box; width: 100%;
+    }
+    .verify-field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(30,100,65,0.1); }
+    .verify-field input::placeholder { color: var(--muted); }
+
+    .otp-row { display: flex; gap: 10px; }
+    .otp-row input {
+      flex: 1; text-align: center;
+      font-size: 22px; font-weight: 700; letter-spacing: 0.1em;
+      padding: 12px 0;
+      border: 1.5px solid rgba(30,100,65,0.2);
+      border-radius: 12px; background: var(--bg); color: var(--text);
+    }
+    .otp-row input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(30,100,65,0.1); }
+
+    .send-btn {
+      background: transparent; border: 1.5px solid rgba(30,100,65,0.25);
+      border-radius: 999px; padding: 9px 20px;
+      font-family: 'Raleway', sans-serif; font-size: 13px;
+      color: var(--accent); cursor: pointer; transition: all 0.2s;
+      align-self: flex-start;
+    }
+    .send-btn:hover { background: var(--accent); color: #fff; }
+
+    .verify-error { font-size: 13px; color: var(--danger); min-height: 18px; text-align: center; }
+    .verify-actions { display: flex; justify-content: space-between; gap: 12px; }
+
+    /* Step panels */
+    .step-panel { display: none; flex-direction: column; gap: 16px; }
+    .step-panel.active { display: flex; }
+
+    @media(max-width:500px) {
+      .verify-card { padding: 36px 20px 32px; }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 28px;
+      border-radius: 999px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid rgba(30,100,65,0.3);
+      color: var(--accent);
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border: 1.5px solid rgba(30,100,65,0.3);
+      border-radius: 999px;
+      color: var(--accent);
+      background: transparent;
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+    .back-btn:hover { background: var(--accent); color: #fff; transform: translateX(-2px); }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="brand"><a href="index.html">Tranquility.com</a></div>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="verify-page">
+    <div class="verify-card">
+
+      <div class="verify-icon">🔐</div>
+      <h2 class="verify-title">Verify Identity</h2>
+      <p class="verify-sub">Choose how you'd like to receive your verification code before payment.</p>
+
+      <!-- METHOD TABS -->
+      <div class="method-tabs">
+        <button class="method-tab active" onclick="switchMethod('email')">📧 Email</button>
+        <button class="method-tab" onclick="switchMethod('otp')">📱 SMS / OTP</button>
+      </div>
+
+      <!-- EMAIL STEP 1: enter email -->
+      <div class="step-panel active" id="emailStep1">
+        <div class="verify-field">
+          <label>Email Address</label>
+          <input type="email" id="emailInput" placeholder="your@email.com" />
+        </div>
+        <button class="send-btn" onclick="sendEmailCode()">Send Code →</button>
+      </div>
+
+      <!-- EMAIL STEP 2: enter code -->
+      <div class="step-panel" id="emailStep2">
+        <p style="font-size:14px;color:var(--muted);">A 6-digit code has been sent to your email. Enter it below.</p>
+        <div class="verify-field">
+          <label>Verification Code</label>
+          <input type="text" id="emailCode" placeholder="6-digit code" maxlength="6" inputmode="numeric" />
+        </div>
+        <button class="send-btn" onclick="resendCode('email')">Resend Code</button>
+      </div>
+
+      <!-- OTP STEP 1: enter phone -->
+      <div class="step-panel" id="otpStep1">
+        <div class="verify-field">
+          <label>Phone Number</label>
+          <input type="tel" id="phoneInput" placeholder="e.g. 0771234567" />
+        </div>
+        <button class="send-btn" onclick="sendOTP()">Send OTP →</button>
+      </div>
+
+      <!-- OTP STEP 2: enter OTP -->
+      <div class="step-panel" id="otpStep2">
+        <p style="font-size:14px;color:var(--muted);">A code has been sent to your phone number.</p>
+        <div class="verify-field">
+          <label>One-Time Password</label>
+          <input type="text" id="otpCode" placeholder="6-digit code" maxlength="6" inputmode="numeric" />
+        </div>
+        <button class="send-btn" onclick="resendCode('otp')">Resend OTP</button>
+      </div>
+
+      <p class="verify-error" id="verifyError"></p>
+
+      <!-- ACTIONS -->
+      <div class="verify-actions">
+        <a href="payment-summary.html" class="btn btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </a>
+        <button class="btn btn-primary" onclick="verifyCode()">Verify &amp; Pay →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    let currentMethod = 'email';
+    let sentCode = null;
+
+    function switchMethod(m) {
+      currentMethod = m;
+      document.querySelectorAll('.method-tab').forEach((t,i) => t.classList.toggle('active', ['email','otp'][i]===m));
+      ['emailStep1','emailStep2','otpStep1','otpStep2'].forEach(id => {
+        document.getElementById(id).classList.remove('active');
+      });
+      document.getElementById(m==='email' ? 'emailStep1' : 'otpStep1').classList.add('active');
+      sentCode = null;
+      document.getElementById('verifyError').textContent = '';
+    }
+
+    function sendEmailCode() {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email || !email.includes('@')) { setError('Please enter a valid email address.'); return; }
+      setError('');
+      /*
+       * BACKEND NOTE:
+       * fetch('SendVerificationCodeServlet', { method:'POST',
+       *   headers:{'Content-Type':'application/x-www-form-urlencoded'},
+       *   body:`contact=${encodeURIComponent(email)}&method=email&purpose=payment` })
+       * .then(r=>r.json()).then(d => { if(d.success) showStep('emailStep2'); });
+       */
+      sentCode = '123456'; // PLACEHOLDER
+      sessionStorage.setItem('verifyContact', email);
+      sessionStorage.setItem('verifyMethod', 'email');
+      showStep('emailStep2');
+    }
+
+    function sendOTP() {
+      const phone = document.getElementById('phoneInput').value.trim();
+      if (!phone) { setError('Please enter your phone number.'); return; }
+      setError('');
+      /*
+       * BACKEND NOTE:
+       * fetch('SendVerificationCodeServlet', { method:'POST',
+       *   body:`contact=${encodeURIComponent(phone)}&method=otp&purpose=payment` })
+       * .then(r=>r.json()).then(d => { if(d.success) showStep('otpStep2'); });
+       */
+      sentCode = '123456'; // PLACEHOLDER
+      sessionStorage.setItem('verifyContact', phone);
+      sessionStorage.setItem('verifyMethod', 'otp');
+      showStep('otpStep2');
+    }
+
+    function resendCode(type) {
+      if (type === 'email') sendEmailCode();
+      else sendOTP();
+    }
+
+    function verifyCode() {
+      if (!sentCode) {
+        if (currentMethod === 'email') sendEmailCode();
+        else sendOTP();
+        return;
+      }
+      const entered = currentMethod === 'email'
+        ? document.getElementById('emailCode').value.trim()
+        : document.getElementById('otpCode').value.trim();
+      if (!entered) { setError('Please enter the verification code.'); return; }
+
+      /*
+       * BACKEND NOTE:
+       * fetch('VerifyCodeServlet', { method:'POST',
+       *   body:`contact=${sessionStorage.getItem('verifyContact')}&code=${entered}&purpose=payment` })
+       * .then(r=>r.json()).then(d => {
+       *   if(d.success) window.location.href='payment-gateway.html';
+       *   else setError('Incorrect code. Please try again.');
+       * });
+       */
+      if (entered === sentCode) {
+        window.location.href = 'payment-gateway.html';
+      } else {
+        setError('Incorrect code. Please try again.');
+      }
+    }
+
+    function showStep(id) {
+      ['emailStep1','emailStep2','otpStep1','otpStep2'].forEach(s => {
+        document.getElementById(s).classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+
+    function setError(msg) {
+      document.getElementById('verifyError').textContent = msg;
+    }
+  </script>
+</body>
+</html>

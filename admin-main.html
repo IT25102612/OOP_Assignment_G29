@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    .admin-nav-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .admin-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 40px 20px;
+      background: var(--bg);
+      border: 1.5px solid rgba(30,100,65,0.15);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .admin-nav-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(30,100,65,0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.22s;
+    }
+
+    .admin-nav-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+      border-color: var(--accent);
+    }
+    .admin-nav-btn:hover::before { opacity: 1; }
+
+    .nav-btn-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--soft-green);
+      border: 1.5px solid rgba(30,100,65,0.2);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      transition: background 0.22s;
+    }
+    .admin-nav-btn:hover .nav-btn-icon {
+      background: var(--accent);
+    }
+
+    .nav-btn-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+
+    .nav-btn-sub {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .exit-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 32px;
+    }
+
+    /* Denied overlay for add room when locked */
+    #deniedOverlay { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ADMIN HEADER -->
+  <header class="admin-header">
+    <span class="admin-brand">Tranquility.com</span>
+    <div class="header-logo">
+      <div class="logo-placeholder">✦</div>
+    </div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="admin-page">
+
+    <!-- BANNER -->
+    <div class="admin-banner">
+      <div class="banner-badge">⚙️</div>
+      <h1>Admin Panel</h1>
+    </div>
+
+    <div class="admin-content">
+
+      <div class="admin-nav-grid">
+
+        <!-- ADD ROOM -->
+        <a href="admin-add-room.html" class="admin-nav-btn" id="addRoomBtn" onclick="return checkAddRoom(event)">
+          <div class="nav-btn-icon">🛏️</div>
+          <span class="nav-btn-label">Add Room</span>
+          <span class="nav-btn-sub">Register new rooms to the system</span>
+        </a>
+
+        <!-- VIEW RESERVATIONS -->
+        <a href="admin-view-reservations.html" class="admin-nav-btn">
+          <div class="nav-btn-icon">📋</div>
+          <span class="nav-btn-label">View Reservations</span>
+          <span class="nav-btn-sub">Browse and inspect all bookings</span>
+        </a>
+
+        <!-- UPDATE RESERVATIONS -->
+        <a href="admin-update-reservation.html" class="admin-nav-btn">
+          <div class="nav-btn-icon">✏️</div>
+          <span class="nav-btn-label">Update Reservation</span>
+          <span class="nav-btn-sub">Modify an existing guest booking</span>
+        </a>
+
+        <!-- CANCEL RESERVATIONS -->
+        <a href="admin-cancel-reservation.html" class="admin-nav-btn">
+          <div class="nav-btn-icon">🚫</div>
+          <span class="nav-btn-label">Cancel Reservation</span>
+          <span class="nav-btn-sub">Cancel and process refunds</span>
+        </a>
+
+      </div>
+
+      <!-- EXIT BUTTON -->
+      <div class="exit-row">
+        <button class="btn btn-dark" onclick="exitAdmin()">
+          Exit &amp; Log Out
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- DENIED OVERLAY (add room locked) -->
+    <div class="denied-overlay" id="deniedOverlay">
+      <div class="denied-box">
+        <div class="denied-icon">🔒</div>
+        <h2 class="denied-title">Access Denied</h2>
+        <p class="denied-msg">Add Room access has been suspended due to too many failed authentication attempts. Please contact your Regional Manager to restore access.</p>
+        <button class="btn btn-outline" onclick="closeDenied()">Close</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ADMIN FOOTER -->
+  <footer class="admin-footer">
+    <div class="admin-footer-dept">
+      <h5>Guest Services</h5>
+      <p><a href="mailto:guests@tranquility.com">guests@tranquility.com</a></p>
+    </div>
+    <div class="admin-footer-dept">
+      <h5>Reservations Dept.</h5>
+      <p><a href="mailto:reservations@tranquility.com">reservations@tranquility.com</a></p>
+    </div>
+    <div class="admin-footer-dept">
+      <h5>IT &amp; Systems</h5>
+      <p><a href="mailto:it@tranquility.com">it@tranquility.com</a></p>
+    </div>
+    <div class="admin-footer-dept">
+      <h5>Regional Manager</h5>
+      <p><a href="mailto:regional@tranquility.com">regional@tranquility.com</a></p>
+    </div>
+    <div class="admin-footer-dept">
+      <h5>Finance</h5>
+      <p><a href="mailto:finance@tranquility.com">finance@tranquility.com</a></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    // Guard: redirect to login if not authenticated
+    if (!sessionStorage.getItem('adminLoggedIn')) {
+      window.location.href = 'admin-login.html';
+    }
+
+    // Check if add room is locked
+    function checkAddRoom(e) {
+      if (sessionStorage.getItem('addRoomDenied') === 'true') {
+        e.preventDefault();
+        document.getElementById('deniedOverlay').style.display = 'flex';
+        setTimeout(() => document.getElementById('deniedOverlay').classList.add('open'), 10);
+        return false;
+      }
+      return true;
+    }
+
+    function closeDenied() {
+      const el = document.getElementById('deniedOverlay');
+      el.classList.remove('open');
+      setTimeout(() => el.style.display = 'none', 300);
+    }
+
+    function exitAdmin() {
+      sessionStorage.clear();
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

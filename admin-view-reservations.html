@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>View Reservations — Tranquility Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    .filter-panel {
+      background: var(--bg);
+      border-bottom: 1px solid rgba(30,100,65,0.12);
+      padding: 20px 32px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px 16px;
+      flex: 1;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; }
+    .filter-group label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .filter-group select,
+    .filter-group input {
+      padding: 9px 14px;
+      border: 1.5px solid rgba(30,100,65,0.2);
+      border-radius: 999px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Raleway', sans-serif;
+      font-size: 13px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%231e6441' stroke-width='1.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box; width: 100%;
+    }
+    .filter-group input { background-image: none; padding-right: 14px; }
+    .filter-group select:focus, .filter-group input:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(30,100,65,0.1);
+    }
+    .search-fab {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--accent); color: #fff; border: none; cursor: pointer;
+      display: grid; place-items: center; flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(30,100,65,0.35);
+      transition: background 0.2s, transform 0.15s; align-self: flex-end;
+    }
+    .search-fab:hover { background: var(--accent-light); transform: scale(1.08); }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <span class="admin-brand">Tranquility.com</span>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="admin-page">
+    <div class="admin-banner">
+      <div class="banner-badge">📋</div>
+      <h1>View Reservations</h1>
+    </div>
+
+    <div class="filter-panel">
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label>Country</label>
+          <select id="f-country" onchange="updateCities()">
+            <option value="">Any</option>
+            <option>France</option><option>Spain</option><option>United States</option>
+            <option>Turkey</option><option>Italy</option><option>England</option>
+            <option>China</option><option>Japan</option><option>Thailand</option>
+            <option>Mexico</option><option>Brazil</option><option>Peru</option>
+            <option>Sri Lanka</option><option>Maldives</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>City</label>
+          <select id="f-city"><option value="">Any</option></select>
+        </div>
+        <div class="filter-group">
+          <label>From</label>
+          <input type="date" id="f-from" />
+        </div>
+        <div class="filter-group">
+          <label>To</label>
+          <input type="date" id="f-to" />
+        </div>
+        <div class="filter-group">
+          <label>Room Number</label>
+          <input type="text" id="f-roomnum" placeholder="e.g. FRPA.A56.03" />
+        </div>
+      </div>
+      <button class="search-fab" onclick="searchReservations()" title="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="admin-content">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">📋</div>
+        <p>Use the filters above and press Search to view reservations.</p>
+      </div>
+      <div class="res-list" id="resList"></div>
+    </div>
+
+    <div class="back-btn-wrap">
+      <a href="admin-main.html" class="back-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Admin
+      </a>
+    </div>
+  </div>
+
+  <footer class="admin-footer">
+    <div class="admin-footer-dept"><h5>Guest Services</h5><p><a href="mailto:guests@tranquility.com">guests@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>Reservations</h5><p><a href="mailto:reservations@tranquility.com">reservations@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>IT &amp; Systems</h5><p><a href="mailto:it@tranquility.com">it@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>Regional Manager</h5><p><a href="mailto:regional@tranquility.com">regional@tranquility.com</a></p></div>
+    <div class="admin-footer-dept"><h5>Finance</h5><p><a href="mailto:finance@tranquility.com">finance@tranquility.com</a></p></div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    if (!sessionStorage.getItem('adminLoggedIn')) window.location.href = 'admin-login.html';
+    const CITY_MAP = {
+      'France':['Paris','Nice','Lyon'],'Spain':['Barcelona','Madrid','Seville','Valencia'],
+      'United States':['New York','Las Vegas','Orlando','Los Angeles'],
+      'Turkey':['Istanbul','Antalya'],'Italy':['Rome','Venice','Milan'],
+      'England':['London','Manchester'],'China':['Beijing','Shanghai'],
+      'Japan':['Tokyo','Osaka','Kyoto'],'Thailand':['Bangkok','Phuket','Chiang Mai'],
+      'Mexico':['Cancun','Mexico City'],'Brazil':['Rio de Janeiro','São Paulo'],
+      'Peru':['Lima','Cusco'],'Sri Lanka':['Colombo','Kandy','Galle'],
+      'Maldives':['North Malé Atoll','Baa Atoll'],
+    };
+    function updateCities() {
+      const sel = document.getElementById('f-city');
+      sel.innerHTML = '<option value="">Any</option>';
+      (CITY_MAP[document.getElementById('f-country').value]||[]).forEach(c => {
+        const o = document.createElement('option'); o.value = o.textContent = c; sel.appendChild(o);
+      });
+    }
+    window.addEventListener('load', () => {
+      const saved = sessionStorage.getItem('lastViewSearch');
+      const scroll = sessionStorage.getItem('viewResScroll');
+      if (saved && scroll) {
+        const s = JSON.parse(saved);
+        document.getElementById('f-country').value = s.country; updateCities();
+        document.getElementById('f-city').value = s.city;
+        document.getElementById('f-from').value = s.from;
+        document.getElementById('f-to').value = s.to;
+        document.getElementById('f-roomnum').value = s.roomnum;
+        searchReservations(() => { window.scrollTo(0, parseInt(scroll)); sessionStorage.removeItem('viewResScroll'); });
+      }
+    });
+    function searchReservations(cb) {
+      const country = document.getElementById('f-country').value;
+      const city    = document.getElementById('f-city').value;
+      const from    = document.getElementById('f-from').value;
+      const to      = document.getElementById('f-to').value;
+      const roomnum = document.getElementById('f-roomnum').value.trim();
+      sessionStorage.setItem('lastViewSearch', JSON.stringify({country,city,from,to,roomnum}));
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('resList').innerHTML = '';
+      /* BACKEND NOTE:
+         fetch(`ViewReservationsServlet?country=${country}&city=${city}&from=${from}&to=${to}&roomNumber=${roomnum}`)
+         .then(r=>r.json()).then(data => { renderResults(data); if(cb)cb(); }); */
+      const PH = [
+        { reservationId:'RES-001', roomNumber:'FRPA.A56.03', guestName:'Emily Clarke',
+          guestEmail:'emily@email.com', guestPhone:'+1 555 0102', verifyMethod:'email',
+          checkin:'2026-04-10', checkout:'2026-04-15', suiteType:'Executive Suite', totalPrice:1755, status:'Confirmed' },
+        { reservationId:'RES-002', roomNumber:'JPTK.B43.02', guestName:'Hiroshi Tanaka',
+          guestEmail:'h.tanaka@email.com', guestPhone:'+81 90 1234 5678', verifyMethod:'otp',
+          checkin:'2026-05-01', checkout:'2026-05-07', suiteType:'Junior Suite', totalPrice:2520, status:'Confirmed' },
+        { reservationId:'RES-003', roomNumber:'SLCO.C12.05', guestName:'Priya Fernando',
+          guestEmail:'priya@email.com', guestPhone:'+94 77 123 4567', verifyMethod:'email',
+          checkin:'2026-03-20', checkout:'2026-03-25', suiteType:'Single Regular', totalPrice:300, status:'Checked In' },
+      ];
+      const filtered = PH.filter(r => !roomnum || r.roomNumber.toLowerCase().includes(roomnum.toLowerCase()));
+      renderResults(filtered);
+      if (cb) cb();
+    }
+    function renderResults(data) {
+      const list = document.getElementById('resList');
+      if (!data.length) {
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><p>No reservations match your filters.</p></div>';
+        return;
+      }
+      data.forEach(r => {
+        const a = document.createElement('a');
+        a.className = 'res-card';
+        a.href = `admin-room-detail.html?res=${r.reservationId}`;
+        a.onclick = () => sessionStorage.setItem('viewResScroll', window.scrollY);
+        a.innerHTML = `
+          <div class="res-room-num">${r.roomNumber}</div>
+          <div class="res-info">
+            <span class="res-guest">${r.guestName}</span>
+            <span class="res-meta">${r.suiteType} &nbsp;·&nbsp; ${r.verifyMethod==='email'?'📧 '+r.guestEmail:'📱 '+r.guestPhone}</span>
+            <span class="res-meta">Status: <strong>${r.status}</strong></span>
+          </div>
+          <div class="res-dates"><strong>$${r.totalPrice.toLocaleString()}</strong>${r.checkin} → ${r.checkout}</div>`;
+        list.appendChild(a);
+      });
+    }
+  </script>
+</body>
+</html>

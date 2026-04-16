@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cancel Reservation — Tranquility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/rooms.css">
+  <style>
+    body { font-family:'Raleway',sans-serif; background:var(--bg); color:var(--text); }
+    .cancel-header { position:fixed;top:0;left:0;right:0;z-index:1000;background:#111a14;height:56px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 20px;box-shadow:0 2px 12px rgba(0,0,0,0.3); }
+    .cancel-brand  { font-family:'Cormorant Garamond',serif;font-size:20px;color:rgba(255,255,255,0.7);letter-spacing:0.04em;user-select:none; }
+    .logo-placeholder { width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);display:grid;place-items:center;font-size:16px;color:#fff; }
+    #themeToggle { justify-self:end;background:transparent;border:none;cursor:pointer;color:#fff;font-size:20px; }
+
+    .cancel-banner { margin-top:56px;height:100px;background:linear-gradient(135deg,#1a0a0a 0%,#8b2020 100%);display:flex;align-items:center;justify-content:center;gap:14px;position:relative;overflow:hidden; }
+    .cancel-banner::before { content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 24px,rgba(255,255,255,0.02) 24px,rgba(255,255,255,0.02) 48px); }
+    .cancel-banner h1 { color:#fff;font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,32px);letter-spacing:0.14em;text-transform:uppercase;margin:0;font-weight:300;position:relative;z-index:1; }
+    .banner-icon { font-size:24px;position:relative;z-index:1; }
+
+    .cancel-page { min-height:100vh;display:flex;flex-direction:column; }
+    .cancel-content { flex:1;padding:40px 48px 100px;max-width:860px;margin:0 auto;width:100%;box-sizing:border-box; }
+
+    .step-bar { display:flex;gap:0;margin-bottom:32px;border-radius:999px;overflow:hidden;border:1px solid rgba(30,100,65,0.15); }
+    .step-seg  { flex:1;text-align:center;padding:10px;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);background:var(--bg);transition:all 0.2s; }
+    .step-seg.active { background:#c0392b;color:#fff; }
+
+    .c-card { background:var(--bg);border:1px solid rgba(30,100,65,0.12);border-radius:20px;padding:32px 36px;box-shadow:0 8px 40px rgba(0,0,0,0.07);margin-bottom:20px; }
+    .c-card h3 { font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--accent,#1e6441);margin:0 0 18px;font-weight:300; }
+
+    .form-group { display:flex;flex-direction:column;gap:6px;margin-bottom:14px; }
+    .form-group label { font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted); }
+    .form-group input, .form-group select, .form-group textarea { padding:11px 16px;border:1.5px solid rgba(30,100,65,0.2);border-radius:10px;background:var(--bg);color:var(--text);font-family:'Raleway',sans-serif;font-size:14px;transition:border-color 0.2s;box-sizing:border-box;width:100%; }
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus { outline:none;border-color:var(--accent,#1e6441);box-shadow:0 0 0 3px rgba(30,100,65,0.1); }
+    .form-group textarea { resize:vertical;appearance:none; }
+
+    .detail-table { width:100%;border-collapse:collapse;font-size:14px; }
+    .detail-table tr { border-bottom:1px solid rgba(30,100,65,0.08); }
+    .detail-table tr:last-child { border-bottom:none; }
+    .detail-table th { text-align:left;padding:10px 12px;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);width:35%; }
+    .detail-table td { padding:10px 12px;color:var(--text); }
+
+    .refund-box { background:#fef9f0;border:1.5px solid rgba(230,126,34,0.2);border-radius:14px;padding:20px 24px;margin-bottom:20px; }
+    .refund-box h4 { font-family:'Cormorant Garamond',serif;font-size:20px;color:#e67e22;margin:0 0 12px;font-weight:300; }
+    .refund-row { display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(230,126,34,0.1);font-size:14px; }
+    .refund-row:last-child { border-bottom:none;font-weight:700; }
+    .refund-row .lbl { color:var(--muted); }
+    .refund-row .amt { font-family:'Cormorant Garamond',serif;font-size:18px;color:#27ae60; }
+
+    .reason-option { display:flex;align-items:center;gap:10px;padding:11px 16px;border:1.5px solid rgba(30,100,65,0.15);border-radius:10px;cursor:pointer;font-size:14px;transition:all 0.2s;margin-bottom:8px; }
+    .reason-option:hover { border-color:var(--accent,#1e6441); }
+    .reason-option.selected { border-color:var(--accent,#1e6441);background:var(--soft-green,#e8f3ed); }
+    .reason-option input[type="radio"] { accent-color:var(--accent,#1e6441); }
+
+    .cancel-warning { background:rgba(192,57,43,0.05);border:1.5px solid rgba(192,57,43,0.18);border-radius:12px;padding:16px 20px;font-size:13px;color:#c0392b;line-height:1.7;margin-bottom:20px; }
+
+    .btn { display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:999px;font-family:'Raleway',sans-serif;font-size:14px;font-weight:500;letter-spacing:0.06em;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none; }
+    .btn-danger  { background:#c0392b;color:#fff; }
+    .btn-danger:hover  { background:#a93226;transform:translateY(-1px); }
+    .btn-outline { background:transparent;border:1.5px solid rgba(30,100,65,0.3);color:var(--accent,#1e6441); }
+    .btn-outline:hover { background:var(--accent,#1e6441);color:#fff; }
+    .btn-row { display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px; }
+    .back-btn { display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border:1.5px solid rgba(30,100,65,0.3);border-radius:999px;color:var(--accent,#1e6441);background:transparent;font-family:'Raleway',sans-serif;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;transition:background 0.2s,color 0.2s,transform 0.15s; }
+    .back-btn:hover { background:var(--accent,#1e6441);color:#fff;transform:translateX(-2px); }
+
+    .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(5px);z-index:4000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s; }
+    .modal-overlay.open { opacity:1;pointer-events:auto; }
+    .modal-box { background:var(--bg);border-radius:20px;padding:40px;width:100%;max-width:420px;box-shadow:0 32px 100px rgba(0,0,0,0.25);display:flex;flex-direction:column;gap:20px;transform:scale(0.94);transition:transform 0.3s; }
+    .modal-overlay.open .modal-box { transform:scale(1); }
+    .modal-title { font-family:'Cormorant Garamond',serif;font-size:26px;color:#c0392b;margin:0;font-weight:300; }
+    .modal-err { font-size:13px;color:#c0392b;min-height:16px; }
+    .modal-actions { display:flex;justify-content:space-between;gap:12px; }
+
+    .toast { position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);padding:12px 28px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.3s;z-index:5000;white-space:nowrap; }
+    .toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+    .toast-success { background:#27ae60;color:#fff; }
+    .toast-error   { background:#c0392b;color:#fff; }
+
+    .step-panel { display:none; }
+    .step-panel.active { display:block; }
+    @media(max-width:700px){ .cancel-content{padding:24px 16px 80px;} }
+  </style>
+</head>
+<body>
+
+  <header class="cancel-header">
+    <span class="cancel-brand">Tranquility.com</span>
+    <div style="display:flex;justify-content:center;"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="cancel-page">
+
+    <div class="cancel-banner">
+      <span class="banner-icon">🚫</span>
+      <h1>Cancel Reservation</h1>
+    </div>
+
+    <div class="cancel-content">
+
+      <div class="step-bar">
+        <div class="step-seg active" id="seg1">1. Verify</div>
+        <div class="step-seg" id="seg2">2. Review</div>
+        <div class="step-seg" id="seg3">3. Confirm</div>
+      </div>
+
+      <!-- STEP 1: VERIFY -->
+      <div class="step-panel active" id="step1">
+        <div class="c-card">
+          <h3>Verify Your Identity</h3>
+          <p style="font-size:14px;color:var(--muted);margin:0 0 20px;line-height:1.7;">Enter your registered email or phone number to retrieve your reservation.</p>
+          <div class="form-group">
+            <label>Verification Method</label>
+            <select id="verifyMethod" onchange="toggleContact()">
+              <option value="email">Email Address</option>
+              <option value="otp">Phone Number (OTP)</option>
+            </select>
+          </div>
+          <div id="emailWrap" class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="contactEmail" placeholder="your@email.com" />
+          </div>
+          <div id="phoneWrap" class="form-group" style="display:none;">
+            <label>Phone Number</label>
+            <input type="tel" id="contactPhone" placeholder="+1 555 0102" />
+          </div>
+          <div class="btn-row">
+            <a href="booking-confirmation.html" class="back-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Back
+            </a>
+            <button class="btn btn-outline" onclick="sendCode()">Send Code →</button>
+          </div>
+        </div>
+        <div class="c-card" id="codeCard" style="display:none;">
+          <h3>Enter Verification Code</h3>
+          <div class="form-group">
+            <label>6-Digit Code</label>
+            <input type="text" id="verifyCode" placeholder="6-digit code" maxlength="6" inputmode="numeric" />
+          </div>
+          <p id="verifyErr" style="font-size:13px;color:#c0392b;min-height:16px;"></p>
+          <div class="btn-row">
+            <button class="back-btn" onclick="document.getElementById('codeCard').style.display='none'">Back</button>
+            <button class="btn btn-outline" onclick="confirmCode()">Verify →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: REVIEW + REASON -->
+      <div class="step-panel" id="step2">
+        <div class="c-card" style="margin-bottom:16px;">
+          <h3>Reservation Details</h3>
+          <table class="detail-table">
+            <tr><th>Reservation ID</th><td id="d-resId">—</td></tr>
+            <tr><th>Room Number</th><td id="d-room">—</td></tr>
+            <tr><th>Suite</th><td id="d-suite">—</td></tr>
+            <tr><th>Check-in</th><td id="d-checkin">—</td></tr>
+            <tr><th>Check-out</th><td id="d-checkout">—</td></tr>
+            <tr><th>Meal Plan</th><td id="d-meal">—</td></tr>
+            <tr><th>Total Paid</th><td id="d-paid">—</td></tr>
+          </table>
+        </div>
+
+        <div class="refund-box">
+          <h4>Refund Estimate</h4>
+          <div class="refund-row"><span class="lbl">Total Paid</span><span id="r-paid">—</span></div>
+          <div class="refund-row"><span class="lbl">Refund Policy</span><span>70% of total</span></div>
+          <div class="refund-row"><span class="lbl">Refund Amount</span><span class="amt" id="r-refund">—</span></div>
+        </div>
+
+        <!-- REASON (optional) -->
+        <div class="c-card" style="margin-bottom:16px;">
+          <h3>Reason for Cancellation <span style="font-size:14px;font-family:'Raleway',sans-serif;color:var(--muted);">(optional)</span></h3>
+          <label class="reason-option"><input type="radio" name="reason" value="change-plans"> Change of plans</label>
+          <label class="reason-option"><input type="radio" name="reason" value="emergency"> Personal emergency</label>
+          <label class="reason-option"><input type="radio" name="reason" value="alternative"> Found alternative accommodation</label>
+          <label class="reason-option"><input type="radio" name="reason" value="health"> Health reasons</label>
+          <label class="reason-option"><input type="radio" name="reason" value="other"> Other</label>
+          <div class="form-group" style="margin-top:12px;">
+            <label>Additional Comments</label>
+            <textarea id="cancelComment" rows="2" placeholder="Any additional details..."></textarea>
+          </div>
+        </div>
+
+        <div class="cancel-warning">
+          ⚠️ A cancellation confirmation code will be sent to you. You must enter the code to complete the cancellation.
+          <strong>70% of your total payment will be refunded.</strong> Cancellations are irreversible once confirmed.
+        </div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="setStep(1)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <button class="btn btn-danger" onclick="sendCancelCode()">Send Cancellation Code →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: ENTER CANCEL CODE -->
+      <div class="step-panel" id="step3">
+        <div class="c-card">
+          <h3 style="color:#c0392b;">Confirm Cancellation</h3>
+          <p style="font-size:14px;color:var(--muted);margin:0 0 20px;line-height:1.7;">A cancellation code has been sent to you. Enter it below to permanently cancel your reservation and initiate your refund.</p>
+          <div class="form-group" style="max-width:280px;">
+            <label>Cancellation Code</label>
+            <input type="text" id="cancelCode" placeholder="6-digit code" maxlength="6" inputmode="numeric" />
+          </div>
+          <p id="cancelErr" style="font-size:13px;color:#c0392b;min-height:16px;"></p>
+          <div class="btn-row">
+            <button class="back-btn" onclick="setStep(2)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Back
+            </button>
+            <button class="btn btn-danger" onclick="confirmCancel()">Cancel &amp; Refund →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <footer style="height:1px;"></footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    const SUITE_LABELS = { presidential:'Presidential Suite',penthouse:'Penthouse Suite',executive:'Executive Suite',junior:'Junior Suite',family:'Family Suite','single-regular':'Single Regular','double-regular':'Double Regular','family-regular':'Family Regular' };
+    const MEAL_LABELS  = { none:'No Meals',breakfast:'Breakfast Only','half-board':'Half Board','full-board':'Full Board','all-inclusive':'All Inclusive' };
+
+    let sentCode = null, cancelCode = null, currentRes = null;
+
+    function toggleContact() {
+      const m = document.getElementById('verifyMethod').value;
+      document.getElementById('emailWrap').style.display = m==='email' ? '' : 'none';
+      document.getElementById('phoneWrap').style.display = m==='otp'   ? '' : 'none';
+    }
+
+    function sendCode() {
+      const m = document.getElementById('verifyMethod').value;
+      const v = m==='email' ? document.getElementById('contactEmail').value.trim()
+                            : document.getElementById('contactPhone').value.trim();
+      if (!v) { showToast('Please enter your contact details.','error'); return; }
+      /* BACKEND: fetch('SendVerificationCodeServlet',{method:'POST',body:`contact=${encodeURIComponent(v)}&method=${m}&purpose=cancel`}) */
+      sentCode = '123456'; // PLACEHOLDER
+      document.getElementById('codeCard').style.display = 'block';
+    }
+
+    function confirmCode() {
+      const entered = document.getElementById('verifyCode').value.trim();
+      if (entered !== sentCode) { document.getElementById('verifyErr').textContent = 'Incorrect code.'; return; }
+      document.getElementById('verifyErr').textContent = '';
+      loadReservation();
+    }
+
+    function loadReservation() {
+      /* BACKEND: fetch(`GetReservationServlet?...`).then(r=>r.json()).then(data=>{ currentRes=data; populateStep2(); setStep(2); }); */
+      currentRes = { reservationId:'RES-001', roomNumber:'FRPA.A56.03', suite:'executive',
+        checkin:'2026-04-10', checkout:'2026-04-15', meal:'breakfast', totalPaid:1755 };
+      populateStep2(); setStep(2);
+    }
+
+    function populateStep2() {
+      const refund = Math.round(currentRes.totalPaid * 0.7);
+      document.getElementById('d-resId').textContent   = currentRes.reservationId;
+      document.getElementById('d-room').textContent    = currentRes.roomNumber;
+      document.getElementById('d-suite').textContent   = SUITE_LABELS[currentRes.suite] || currentRes.suite;
+      document.getElementById('d-checkin').textContent = currentRes.checkin;
+      document.getElementById('d-checkout').textContent= currentRes.checkout;
+      document.getElementById('d-meal').textContent    = MEAL_LABELS[currentRes.meal]   || currentRes.meal;
+      document.getElementById('d-paid').textContent    = '$' + currentRes.totalPaid.toLocaleString();
+      document.getElementById('r-paid').textContent    = '$' + currentRes.totalPaid.toLocaleString();
+      document.getElementById('r-refund').textContent  = '$' + refund.toLocaleString();
+    }
+
+    function sendCancelCode() {
+      /* BACKEND: fetch('SendCancelCodeServlet',{method:'POST',body:`resId=${currentRes.reservationId}`}) */
+      cancelCode = '654321'; // PLACEHOLDER — real code from backend
+      showToast('Cancellation code sent.','success');
+      setStep(3);
+    }
+
+    function confirmCancel() {
+      const entered = document.getElementById('cancelCode').value.trim();
+      const err     = document.getElementById('cancelErr');
+      if (!entered) { err.textContent = 'Please enter the cancellation code.'; return; }
+      if (entered !== cancelCode) { err.textContent = 'Incorrect code. Cancellation failed.'; showToast('Cancellation failed — incorrect code.','error'); return; }
+      err.textContent = '';
+      /* BACKEND: fetch('ProcessCancelServlet',{method:'POST',body:`resId=${currentRes.reservationId}`}).then(...)  */
+      showToast('Reservation cancelled successfully.','success');
+      setTimeout(()=>window.location.href='refund.html?type=cancel', 1800);
+    }
+
+    function setStep(n) {
+      [1,2,3].forEach(i=>{
+        document.getElementById(`step${i}`).classList.toggle('active',i===n);
+        document.getElementById(`seg${i}`).classList.toggle('active',i===n);
+      });
+    }
+
+    function showToast(msg,type='success'){
+      const t=document.getElementById('toast');
+      t.textContent=msg; t.className=`toast toast-${type} show`;
+      setTimeout(()=>t.classList.remove('show'),3200);
+    }
+
+    document.addEventListener('change',function(e){
+      if (e.target.name==='reason') {
+        document.querySelectorAll('.reason-option').forEach(el=>el.classList.remove('selected'));
+        e.target.closest('.reason-option')?.classList.add('selected');
+      }
+    });
+  </script>
+</body>
+</html>

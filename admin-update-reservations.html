@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Update Reservation — Tranquility Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <style>
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(30,100,65,0.08);
+    }
+    .field-row:last-child { border-bottom: none; }
+    .field-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+    .field-value { font-size: 15px; color: var(--text); }
+    .field-input { display: none; }
+    .change-btn {
+      background: transparent;
+      border: 1.5px solid rgba(30,100,65,0.25);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .change-btn:hover { background: var(--accent); color: #fff; }
+    .change-btn.active { background: var(--accent); color: #fff; }
+
+    /* Step indicator */
+    .step-indicator {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(30,100,65,0.15);
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+    .step.active { background: var(--accent); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <span class="admin-brand">Tranquility.com</span>
+    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <div class="admin-page">
+
+    <div class="admin-banner">
+      <div class="banner-badge">✏️</div>
+      <h1>Update Reservation</h1>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- STEP INDICATOR -->
+      <div class="step-indicator">
+        <div class="step active" id="step1-ind">1. Verify Guest</div>
+        <div class="step" id="step2-ind">2. Edit Fields</div>
+        <div class="step" id="step3-ind">3. Payment</div>
+      </div>
+
+      <!-- STEP 1: VERIFY GUEST -->
+      <div id="step1">
+        <div class="admin-card">
+          <h3 style="font-size:20px;color:var(--accent);margin:0 0 6px;">Guest Verification</h3>
+          <p style="color:var(--muted);font-size:14px;margin:0 0 24px;">Enter the guest's email address or send an OTP to their phone to retrieve their reservation.</p>
+          <div class="admin-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Verification Method</label>
+                <select id="verifyMethod" onchange="toggleVerifyInput()">
+                  <option value="email">Email</option>
+                  <option value="otp">OTP (Phone)</option>
+                </select>
+              </div>
+              <div class="form-group" id="emailWrap">
+                <label>Guest Email</label>
+                <input type="email" id="guestEmail" placeholder="guest@email.com" />
+              </div>
+              <div class="form-group" id="phoneWrap" style="display:none;">
+                <label>Guest Phone Number</label>
+                <input type="tel" id="guestPhone" placeholder="+1 555 0102" />
+              </div>
+            </div>
+            <div class="btn-row">
+              <a href="admin-main.html" class="back-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Back
+              </a>
+              <button class="btn btn-primary" onclick="verifyGuest()">Retrieve Reservation →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: EDIT FIELDS -->
+      <div id="step2" style="display:none;">
+        <div class="admin-card" style="margin-bottom:24px;">
+          <h3 style="font-size:18px;color:var(--accent);margin:0 0 20px;">Reservation Fields <span style="font-size:13px;color:var(--muted);font-family:'Raleway',sans-serif;">— click Change to edit a field</span></h3>
+
+          <div class="field-row">
+            <div><div class="field-label">Room Number</div><div class="field-value" id="e-roomNum">—</div></div>
+            <button class="change-btn" onclick="toggleField('roomNum')">Change</button>
+          </div>
+          <div class="field-input" id="fi-roomNum">
+            <div class="form-group" style="margin-top:8px;"><input type="text" id="new-roomNum" placeholder="New room number" /></div>
+          </div>
+
+          <div class="field-row">
+            <div><div class="field-label">Suite Type</div><div class="field-value" id="e-suite">—</div></div>
+            <button class="change-btn" onclick="toggleField('suite')">Change</button>
+          </div>
+          <div class="field-input" id="fi-suite">
+            <div class="form-group" style="margin-top:8px;">
+              <select id="new-suite">
+                <option value="">Select suite</option>
+                <option value="presidential">Presidential Suite</option>
+                <option value="penthouse">Penthouse Suite</option>
+                <option value="executive">Executive Suite</option>
+                <option value="junior">Junior Suite</option>
+                <option value="family">Family Suite</option>
+                <option value="single-regular">Single Regular</option>
+                <option value="double-regular">Double Regular</option>
+                <option value="family-regular">Family Regular</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div><div class="field-label">Check-in Date</div><div class="field-value" id="e-checkin">—</div></div>
+            <button class="change-btn" onclick="toggleField('checkin')">Change</button>
+          </div>
+          <div class="field-input" id="fi-checkin">
+            <div class="form-group" style="margin-top:8px;"><input type="date" id="new-checkin" /></div>
+          </div>
+
+          <div class="field-row">
+            <div><div class="field-label">Check-out Date</div><div class="field-value" id="e-checkout">—</div></div>
+            <button class="change-btn" onclick="toggleField('checkout')">Change</button>
+          </div>
+          <div class="field-input" id="fi-checkout">
+            <div class="form-group" style="margin-top:8px;"><input type="date" id="new-checkout" /></div>
+          </div>
+
+          <div class="field-row">
+            <div><div class="field-label">Food Option</div><div class="field-value" id="e-food">—</div></div>
+            <button class="change-btn" onclick="toggleField('food')">Change</button>
+          </div>
+          <div class="field-input" id="fi-food">
+            <div class="form-group" style="margin-top:8px;">
+              <select id="new-food">
+                <option value="none">No meals included</option>
+                <option value="breakfast">Breakfast only</option>
+                <option value="half-board">Half Board (Breakfast + Dinner)</option>
+                <option value="full-board">Full Board (All meals)</option>
+                <option value="all-inclusive">All Inclusive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="backToStep1()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" onclick="calculatePayment()">Calculate Payment →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: PAYMENT -->
+      <div id="step3" style="display:none;">
+        <div class="admin-card" style="margin-bottom:24px;">
+          <h3 style="font-size:18px;color:var(--accent);margin:0 0 20px;">Payment Summary</h3>
+          <div class="payment-box">
+            <div class="payment-row"><span class="label">Original Payment</span><span class="amount" id="p-original">—</span></div>
+            <div class="payment-row"><span class="label">New Amount</span><span class="amount" id="p-new">—</span></div>
+            <div class="payment-row"><span class="label">Difference</span><span class="amount" id="p-diff">—</span></div>
+            <div class="payment-row"><span class="label">Refundable Amount</span><span class="amount" id="p-refund">—</span></div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="back-btn" onclick="backToStep2()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back — discard changes
+          </button>
+          <div style="display:flex;gap:12px;">
+            <button class="btn btn-success" id="payBtn" style="display:none;" onclick="goToPayment()">Pay →</button>
+            <button class="btn btn-warn" id="refundBtn" style="display:none;" onclick="goToRefund()">Get Refund →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty footer -->
+  <footer class="admin-footer-empty"></footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    if (!sessionStorage.getItem('adminLoggedIn')) window.location.href = 'admin-login.html';
+
+    let currentRes = null;
+
+    function toggleVerifyInput() {
+      const m = document.getElementById('verifyMethod').value;
+      document.getElementById('emailWrap').style.display = m==='email' ? 'flex' : 'none';
+      document.getElementById('phoneWrap').style.display = m==='otp'   ? 'flex' : 'none';
+    }
+
+    function verifyGuest() {
+      const method = document.getElementById('verifyMethod').value;
+      const email  = document.getElementById('guestEmail').value.trim();
+      const phone  = document.getElementById('guestPhone').value.trim();
+      if (method==='email' && !email) { showToast('Please enter the guest email.','error'); return; }
+      if (method==='otp'   && !phone) { showToast('Please enter the guest phone.','error'); return; }
+
+      /*
+       * BACKEND NOTE:
+       * fetch(`GetReservationServlet?method=${method}&contact=${method==='email'?email:phone}`)
+       * .then(r=>r.json()).then(data => { currentRes = data; loadStep2(); });
+       */
+
+      // PLACEHOLDER
+      currentRes = {
+        reservationId: 'RES-001', roomNumber: 'FRPA.A56.03',
+        suite: 'executive', suiteLabel: 'Executive Suite',
+        checkin: '2026-04-10', checkout: '2026-04-15',
+        food: 'breakfast', foodLabel: 'Breakfast only',
+        pricePerNight: 351, totalPrice: 1755,
+      };
+      loadStep2();
+    }
+
+    function loadStep2() {
+      document.getElementById('e-roomNum').textContent = currentRes.roomNumber;
+      document.getElementById('e-suite').textContent   = currentRes.suiteLabel;
+      document.getElementById('e-checkin').textContent = currentRes.checkin;
+      document.getElementById('e-checkout').textContent= currentRes.checkout;
+      document.getElementById('e-food').textContent    = currentRes.foodLabel;
+      document.getElementById('new-checkin').value     = currentRes.checkin;
+      document.getElementById('new-checkout').value    = currentRes.checkout;
+      document.getElementById('new-suite').value       = currentRes.suite;
+      document.getElementById('new-food').value        = currentRes.food;
+      setStep(2);
+    }
+
+    function toggleField(field) {
+      const fi  = document.getElementById(`fi-${field}`);
+      const btn = fi.previousElementSibling.querySelector('.change-btn');
+      const open = fi.style.display === 'block';
+      fi.style.display = open ? 'none' : 'block';
+      btn.classList.toggle('active', !open);
+    }
+
+    function calculatePayment() {
+      const newCheckin  = document.getElementById('new-checkin').value  || currentRes.checkin;
+      const newCheckout = document.getElementById('new-checkout').value || currentRes.checkout;
+      const newSuite    = document.getElementById('new-suite').value     || currentRes.suite;
+
+      const PRICES = {
+        'presidential':63600,'penthouse':44200,'executive':351,'junior':420,
+        'family':560,'single-regular':60,'double-regular':100,'family-regular':120
+      };
+
+      const nights    = Math.round((new Date(newCheckout)-new Date(newCheckin))/(1000*60*60*24));
+      const newPrice  = (PRICES[newSuite] || currentRes.pricePerNight) * nights;
+      const diff      = newPrice - currentRes.totalPrice;
+      const refund    = diff < 0 ? Math.abs(diff) : 0;
+
+      document.getElementById('p-original').textContent = '$' + currentRes.totalPrice.toLocaleString();
+      document.getElementById('p-new').textContent      = '$' + newPrice.toLocaleString();
+      const diffEl = document.getElementById('p-diff');
+      diffEl.textContent = (diff >= 0 ? '+' : '') + '$' + diff.toLocaleString();
+      diffEl.className   = 'amount ' + (diff > 0 ? 'pos' : diff < 0 ? 'neg' : '');
+      document.getElementById('p-refund').textContent = '$' + refund.toLocaleString();
+      document.getElementById('payBtn').style.display    = diff > 0  ? 'inline-flex' : 'none';
+      document.getElementById('refundBtn').style.display = refund > 0 ? 'inline-flex' : 'none';
+      setStep(3);
+    }
+
+    function setStep(n) {
+      [1,2,3].forEach(i => {
+        document.getElementById(`step${i}`).style.display     = i===n ? 'block' : 'none';
+        document.getElementById(`step${i}-ind`).classList.toggle('active', i===n);
+      });
+    }
+
+    function backToStep1() { setStep(1); }
+    function backToStep2() { setStep(2); }
+    function goToPayment() { window.location.href = 'payment.html?type=update&res=' + currentRes.reservationId; }
+    function goToRefund()  { window.location.href = 'refund.html?res=' + currentRes.reservationId; }
+
+    function showToast(msg, type='success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast toast-${type} show`;
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
