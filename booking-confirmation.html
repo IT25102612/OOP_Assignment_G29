@@ -221,6 +221,62 @@
 
     // Store confirmation ID for update/cancel pages
     sessionStorage.setItem('confId', confData.confirmationId);
+    // ---------------------------------------------------------
+    // Load services linked to the reservations and display them
+    // ---------------------------------------------------------
+    const reservationIds = confData.reservationIds || [];
+
+    if (reservationIds.length > 0) {
+
+        // Fetch services for the first reservation
+        // (all rooms share the same meal plan so one fetch is enough)
+        fetch('/ViewServicesServlet?reservationId=' + 
+              reservationIds[0])
+        .then(r => r.json())
+        .then(data => {
+
+            if (!data.success || !data.services.length) return;
+
+            // Find where to display services on the page
+            // We will add it after the payment summary div
+            const paymentDiv = document.getElementById('confPayment');
+            if (!paymentDiv) return;
+
+            // Build the services display block
+            const servicesBlock = document.createElement('div');
+            servicesBlock.style.cssText = 
+                'border:1.5px solid rgba(30,100,65,0.12);' +
+                'border-radius:14px;padding:20px;margin-top:16px;';
+
+            let html = '<h4 style="font-family:Cormorant Garamond,' +
+                'serif;font-size:18px;color:var(--accent),' +
+                '#1e6441;margin:0 0 12px;font-weight:300;">' +
+                'Included Services</h4>';
+
+            data.services.forEach(service => {
+                html += '<div style="display:flex;justify-content:' +
+                    'space-between;padding:8px 0;border-bottom:' +
+                    '1px solid rgba(30,100,65,0.08);font-size:14px;">' +
+                    '<span style="color:#7a8c80;">' + 
+                        service.name + '</span>' +
+                    '<span>$' + service.price + '/person</span>' +
+                    '</div>';
+            });
+
+            servicesBlock.innerHTML = html;
+
+            // Insert it after the payment summary
+            paymentDiv.parentNode.insertBefore(
+                servicesBlock, 
+                paymentDiv.nextSibling
+            );
+        })
+        .catch(err => {
+            // Services failed to load — not critical, 
+            // confirmation still shows
+            console.error('Could not load services:', err);
+        });
+    }
   </script>
 </body>
 </html>

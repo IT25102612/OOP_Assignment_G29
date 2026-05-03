@@ -315,6 +315,15 @@
       const note = document.getElementById('customMealNote').value.trim();
       sessionStorage.setItem('mealOption', JSON.stringify({ ...selectedMeal, note }));
       sessionStorage.setItem('guestCounts', JSON.stringify({ adults, children }));
+      fetch('/ViewServicesServlet?category=Meals')
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            // data.services is your array of meal services
+            // use this to populate the meal cards dynamically
+           // instead of the hardcoded HTML cards
+          }
+        });
       window.location.href = 'payment-summary.html';
     }
   </script>
