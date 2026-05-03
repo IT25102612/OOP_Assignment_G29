@@ -139,55 +139,206 @@
     }
 
     function processPayment() {
-      if (!selectedMethod) { document.getElementById('gwError').textContent = 'Please select a payment method.'; return; }
+
+      // Check a payment method was selected
+      if (!selectedMethod) {
+          document.getElementById('gwError').textContent =
+              'Please select a payment method.';
+          return;
+      }
 
       const overlay = document.getElementById('processingOverlay');
       overlay.classList.add('show');
 
-      /*
-       * BACKEND NOTE:
-       * fetch('SubmitPaymentServlet', {
-       *   method: 'POST',
-       *   headers: { 'Content-Type': 'application/json' },
-       *   body: JSON.stringify({
-       *     reservations: allRes,
-       *     paymentMethod: selectedMethod,
-       *     verifyContact: sessionStorage.getItem('verifyContact'),
-       *     verifyMethod:  sessionStorage.getItem('verifyMethod'),
-       *     grandTotal: grand,
-       *   })
-       * })
-       * .then(r => r.json())
-       * .then(data => {
-       *   if (data.success) {
-       *     sessionStorage.setItem('confirmationData', JSON.stringify(data));
-       *     window.location.href = 'booking-confirmation.html';
-       *   } else {
-       *     overlay.classList.remove('show');
-       *     document.getElementById('gwError').textContent = data.message || 'Payment failed. Please try again.';
-       *   }
-       * });
-       *
-       * The servlet should:
-       * 1. Insert all reservations into the reservations table
-       * 2. Record payment method and mark status = 'paid'
-       * 3. Generate a confirmation email with QR code + booking details
-       * 4. Send email to verifyContact
-       * 5. Send SMS if verifyMethod = 'otp'
-       * 6. Return confirmationId + reservationIds
-       */
+      // Read everything stored from previous pages
+      const allRes       = JSON.parse(
+          sessionStorage.getItem('allReservations') || '[]');
+      const mealOption   = JSON.parse(
+          sessionStorage.getItem('mealOption') || 'null');
+      const guestCounts  = JSON.parse(
+          sessionStorage.getItem('guestCounts') || 
+          '{"adults":1,"children":0}');
+      const verifyContact = 
+          sessionStorage.getItem('verifyContact') || '';
 
-      // PLACEHOLDER — simulate 2s processing
-      setTimeout(() => {
-        overlay.classList.remove('show');
-        sessionStorage.setItem('confirmationData', JSON.stringify({
-          confirmationId: 'TRQ-' + Math.random().toString(36).substr(2,8).toUpperCase(),
-          reservationIds: allRes.map((_,i) => 'RES-' + (100 + i)),
-          paymentMethod: selectedMethod,
-          grandTotal: grand,
-        }));
-        window.location.href = 'booking-confirmation.html';
-      }, 2000);
+      // We will store reservation IDs here as we create them
+      const createdReservationIds = [];
+
+      // ---------------------------------------------------------
+      // STEP 1: Register or retrieve the customer
+      // ---------------------------------------------------------
+      const customerParams = new URLSearchParams();
+      customerParams.append('name',  verifyContact); // use email
+      customerParams.append('nic',   'UNKNOWN');     // guest fills later
+      customerParams.append('phone', '');
+      customerParams.append('email', verifyContact);
+
+      fetch('/RegisterCustomerServlet', {
+          method:  'POST',
+          headers: { 
+              'Content-Type': 'application/x-www-form-urlencoded' 
+          },
+          body: customerParams.toString()
+      })
+      .then(r => r.json())
+      .then(customerData => {
+
+          if (!customerData.success) {
+              throw new Error('Customer registration failed.');
+          }
+
+          const customerId = customerData.customerId;
+
+          // ---------------------------------------------------------
+          // STEP 2: Create a reservation for each room selected
+          // We do them one at a time using a chain of promises
+          // ---------------------------------------------------------
+          // Flatten all rooms across all reservation blocks
+          const allRooms = [];
+          allRes.forEach(res => {
+              res.rooms.forEach(room => {
+                  allRooms.push({
+                      roomId:       room.roomNumber,
+                      checkinDate:  res.checkin,
+                      checkoutDate: res.checkout,
+                      customerId:   customerId
+                  });
+              });
+          });
+
+          // Create reservations one by one (sequential promises)
+          return allRooms.reduce((promiseChain, roomData) => {
+              return promiseChain.then(() => {
+
+                  const resParams = new URLSearchParams();
+                  resParams.append('customerId',   roomData.customerId);
+                  resParams.append('roomId',        roomData.roomId);
+                  resParams.append('checkinDate',   roomData.checkinDate);
+                  resParams.append('checkoutDate',  roomData.checkoutDate);
+
+                  return fetch('/MakeReservationServlet', {
+                      method:  'POST',
+                      headers: { 
+                          'Content-Type': 
+                              'application/x-www-form-urlencoded' 
+                      },
+                      body: resParams.toString()
+                  })
+                  .then(r => r.json())
+                  .then(resData => {
+                      if (!resData.success) {
+                          throw new Error(
+                              'Reservation failed for room ' + 
+                              roomData.roomId);
+                      }
+                      // Save the new reservation ID
+                      createdReservationIds.push(
+                          resData.reservationId);
+                  });
+              });
+          }, Promise.resolve());
+
+      })
+      .then(() => {
+
+          // ---------------------------------------------------------
+          // STEP 3: Link the meal/service to each reservation
+          // Only runs if guest chose a meal that is not "No Meals"
+          // ---------------------------------------------------------
+          if (mealOption && 
+              mealOption.id !== 'none' && 
+              mealOption.serviceId) {
+
+              // Link service to every reservation just created
+              const linkPromises = createdReservationIds.map(resId => {
+
+                  const linkParams = new URLSearchParams();
+                  linkParams.append('reservationId', resId);
+                  linkParams.append('serviceId',     
+                                    mealOption.serviceId);
+
+                  return fetch('/LinkServiceServlet', {
+                      method:  'POST',
+                      headers: { 
+                          'Content-Type': 
+                              'application/x-www-form-urlencoded' 
+                      },
+                      body: linkParams.toString()
+                  })
+                  .then(r => r.json());
+                  // We don't throw on link failure — 
+                  // reservation still counts as made
+              });
+
+              return Promise.all(linkPromises);
+          }
+
+          return Promise.resolve();
+      })
+      .then(() => {
+
+          // ---------------------------------------------------------
+          // STEP 4: Record the payment
+          // ---------------------------------------------------------
+          const grand = allRes.reduce((s, r) => s + r.total, 0);
+
+          // Record one payment entry covering the whole booking
+          const payParams = new URLSearchParams();
+          payParams.append('reservationId', 
+                          createdReservationIds[0] || 'UNKNOWN');
+          payParams.append('amount',  grand);
+          payParams.append('method',  selectedMethod);
+
+          return fetch('/RecordPaymentServlet', {
+              method:  'POST',
+              headers: { 
+                  'Content-Type': 
+                      'application/x-www-form-urlencoded' 
+              },
+              body: payParams.toString()
+          })
+          .then(r => r.json());
+
+      })
+      .then(paymentData => {
+
+          // ---------------------------------------------------------
+          // STEP 5: Everything succeeded — build confirmation data
+          // and navigate to confirmation page
+          // ---------------------------------------------------------
+          overlay.classList.remove('show');
+
+          // Generate a confirmation ID
+          const confirmationId = 'TRQ-' + 
+              Math.random()
+                  .toString(36)
+                  .substr(2, 8)
+                  .toUpperCase();
+
+          const grand = allRes.reduce((s, r) => s + r.total, 0);
+
+          // Save to sessionStorage so confirmation page can read it
+          sessionStorage.setItem('confirmationData', JSON.stringify({
+              confirmationId:   confirmationId,
+              reservationIds:   createdReservationIds,
+              paymentMethod:    selectedMethod,
+              grandTotal:       grand,
+          }));
+
+          // Navigate to confirmation page
+          window.location.href = 'booking-confirmation.html';
+
+      })
+      .catch(error => {
+
+          // ---------------------------------------------------------
+          // If anything fails, hide the overlay and show the error
+          // ---------------------------------------------------------
+          overlay.classList.remove('show');
+          document.getElementById('gwError').textContent =
+              'Payment failed: ' + error.message + 
+              '. Please try again.';
+      });
     }
   </script>
 </body>
