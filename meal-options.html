@@ -189,44 +189,103 @@
     <div class="meal-content">
 
       <!-- MEAL OPTIONS -->
-      <div class="meal-options-grid" id="mealGrid">
+<!-- 
+  data-service-id connects each card to its row in the 
+  services table in your MySQL database.
+  These IDs match the seed data in schema.sql exactly:
+    SVC001 = Breakfast
+    SVC002 = Half Board
+    SVC003 = Full Board
+    SVC004 = All Inclusive
+  "No Meals" has data-service-id="" because it is not
+  a real service — no database row exists for it.
+-->
+<div class="meal-options-grid" id="mealGrid">
 
-        <div class="meal-card" data-meal="none" data-price-adult="0" data-price-child="0" onclick="selectMeal(this)">
-          <div class="meal-card-icon">🚫</div>
-          <div class="meal-card-name">No Meals</div>
-          <div class="meal-card-desc">Room only. Dine at your leisure in our restaurants or explore the city.</div>
-          <div class="meal-card-price">Included</div>
-        </div>
+  <div class="meal-card"
+       data-meal="none"
+       data-service-id=""
+       data-price-adult="0"
+       data-price-child="0"
+       onclick="selectMeal(this)">
+    <div class="meal-card-icon">🚫</div>
+    <div class="meal-card-name">No Meals</div>
+    <div class="meal-card-desc">
+      Room only. Dine at your leisure in our restaurants 
+      or explore the city.
+    </div>
+    <div class="meal-card-price">Included</div>
+  </div>
 
-        <div class="meal-card" data-meal="breakfast" data-price-adult="35" data-price-child="18" onclick="selectMeal(this)">
-          <div class="meal-card-icon">🍳</div>
-          <div class="meal-card-name">Breakfast Only</div>
-          <div class="meal-card-desc">Start each day with our full continental buffet — pastries, eggs, fruits, and more.</div>
-          <div class="meal-card-price">$35 / adult &nbsp;·&nbsp; $18 / child per night</div>
-        </div>
+  <div class="meal-card"
+       data-meal="breakfast"
+       data-service-id="SVC001"
+       data-price-adult="35"
+       data-price-child="18"
+       onclick="selectMeal(this)">
+    <div class="meal-card-icon">🍳</div>
+    <div class="meal-card-name">Breakfast Only</div>
+    <div class="meal-card-desc">
+      Start each day with our full continental buffet — 
+      pastries, eggs, fruits, and more.
+    </div>
+    <div class="meal-card-price">
+      $35 / adult &nbsp;·&nbsp; $18 / child per night
+    </div>
+  </div>
 
-        <div class="meal-card" data-meal="half-board" data-price-adult="75" data-price-child="38" onclick="selectMeal(this)">
-          <div class="meal-card-icon">🍽️</div>
-          <div class="meal-card-name">Half Board</div>
-          <div class="meal-card-desc">Breakfast + 3-course dinner. Enjoy your afternoons freely while we handle morning and evening.</div>
-          <div class="meal-card-price">$75 / adult &nbsp;·&nbsp; $38 / child per night</div>
-        </div>
+  <div class="meal-card"
+       data-meal="half-board"
+       data-service-id="SVC002"
+       data-price-adult="75"
+       data-price-child="38"
+       onclick="selectMeal(this)">
+    <div class="meal-card-icon">🍽️</div>
+    <div class="meal-card-name">Half Board</div>
+    <div class="meal-card-desc">
+      Breakfast + 3-course dinner. Enjoy your afternoons 
+      freely while we handle morning and evening.
+    </div>
+    <div class="meal-card-price">
+      $75 / adult &nbsp;·&nbsp; $38 / child per night
+    </div>
+  </div>
 
-        <div class="meal-card" data-meal="full-board" data-price-adult="110" data-price-child="55" onclick="selectMeal(this)">
-          <div class="meal-card-icon">🥘</div>
-          <div class="meal-card-name">Full Board</div>
-          <div class="meal-card-desc">All three meals — breakfast, lunch, and dinner — included each day of your stay.</div>
-          <div class="meal-card-price">$110 / adult &nbsp;·&nbsp; $55 / child per night</div>
-        </div>
+  <div class="meal-card"
+       data-meal="full-board"
+       data-service-id="SVC003"
+       data-price-adult="110"
+       data-price-child="55"
+       onclick="selectMeal(this)">
+    <div class="meal-card-icon">🥘</div>
+    <div class="meal-card-name">Full Board</div>
+    <div class="meal-card-desc">
+      All three meals — breakfast, lunch, and dinner — 
+      included each day of your stay.
+    </div>
+    <div class="meal-card-price">
+      $110 / adult &nbsp;·&nbsp; $55 / child per night
+    </div>
+  </div>
 
-        <div class="meal-card" data-meal="all-inclusive" data-price-adult="160" data-price-child="80" onclick="selectMeal(this)">
-          <div class="meal-card-icon">🌟</div>
-          <div class="meal-card-name">All Inclusive</div>
-          <div class="meal-card-desc">All meals, snacks, non-alcoholic beverages, and access to the poolside dining area.</div>
-          <div class="meal-card-price">$160 / adult &nbsp;·&nbsp; $80 / child per night</div>
-        </div>
+  <div class="meal-card"
+       data-meal="all-inclusive"
+       data-service-id="SVC004"
+       data-price-adult="160"
+       data-price-child="80"
+       onclick="selectMeal(this)">
+    <div class="meal-card-icon">🌟</div>
+    <div class="meal-card-name">All Inclusive</div>
+    <div class="meal-card-desc">
+      All meals, snacks, non-alcoholic beverages, and 
+      access to the poolside dining area.
+    </div>
+    <div class="meal-card-price">
+      $160 / adult &nbsp;·&nbsp; $80 / child per night
+    </div>
+  </div>
 
-      </div>
+</div>
 
       <!-- CUSTOM MEAL -->
       <div class="custom-meal-wrap">
@@ -290,15 +349,26 @@
     let adults = 1, children = 0, selectedMeal = null;
 
     function selectMeal(el) {
-      document.querySelectorAll('.meal-card').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedMeal = {
-        id:          el.dataset.meal,
-        priceAdult:  parseFloat(el.dataset.priceAdult),
-        priceChild:  parseFloat(el.dataset.priceChild),
-        label:       el.querySelector('.meal-card-name').textContent,
-      };
-    }
+  // Remove selected style from all cards
+  document.querySelectorAll('.meal-card').forEach(
+    c => c.classList.remove('selected')
+  );
+
+  // Add selected style to the clicked card
+  el.classList.add('selected');
+
+  // Store the selected meal in the selectedMeal variable
+  // so proceedToPayment() can read it later
+  selectedMeal = {
+    id:          el.dataset.meal,
+    // serviceId connects this choice to your MySQL services table
+    // e.g. "SVC001" for Breakfast, "" for No Meals
+    serviceId:   el.dataset.serviceId,
+    priceAdult:  parseFloat(el.dataset.priceAdult),
+    priceChild:  parseFloat(el.dataset.priceChild),
+    label:       el.querySelector('.meal-card-name').textContent,
+  };
+}
 
     function adjustGuest(type, delta) {
       if (type === 'adults') {
