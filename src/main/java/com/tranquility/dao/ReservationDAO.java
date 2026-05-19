@@ -26,7 +26,7 @@ public class ReservationDAO {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("File error: " + e.getMessage());
         }
         return list;
     }
