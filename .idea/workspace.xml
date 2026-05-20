@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7c423f18-eff2-4c39-88b4-3dd936758555" name="Changes" comment="Add QuickSort algorithm for sorting reservations by check-in date">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OOP_Assignment_G29.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OOP_Assignment_G29.iml" afterDir="false" />
-    </list>
+    <list default="true" id="7c423f18-eff2-4c39-88b4-3dd936758555" name="Changes" comment="Add CancelReservationServlet - Cancel reservation endpoint" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,6 +47,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "project.structure.last.edited": "Libraries",
@@ -98,7 +96,15 @@
       <option name="project" value="LOCAL" />
       <updated>1779158337277</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Add CancelReservationServlet - Cancel reservation endpoint">
+      <option name="closed" value="true" />
+      <created>1779279092409</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1779279092409</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -106,6 +112,7 @@
     <MESSAGE value="Add Reservation model with encapsulation getters/setters" />
     <MESSAGE value="Add ReservationDAO with file read/write CRUD operations" />
     <MESSAGE value="Add QuickSort algorithm for sorting reservations by check-in date" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add QuickSort algorithm for sorting reservations by check-in date" />
+    <MESSAGE value="Add CancelReservationServlet - Cancel reservation endpoint" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add CancelReservationServlet - Cancel reservation endpoint" />
   </component>
 </project>
