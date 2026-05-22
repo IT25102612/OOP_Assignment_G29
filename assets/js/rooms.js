@@ -21,6 +21,7 @@ const CITY_MAP = {
   'Peru':          ['Lima','Cusco'],
   'Sri Lanka':     ['Colombo','Kandy','Galle'],
   'Maldives':      ['North Malé Atoll','Baa Atoll'],
+
 };
 
 /* ---------------------------------------------------------------
