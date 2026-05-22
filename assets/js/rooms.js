@@ -20,7 +20,8 @@ const CITY_MAP = {
   'Brazil':        ['Rio de Janeiro','São Paulo'],
   'Peru':          ['Lima','Cusco'],
   'Sri Lanka':     ['Colombo','Kandy','Galle'],
-  'Maldives':      ['North Malé Atoll','Baa Atoll'],
+
+
 };
 
 /* ---------------------------------------------------------------
