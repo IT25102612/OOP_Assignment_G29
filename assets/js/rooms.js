@@ -339,5 +339,9 @@ document.getElementById('f-checkin')?.addEventListener('change', function () {
   }
 });
 
-
+// Set min checkin to today
+(function () {
+  const today = new Date().toISOString().split('T')[0];
+  const checkin = document.getElementById('f-checkin');
+  if (checkin) checkin.min = today;
 })();
