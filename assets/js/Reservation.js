@@ -55,9 +55,7 @@ public class Reservation {
         this.checkoutDate = checkoutDate;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+
 
     @Override
     public String toString() {
