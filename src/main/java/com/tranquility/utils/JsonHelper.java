@@ -31,4 +31,8 @@ public class JsonHelper {
                 .replace("\r", "\\r")
                 .replace("\t", "\\t");
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master
