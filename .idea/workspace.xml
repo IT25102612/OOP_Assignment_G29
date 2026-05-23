@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7c423f18-eff2-4c39-88b4-3dd936758555" name="Changes" comment="Add ViewReservationsServlet - Read and sort reservations">
+    <list default="true" id="7c423f18-eff2-4c39-88b4-3dd936758555" name="Changes" comment="Add Reservation model with encapsulation - getters/setters">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/tranquility/utils/JsonHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/Reservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/Reservation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tranquility/utils/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tranquility/utils/DBConnection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +58,7 @@
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "vcs.Git",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -161,7 +163,23 @@
       <option name="project" value="LOCAL" />
       <updated>1779456893364</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Add ViewReservationsServlet - Read and sort reservations">
+      <option name="closed" value="true" />
+      <created>1779502162623</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1779502162623</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Add Reservation model with encapsulation - getters/setters">
+      <option name="closed" value="true" />
+      <created>1779502255527</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1779502255527</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -188,7 +206,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add Reservation model with encapsulation - getters/setters" />
     <MESSAGE value="Add Reservation model with encapsulation getters/setters" />
     <MESSAGE value="Add ReservationDAO with file read/write CRUD operations" />
     <MESSAGE value="Add QuickSort algorithm for sorting reservations by check-in date" />
@@ -196,6 +213,7 @@
     <MESSAGE value="Add MakeReservationServlet - Create reservation endpoint" />
     <MESSAGE value="Add UpdateReservationServlet - Update reservation endpoint" />
     <MESSAGE value="Add ViewReservationsServlet - Read and sort reservations" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add ViewReservationsServlet - Read and sort reservations" />
+    <MESSAGE value="Add Reservation model with encapsulation - getters/setters" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add Reservation model with encapsulation - getters/setters" />
   </component>
 </project>

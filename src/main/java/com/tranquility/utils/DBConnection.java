@@ -29,7 +29,7 @@ public class DBConnection {
 
     // Your MySQL password — change this to your actual password
     // Leave as empty string "" if you have no password set
-    private static final String PASSWORD = "yourpassword";
+    private static final String PASSWORD = "your password";
 
     // Static block: loads the MySQL JDBC driver when the class
     // is first used. This only runs once.
