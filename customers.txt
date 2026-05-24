@@ -1,0 +1,2 @@
+C001,Kasun Perera,200012345678,0771234567,kasun@gmail.com
+C002,Nimal Silva,199988877766,0712345678,nimal@gmail.com
