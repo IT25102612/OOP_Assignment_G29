@@ -1,4 +1,5 @@
-package com.tranquility.models;
+
+// Component 01 - Room Inventory Management - IT25102616package com.tranquility.models;
 
 public class Room {
 
