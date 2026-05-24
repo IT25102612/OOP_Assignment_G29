@@ -41,11 +41,6 @@ public class RoomDAO {
             ps.setString(8,  room.getBuilding());
             ps.setInt(9,     room.getFloor());
             ps.setInt(10,    room.getRoomNumber());
-            ps.setString(11, room.getCountry());
-            ps.setString(12, room.getCity());
-            ps.setString(13, room.getBalcony());
-            ps.setString(14, room.getPrivatePool());
-            ps.setString(15, room.getJointRooms());
             ps.executeUpdate();
         }
         bst.insert(room);
