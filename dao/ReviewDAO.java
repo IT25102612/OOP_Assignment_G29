@@ -28,6 +28,8 @@ public class ReviewDAO {
             pst.setInt(3, review.getRating());
             pst.setString(4, review.getComment());
 
+            //executeUpdate() returns number of affected rows
+            //If rows > 0, insertion successful
             status = pst.executeUpdate() > 0;
 
         } catch (Exception e) {
