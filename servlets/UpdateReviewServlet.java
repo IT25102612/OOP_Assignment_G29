@@ -24,6 +24,7 @@ public class UpdateReviewServlet extends HttpServlet {
                 request.getParameter("approved")
         );
 
+        // Create Review object
         Review review = new Review();
 
         review.setReviewId(reviewId);
