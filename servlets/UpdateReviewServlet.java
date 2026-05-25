@@ -14,9 +14,10 @@ public class UpdateReviewServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-       // Get review ID from request         
+        // Get review ID from request         
         int reviewId = Integer.parseInt(request.getParameter("reviewId"));
 
+        // Get updated values
         String adminReply = request.getParameter("adminReply");
 
         boolean approved = Boolean.parseBoolean(
