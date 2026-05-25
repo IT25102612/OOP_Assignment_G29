@@ -33,7 +33,8 @@ public class UpdateReviewServlet extends HttpServlet {
         review.setApproved(approved);
 
         ReviewDAO dao = new ReviewDAO();
-
+                
+        // UPDATE operation called here
         boolean status = dao.updateReview(review);
 
         if (status) {
