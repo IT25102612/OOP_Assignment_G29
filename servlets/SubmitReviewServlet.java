@@ -23,11 +23,13 @@ public class SubmitReviewServlet extends HttpServlet {
         //create review object 
         Review review = new Review();
 
+        //store form date into object        
         review.setCodename(codename);
         review.setLocation(location);
         review.setEmail(email);
         review.setReviewText(reviewText);
 
+        //Dao object handle database operations        
         ReviewDAO dao = new ReviewDAO();
 
         boolean status = dao.addReview(review);
