@@ -14,7 +14,8 @@ public class AdminDAO {
 
         try {
             Connection con = DBConnection.getConnection();
-
+            
+            // CREATE operation for admin registration
             String sql = "INSERT INTO admins(full_name,email,username,password) VALUES(?,?,?,?)";
 
             PreparedStatement pst = con.prepareStatement(sql);
