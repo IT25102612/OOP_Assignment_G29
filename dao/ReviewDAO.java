@@ -18,9 +18,10 @@ public class ReviewDAO {
 
             //CREATE operation using INSERT query
             String sql = "INSERT INTO reviews(guest_name,room_type,rating,comment) VALUES(?,?,?,?)";
-            
-            PreparedStatement pst = con.prepareStatement(sql);
 
+            //PreparedStatement prevent SQL injection
+            PreparedStatement pst = con.prepareStatement(sql);
+            
             pst.setString(1, review.getGuestName());
             pst.setString(2, review.getRoomType());
             pst.setInt(3, review.getRating());
