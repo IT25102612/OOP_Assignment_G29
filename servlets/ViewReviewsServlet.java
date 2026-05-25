@@ -30,7 +30,8 @@ public class ViewReviewsServlet extends HttpServlet {
 
         // Store data in request object              
         request.setAttribute("reviewList", reviewList);
-
+                
+        // Forward data to JSP page
         request.getRequestDispatcher("reviews.jsp")
                 .forward(request, response);
     }
