@@ -13,10 +13,12 @@ public class ReviewDAO {
         boolean status = false;
 
         try {
+            //Establish operation using INSERT query
             Connection con = DBConnection.getConnection();
 
+            //CREATE operation using INSERT query
             String sql = "INSERT INTO reviews(guest_name,room_type,rating,comment) VALUES(?,?,?,?)";
-
+            
             PreparedStatement pst = con.prepareStatement(sql);
 
             pst.setString(1, review.getGuestName());
