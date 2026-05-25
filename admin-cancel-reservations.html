@@ -58,7 +58,11 @@
 
   <header class="admin-header">
     <span class="admin-brand">Tranquility.com</span>
-    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <div class="header-logo"><div class="header-logo">
+    <img src="assets/images/logo.jpg"
+         alt="Tranquility Logo"
+         class="site-logo">
+    </div></div>
     <button id="themeToggle" aria-label="Toggle theme">🌙</button>
   </header>
 
@@ -191,8 +195,7 @@
   <script>
     if (!sessionStorage.getItem('adminLoggedIn')) window.location.href = 'admin-login.html';
 
-    let currentRes = null;
-    let sentCode   = null;
+    
 
     function toggleVerify() {
       const m = document.getElementById('verifyMethod').value;
@@ -201,22 +204,26 @@
     }
 
     function verifyGuest() {
-      /*
-       * BACKEND NOTE:
-       * fetch(`GetReservationServlet?...`).then(r=>r.json()).then(data => { currentRes=data; loadStep2(); });
-       */
-      // PLACEHOLDER
-      currentRes = {
-        reservationId: 'RES-001',
-        roomNumber:    'FRPA.A56.03',
-        suiteLabel:    'Executive Suite',
-        guestName:     'Emily Clarke',
-        guestEmail:    'emily@email.com',
-        checkin:       '2026-04-10',
-        checkout:      '2026-04-15',
-        totalPrice:    1755,
-      };
-      loadStep2();
+      const method  = document.getElementById('verifyMethod').value;
+      const contact = method === 'email'
+        ? document.getElementById('guestEmail').value.trim()
+        : document.getElementById('guestPhone').value.trim();
+
+      fetch('/ViewReservationsServlet?contact='
+            + encodeURIComponent(contact)
+            + '&method=' + method)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.reservation) {
+          currentRes = data.reservation;
+          loadStep2();
+        } else {
+          showToast('No reservation found.','error');
+        }
+      })
+      .catch(() => {
+        showToast('Could not connect to server.','error');
+      });
     }
 
     function loadStep2() {
@@ -233,14 +240,25 @@
     }
 
     function sendCancelCode() {
-      /*
-       * BACKEND NOTE:
-       * fetch(`SendCancelCodeServlet`, { method:'POST', body:`resId=${currentRes.reservationId}` })
-       * The servlet generates a 6-digit code, stores it server-side, and sends to guest.
-       */
-      sentCode = '123456'; // PLACEHOLDER — real code sent by backend
-      showToast('Cancellation code sent to guest.', 'warn');
-      setStep(3);
+      fetch('/SendCancelCodeServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'resId=' + currentRes.reservationId
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          showToast('Cancellation code sent to guest.', 'warn');
+          setStep(3);
+        } else {
+          showToast(data.message || 'Failed to send code.','error');
+        }
+      })
+      .catch(() => {
+        showToast('Could not connect to server.','error');
+      });
     }
 
     function verifyCancelCode() {
@@ -248,32 +266,50 @@
       const warn    = document.getElementById('codeWarn');
       if (!entered) { warn.textContent = 'Please enter the code.'; return; }
 
-      /*
-       * BACKEND NOTE:
-       * fetch(`VerifyCancelCodeServlet`, { method:'POST', body:`resId=${currentRes.reservationId}&code=${entered}` })
-       * .then(r=>r.json()).then(data => {
-       *   if (data.success) processCancel();
-       *   else warn.textContent = 'Incorrect code. Cancellation failed.';
-       * });
-       */
-      if (entered === sentCode) {
-        processCancel();
-      } else {
-        warn.textContent = 'Incorrect code. Cancellation failed.';
-        showToast('Cancellation failed — incorrect code.', 'error');
-      }
+      fetch('/VerifyCancelCodeServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'resId=' + currentRes.reservationId
+            + '&code=' + encodeURIComponent(entered)
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          processCancel();
+        } else {
+          warn.textContent = 'Incorrect code. Cancellation failed.';
+          showToast('Cancellation failed — incorrect code.','error');
+        }
+      })
+      .catch(() => {
+        warn.textContent = 'Could not connect to server.';
+      });
     }
 
     function processCancel() {
-      /*
-       * BACKEND NOTE:
-       * fetch(`ProcessCancelServlet`, { method:'POST', body:`resId=${currentRes.reservationId}` })
-       * Then redirect to refund page.
-       */
-      showToast('Reservation cancelled. Redirecting to refund...', 'success');
-      setTimeout(() => {
-        window.location.href = `refund.html?res=${currentRes.reservationId}&type=cancel`;
-      }, 1800);
+      fetch('/CancelReservationServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'reservationId=' + currentRes.reservationId
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          showToast('Reservation cancelled. Redirecting...','success');
+          setTimeout(() => {
+            window.location.href = 'refund.html?type=cancel';
+          }, 1800);
+        } else {
+          showToast(data.message || 'Cancellation failed.','error');
+        }
+      })
+      .catch(() => {
+        showToast('Could not connect to server.','error');
+      });
     }
 
     function setStep(n) {

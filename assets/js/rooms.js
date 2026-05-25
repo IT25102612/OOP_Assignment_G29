@@ -304,27 +304,37 @@ function searchRooms() {
   emptyState.style.display = 'none';
   suiteList.innerHTML = '';
 
-  // Filter locally
-  const matched = SUITES.filter((s) => {
-    if (beds    && s.beds    !== parseInt(beds))    return false;
-    if (baths   && s.baths   !== parseInt(baths))   return false;
-    if (balcony && s.balcony !== balcony)            return false;
-    if (joint   && s.jointRooms !== joint)           return false;
-    if (pool    && s.privatePool !== pool)           return false;
-    return true;
-  });
+  // Build query parameters from filter values
+  const queryParams = new URLSearchParams();
+  if (beds)    queryParams.append('beds',    beds);
+  if (baths)   queryParams.append('baths',   baths);
+  if (balcony) queryParams.append('balcony', balcony);
+  if (joint)   queryParams.append('joint',   joint);
+  if (pool)    queryParams.append('pool',    pool);
 
-  if (!matched.length) {
+  fetch('/SearchRoomServlet?' + queryParams.toString())
+  .then(r => r.json())
+  .then(data => {
+    if (!data.success || !data.rooms || !data.rooms.length) {
+      suiteList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">✦</div>
+          <p>No suites match your selected filters.
+             <br>Try broadening your search.</p>
+        </div>`;
+      return;
+    }
+
+    data.rooms.forEach(suite => {
+      suiteList.appendChild(buildCard(suite, nights));
+    });
+  })
+  .catch(() => {
     suiteList.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">✦</div>
-        <p>No suites match your selected filters.<br>Try broadening your search.</p>
+        <p>Could not connect to server. Please try again.</p>
       </div>`;
-    return;
-  }
-
-  matched.forEach((suite) => {
-    suiteList.appendChild(buildCard(suite, nights));
   });
 }
 

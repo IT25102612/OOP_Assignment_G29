@@ -1,0 +1,9 @@
+{
+  "java.project.referencedLibraries": [
+    "c:\\Users\\Admin\\Desktop\\SE1020_project\\WEB-INF\\lib\\mysql-connector-j-9.7.0.jar",
+    "c:\\Users\\Admin\\Desktop\\SE1020_project\\lib\\servlet-api.jar"
+  ],
+  "java.project.sourcePaths": [
+    "src\\main\\java"
+  ]
+}

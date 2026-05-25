@@ -63,13 +63,17 @@
 <body>
   <header class="admin-header">
     <span class="admin-brand">Tranquility.com</span>
-    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <div class="header-logo">
+      <img src="assets/images/logo.jpg"
+         alt="Tranquility Logo"
+         class="site-logo">
+    </div>
     <button id="themeToggle" aria-label="Toggle theme">🌙</button>
   </header>
 
   <div class="admin-page">
     <div class="admin-banner">
-      <div class="banner-badge">📋</div>
+      
       <h1>View Reservations</h1>
     </div>
 
@@ -176,23 +180,31 @@
       sessionStorage.setItem('lastViewSearch', JSON.stringify({country,city,from,to,roomnum}));
       document.getElementById('emptyState').style.display = 'none';
       document.getElementById('resList').innerHTML = '';
-      /* BACKEND NOTE:
+      /* BACKEND NOTE:*/
          fetch(`ViewReservationsServlet?country=${country}&city=${city}&from=${from}&to=${to}&roomNumber=${roomnum}`)
-         .then(r=>r.json()).then(data => { renderResults(data); if(cb)cb(); }); */
-      const PH = [
-        { reservationId:'RES-001', roomNumber:'FRPA.A56.03', guestName:'Emily Clarke',
-          guestEmail:'emily@email.com', guestPhone:'+1 555 0102', verifyMethod:'email',
-          checkin:'2026-04-10', checkout:'2026-04-15', suiteType:'Executive Suite', totalPrice:1755, status:'Confirmed' },
-        { reservationId:'RES-002', roomNumber:'JPTK.B43.02', guestName:'Hiroshi Tanaka',
-          guestEmail:'h.tanaka@email.com', guestPhone:'+81 90 1234 5678', verifyMethod:'otp',
-          checkin:'2026-05-01', checkout:'2026-05-07', suiteType:'Junior Suite', totalPrice:2520, status:'Confirmed' },
-        { reservationId:'RES-003', roomNumber:'SLCO.C12.05', guestName:'Priya Fernando',
-          guestEmail:'priya@email.com', guestPhone:'+94 77 123 4567', verifyMethod:'email',
-          checkin:'2026-03-20', checkout:'2026-03-25', suiteType:'Single Regular', totalPrice:300, status:'Checked In' },
-      ];
-      const filtered = PH.filter(r => !roomnum || r.roomNumber.toLowerCase().includes(roomnum.toLowerCase()));
-      renderResults(filtered);
-      if (cb) cb();
+         .then(r=>r.json()).then(data => { renderResults(data); if(cb)cb(); }); 
+      const queryParams = new URLSearchParams();
+      if (country) queryParams.append('country', country);
+      if (city)    queryParams.append('city',    city);
+      if (from)    queryParams.append('from',    from);
+      if (to)      queryParams.append('to',      to);
+      if (roomnum) queryParams.append('roomNumber', roomnum);
+
+      fetch('/ViewReservationsServlet?'
+            + queryParams.toString())
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          renderResults(data.reservations || []);
+        } else {
+          renderResults([]);
+        }
+        if (cb) cb();
+      })
+      .catch(() => {
+        renderResults([]);
+        if (cb) cb();
+      });
     }
     function renderResults(data) {
       const list = document.getElementById('resList');
