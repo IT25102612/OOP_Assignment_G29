@@ -16,11 +16,10 @@ public class ViewReviewsServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String all = request.getParameter("all");
-
-        // READ operation         
+        
         ReviewDAO dao = new ReviewDAO();
 
-        // Store data in request object        
+        // READ operation       
         List<Review> reviewList;
 
         if (all != null && all.equals("true")) {
