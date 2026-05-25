@@ -21,7 +21,8 @@ public class ReviewDAO {
 
             //PreparedStatement prevent SQL injection
             PreparedStatement pst = con.prepareStatement(sql);
-            
+
+            // Set Values into query placeholders
             pst.setString(1, review.getGuestName());
             pst.setString(2, review.getRoomType());
             pst.setInt(3, review.getRating());
