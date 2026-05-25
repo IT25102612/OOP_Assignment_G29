@@ -17,6 +17,7 @@ public class ViewReviewsServlet extends HttpServlet {
 
         String all = request.getParameter("all");
 
+       // READ operation         
         ReviewDAO dao = new ReviewDAO();
 
         List<Review> reviewList;
