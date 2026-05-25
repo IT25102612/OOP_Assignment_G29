@@ -1,5 +1,6 @@
 package com.tranquility.dao;
 
+
 import com.tranquility.models.Room;
 
 import com.tranquility.structures.RoomBST;
@@ -189,5 +190,3 @@ public class RoomDAO {
         return s != null && !s.trim().isEmpty();
     }
 }
- 
- 
