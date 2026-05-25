@@ -42,44 +42,48 @@
   if (!track) return;
 
   // ------- Load reviews from backend -------
-  // When backend is ready, uncomment this block and remove placeholder cards from HTML:
-  /*
   async function loadReviews() {
     try {
-      const res  = await fetch('ReviewServlet');        // your servlet URL
-      const data = await res.json();                    // expects array of review objects
+      const res  = await fetch('/ViewReviewsServlet');
+      const data = await res.json();
 
-      track.innerHTML = '';                             // clear placeholders
+      if (data.success && data.reviews.length > 0) {
+        track.innerHTML = ''; // clear placeholder cards
 
-      data.forEach((review) => {
-        const card = document.createElement('div');
-        card.classList.add('review-card');
-        card.innerHTML = `
-          <div class="review-header">
-            <span class="review-codename">${escapeHTML(review.codename)}</span>
-            <span class="review-location">${escapeHTML(review.location)}</span>
-          </div>
-          <p class="review-text">"${escapeHTML(review.reviewText)}"</p>
-          ${review.adminReply ? `
-          <div class="review-reply">
-            <span class="reply-label">Hotel Tranquility</span>
-            <p>"${escapeHTML(review.adminReply)}"</p>
-          </div>` : ''}
-        `;
-        track.appendChild(card);
-      });
+        data.reviews.forEach((review) => {
+          const card = document.createElement('div');
+          card.classList.add('review-card');
+          card.innerHTML = `
+            <div class="review-header">
+              <span class="review-codename">
+                ${escapeHTML(review.codename)}
+              </span>
+              <span class="review-location">
+                ${escapeHTML(review.location)}
+              </span>
+            </div>
+            <p class="review-text">
+              "${escapeHTML(review.reviewText)}"
+            </p>
+            ${review.adminReply ? `
+            <div class="review-reply">
+              <span class="reply-label">Hotel Tranquility</span>
+              <p>"${escapeHTML(review.adminReply)}"</p>
+            </div>` : ''}
+          `;
+          track.appendChild(card);
+        });
+      }
+      // If no reviews or fetch failed, placeholder cards stay
 
-      initCarousel();  // build dots after cards are loaded
+      initCarousel(); // build dots after cards are loaded
+
     } catch (err) {
       console.error('Could not load reviews:', err);
-      initCarousel(); // still initialise with placeholder cards
+      initCarousel(); // still run with placeholder cards
     }
   }
   loadReviews();
-  */
-
-  // ------- Carousel logic -------
-  initCarousel(); // call directly while using placeholder cards
 
   function initCarousel() {
     const cards = Array.from(track.querySelectorAll('.review-card'));
@@ -144,39 +148,38 @@ function submitReview(event) {
     return;
   }
 
-  // ------- Send to backend -------
-  // When backend is ready, uncomment and use this fetch block:
-  /*
   const formData = new FormData();
   formData.append('email',      email);
   formData.append('codename',   codename);
   formData.append('location',   location);
   formData.append('reviewText', text);
 
-  fetch('SubmitReviewServlet', {     // your servlet URL
+  fetch('/SubmitReviewServlet', {
     method: 'POST',
     body: formData,
   })
-    .then((res) => {
-      if (res.ok) {
-        feedback.textContent = 'Thank you! Your review has been submitted for approval.';
-        feedback.style.color = 'var(--accent)';
-        document.getElementById('reviewForm').reset();
-      } else {
-        feedback.textContent = 'Something went wrong. Please try again.';
-        feedback.style.color = '#c0392b';
-      }
-    })
-    .catch(() => {
-      feedback.textContent = 'Network error. Please try again.';
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+    throw new Error('Server error');
+  })
+  .then(data => {
+    if (data.success) {
+      feedback.textContent =
+        'Thank you! Your review has been submitted for approval.';
+      feedback.style.color = 'var(--accent)';
+      document.getElementById('reviewForm').reset();
+    } else {
+      feedback.textContent =
+        data.message || 'Something went wrong.';
       feedback.style.color = '#c0392b';
-    });
-  */
-
-  // TEMPORARY (remove when backend is ready):
-  feedback.textContent = 'Thank you! Your review has been submitted for approval.';
-  feedback.style.color = 'var(--accent)';
-  document.getElementById('reviewForm').reset();
+    }
+  })
+  .catch(() => {
+    feedback.textContent = 'Network error. Please try again.';
+    feedback.style.color = '#c0392b';
+  });
 }
 
 

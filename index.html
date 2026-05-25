@@ -18,16 +18,18 @@
       <a href="index.html">Tranquility.com</a>
     </div>
 
-    <!-- LOGO IN CENTRE OF HEADER -->
     <div class="header-logo">
-      <!-- Replace with your actual logo image -->
-      <div class="logo-placeholder" title="Tranquility Logo">
-        <!-- <img src="assets/images/logo.png" alt="Tranquility Logo" /> -->
-        <span>✦</span>
-      </div>
+      <img src="assets/images/logo.jpg"
+         alt="Tranquility Logo"
+         class="site-logo">
     </div>
 
-    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+    <div class="header-right">
+      <a href="available-rooms.html" class="book-btn">
+        Book Your Stay
+      </a>
+      <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+    </div>
   </header>
 
   <!-- ===== HERO BANNER / CAROUSEL ===== -->
@@ -57,10 +59,6 @@
     <section class="welcome-section">
       <div class="welcome-heading-row">
         <h1 class="welcome-heading">Welcome to Hotel Tranquility</h1>
-        <a href="#rooms-cta" class="rooms-scroll-pill" onclick="document.getElementById('rooms-cta').scrollIntoView({behavior:'smooth'});return false;">
-          View Rooms
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </a>
       </div>
       <p class="welcome-intro">
         Where the world's most breathtaking destinations meet unmatched comfort and care.
@@ -394,10 +392,7 @@
     </section>
     <!-- END REVIEWS -->
 
-    <!-- VIEW ROOMS BUTTON -->
-    <div class="cta-wrap" id="rooms-cta">
-      <a href="available-rooms.html" class="cta-btn">View Available Rooms</a>
-    </div>
+    
 
   </main>
   <!-- END MAIN -->
@@ -409,7 +404,7 @@
     <div class="footer-contact">
       <h4>Contact Us</h4>
       <ul>
-        <li>📧 <a href="/cdn-cgi/l/email-protection#d3bbb6bfbfbc93a7a1b2bda2a6babfbaa7aafdb0bcbe"><span class="__cf_email__" data-cfemail="6109040d0d0e211513000f1014080d0815184f020e0c">[email&#160;protected]</span></a></li>
+        <li>📧 hello@tranqulity.com</li>
         <li>📞 +1 (800) 872-6784</li>
         <li>🕐 24/7 Guest Support</li>
       </ul>
@@ -452,22 +447,16 @@
         <p id="reviewFeedback" class="review-feedback"></p>
       </form>
     </div>
-
-    <!-- RIGHT: Secret Admin Button (Logo) -->
-    <div class="footer-logo-wrap">
-      <!--
-        This logo image is a SECRET BUTTON that navigates to the admin login page.
-        Replace the placeholder below with your actual logo image.
-        Keep the href pointing to your admin login/verify page.
-      -->
-      <a href="admin-login.html" class="secret-admin-btn" title="">
-        <!-- Replace with: <img src="assets/images/logo.png" alt="" /> -->
-        <div class="logo-placeholder large">
-          <span>✦</span>
-        </div>
-      </a>
-      <p class="footer-tagline">Peace in every corner of the world.</p>
+    <!-- RIGHT: Logo -->
+    <div class="footer-logo-col" style="display:flex; flex-direction:column;
+         align-items:center; justify-content:center; padding:20px;">
+      <img src="assets/images/logoo.jpg" 
+           alt="Tranquility Logo"
+           style="height:150px; width:auto; object-fit:contain; 
+                  border-radius:8px; opacity:0.85;">
     </div>
+
+    
   </footer>
   <script src="assets/js/main.js"></script>
   <script src="assets/js/home.js"></script>

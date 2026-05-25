@@ -270,7 +270,11 @@
   <!-- HEADER -->
   <header class="site-header">
     <div class="brand"><a href="index.html">Tranquility.com</a></div>
-    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <div class="header-logo">
+      <img src="assets/images/logo.jpg"
+         alt="Tranquility Logo"
+         class="site-logo">
+    </div>
     <button id="themeToggle" aria-label="Toggle theme">🌙</button>
   </header>
 
@@ -415,10 +419,25 @@
       renderGrid(b);
     }
 
-    // ---- Booked rooms (placeholder — replace with backend fetch) ----
-    // BACKEND: fetch(`GetRoomGridServlet?suite=${suiteParam}&city=${city}&checkin=${checkin}&checkout=${checkout}`)
-    //          .then(r=>r.json()).then(data => { bookedRooms = data.booked; renderGrid(currentBuilding); });
-    const bookedRooms = ['FRPA.A56.02', 'FRPA.A56.04', 'FRPA.B43.01', 'FRPA.C12.03']; // PLACEHOLDER
+    let bookedRooms = [];
+
+    fetch('/SearchRoomServlet?suiteType='
+          + encodeURIComponent(suiteParam)
+          + '&city=' + encodeURIComponent(city)
+          + '&checkin=' + encodeURIComponent(checkin)
+          + '&checkout=' + encodeURIComponent(checkout))
+    .then(r => r.json())
+    .then(data => {
+      if (data.booked) {
+        bookedRooms = data.booked;
+      }
+      renderGrid(currentBuilding);
+    })
+    .catch(() => {
+      // If fetch fails, render with no booked rooms
+      // so guest can still see the grid
+      renderGrid(currentBuilding);
+    });
 
     function renderGrid(building) {
       const section = document.getElementById('roomGridSection');
@@ -540,8 +559,7 @@
       window.location.href = 'meal-options.html';
     }
 
-    // Init
-    renderGrid('A');
+    
   </script>
 </body>
 </html>
