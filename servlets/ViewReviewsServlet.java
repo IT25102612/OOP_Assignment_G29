@@ -28,6 +28,7 @@ public class ViewReviewsServlet extends HttpServlet {
             reviewList = dao.getApprovedReviews();
         }
 
+        // Store data in request object              
         request.setAttribute("reviewList", reviewList);
 
         request.getRequestDispatcher("reviews.jsp")
