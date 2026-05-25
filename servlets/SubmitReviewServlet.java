@@ -19,7 +19,8 @@ public class SubmitReviewServlet extends HttpServlet {
         String location = request.getParameter("location");
         String email = request.getParameter("email");
         String reviewText = request.getParameter("reviewText");
-        
+
+        //create review object 
         Review review = new Review();
 
         review.setCodename(codename);
