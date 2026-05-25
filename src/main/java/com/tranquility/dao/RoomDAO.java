@@ -1,6 +1,7 @@
 package com.tranquility.dao;
 
 import com.tranquility.models.Room;
+
 import com.tranquility.structures.RoomBST;
 import com.tranquility.utils.DBConnection;
 
@@ -68,10 +69,10 @@ public class RoomDAO {
 
     // READ — filtered search from available-rooms.html
     public List<Room> getFilteredRooms(String country, String city,
-                                       String beds, String baths,
-                                       String balcony, String pool,
-                                       String joint, String suiteType,
-                                       String checkin, String checkout) throws SQLException {
+                                        String beds, String baths,
+                                        String balcony, String pool,
+                                        String joint, String suiteType,
+                                        String checkin, String checkout) throws SQLException {
         List<Room> result   = new ArrayList<>();
         List<String> booked = new ArrayList<>();
 
@@ -187,5 +188,6 @@ public class RoomDAO {
     private boolean notEmpty(String s) {
         return s != null && !s.trim().isEmpty();
     }
-} 
+}
+ 
  
