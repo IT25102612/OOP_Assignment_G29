@@ -14,6 +14,7 @@ public class UpdateReviewServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+       // Get review ID from request         
         int reviewId = Integer.parseInt(request.getParameter("reviewId"));
 
         String adminReply = request.getParameter("adminReply");
