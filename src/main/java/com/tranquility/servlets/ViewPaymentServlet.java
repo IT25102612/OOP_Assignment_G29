@@ -1,5 +1,5 @@
-package main.java.com.tranquility.servlets;
-
+package com.tranquility.servlets;
+// View Payment Servlet - IT25102650
 import com.tranquility.dao.PaymentDAO;
 import com.tranquility.models.Payment;
 
