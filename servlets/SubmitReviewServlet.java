@@ -14,11 +14,12 @@ public class SubmitReviewServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Retrieve data enterd by user from HTML form        
         String codename = request.getParameter("codename");
         String location = request.getParameter("location");
         String email = request.getParameter("email");
         String reviewText = request.getParameter("reviewText");
-
+        
         Review review = new Review();
 
         review.setCodename(codename);
