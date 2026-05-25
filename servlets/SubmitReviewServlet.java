@@ -32,6 +32,7 @@ public class SubmitReviewServlet extends HttpServlet {
         //Dao object handle database operations        
         ReviewDAO dao = new ReviewDAO();
 
+        // CREATE operation called here        
         boolean status = dao.addReview(review);
 
         if (status) {
