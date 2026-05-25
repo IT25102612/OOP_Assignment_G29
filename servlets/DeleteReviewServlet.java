@@ -13,6 +13,7 @@ public class DeleteReviewServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Get ID of review to delete         
         int reviewId = Integer.parseInt(
                 request.getParameter("reviewId")
         );
