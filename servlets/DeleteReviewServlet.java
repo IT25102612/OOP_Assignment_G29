@@ -20,6 +20,7 @@ public class DeleteReviewServlet extends HttpServlet {
 
         ReviewDAO dao = new ReviewDAO();
 
+        // DELETE operation called here        
         boolean status = dao.deleteReview(reviewId);
 
         if (status) {
