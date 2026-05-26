@@ -1,10 +1,14 @@
+//package
 package com.tranquility.servlets;
+//handle customer data
 import com.tranquility.dao.CustomerDAO;
+//represent customer data
 import com.tranquility.models.Customer;
-
+//web request handling
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+//handle the errors
 import java.io.IOException;
 
 @WebServlet("/RegisterCustomerServlet")
