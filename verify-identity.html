@@ -139,7 +139,11 @@
 
   <header class="site-header">
     <div class="brand"><a href="index.html">Tranquility.com</a></div>
-    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <div class="header-logo">
+      <img src="assets/images/logo.jpg"
+         alt="Tranquility Logo"
+         class="site-logo">
+    </div>
     <button id="themeToggle" aria-label="Toggle theme">🌙</button>
   </header>
 
@@ -228,14 +232,31 @@
       const email = document.getElementById('emailInput').value.trim();
       if (!email || !email.includes('@')) { setError('Please enter a valid email address.'); return; }
       setError('');
-      /*
-       * BACKEND NOTE:
-       * fetch('SendVerificationCodeServlet', { method:'POST',
-       *   headers:{'Content-Type':'application/x-www-form-urlencoded'},
-       *   body:`contact=${encodeURIComponent(email)}&method=email&purpose=payment` })
-       * .then(r=>r.json()).then(d => { if(d.success) showStep('emailStep2'); });
-       */
-      sentCode = '123456'; // PLACEHOLDER
+      
+       
+        fetch('/SendVerificationCodeServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'contact=' + encodeURIComponent(email)
+            + '&method=email&purpose=payment'
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          sessionStorage.setItem('verifyContact', email);
+          sessionStorage.setItem('verifyMethod', 'email');
+          showStep('emailStep2');
+        } else {
+          setError(data.message || 'Could not send code.');
+        }
+      })
+      .catch(() => {
+        setError('Could not connect to server.');
+      });
+       
+      
       sessionStorage.setItem('verifyContact', email);
       sessionStorage.setItem('verifyMethod', 'email');
       showStep('emailStep2');
@@ -245,13 +266,31 @@
       const phone = document.getElementById('phoneInput').value.trim();
       if (!phone) { setError('Please enter your phone number.'); return; }
       setError('');
-      /*
-       * BACKEND NOTE:
-       * fetch('SendVerificationCodeServlet', { method:'POST',
-       *   body:`contact=${encodeURIComponent(phone)}&method=otp&purpose=payment` })
-       * .then(r=>r.json()).then(d => { if(d.success) showStep('otpStep2'); });
-       */
-      sentCode = '123456'; // PLACEHOLDER
+      
+       
+      fetch('/SendVerificationCodeServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'contact=' + encodeURIComponent(phone)
+            + '&method=otp&purpose=payment'
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          sessionStorage.setItem('verifyContact', phone);
+          sessionStorage.setItem('verifyMethod', 'otp');
+          showStep('otpStep2');
+        } else {
+          setError(data.message || 'Could not send code.');
+        }
+      })
+      .catch(() => {
+        setError('Could not connect to server.');
+      });
+       
+      
       sessionStorage.setItem('verifyContact', phone);
       sessionStorage.setItem('verifyMethod', 'otp');
       showStep('otpStep2');
@@ -272,21 +311,28 @@
         ? document.getElementById('emailCode').value.trim()
         : document.getElementById('otpCode').value.trim();
       if (!entered) { setError('Please enter the verification code.'); return; }
-
-      /*
-       * BACKEND NOTE:
-       * fetch('VerifyCodeServlet', { method:'POST',
-       *   body:`contact=${sessionStorage.getItem('verifyContact')}&code=${entered}&purpose=payment` })
-       * .then(r=>r.json()).then(d => {
-       *   if(d.success) window.location.href='payment-gateway.html';
-       *   else setError('Incorrect code. Please try again.');
-       * });
-       */
-      if (entered === sentCode) {
-        window.location.href = 'payment-gateway.html';
-      } else {
-        setError('Incorrect code. Please try again.');
-      }
+       
+      fetch('/VerifyCodeServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'contact=' + encodeURIComponent(
+                sessionStorage.getItem('verifyContact'))
+            + '&code=' + encodeURIComponent(entered)
+            + '&purpose=payment'
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = 'payment-gateway.html';
+        } else {
+          setError('Incorrect code. Please try again.');
+        }
+      })
+      .catch(() => {
+        setError('Could not connect to server.');
+      });
     }
 
     function showStep(id) {

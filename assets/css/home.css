@@ -28,45 +28,17 @@ h1, h2, h3, h4 {
   padding: 0 20px;
 }
 
-#themeToggle {
-  justify-self: end;
-}
-
 .header-logo {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.logo-placeholder {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.4);
-  display: grid;
-  place-items: center;
-  font-size: 18px;
-  color: #fff;
-  cursor: default;
-  transition: background 0.3s;
-}
-
-.logo-placeholder.large {
-  width: 64px;
-  height: 64px;
-  font-size: 28px;
-  background: rgba(30, 100, 65, 0.1);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* Once you have a real logo image, the img inside will auto-size */
-.logo-placeholder img {
-  width: 100%;
-  height: 100%;
+.site-logo {
+  height: 48px;
+  width: auto;
   object-fit: contain;
-  border-radius: 50%;
+  display: block;
 }
 
 /* ---------------------------------------------------------------
@@ -621,4 +593,52 @@ h1, h2, h3, h4 {
   color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(30,100,65,0.25);
+}
+
+/* ---------------------------------------------------------------
+   HEADER RIGHT — wraps Book Your Stay button + theme toggle
+--------------------------------------------------------------- */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: end;
+}
+
+/* Book Your Stay button in header */
+.book-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 20px;
+  background: #fff;
+  color: var(--accent);
+  border: 2px solid #fff;
+  border-radius: 999px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.book-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* Make sure themeToggle still sits correctly */
+.header-right #themeToggle {
+  justify-self: unset;
+}
+
+/* Mobile — hide button text on very small screens */
+@media (max-width: 420px) {
+  .book-btn {
+    padding: 7px 12px;
+    font-size: 11px;
+  }
 }

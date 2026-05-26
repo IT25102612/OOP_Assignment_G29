@@ -11,7 +11,11 @@
 
   <header class="admin-header">
     <span class="admin-brand">Tranquility.com</span>
-    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <div class="header-logo">
+      <img src="assets/images/logo.jpg"
+          alt="Tranquility Logo"
+          class="site-logo">
+  </div>
     <button id="themeToggle" aria-label="Toggle theme">🌙</button>
   </header>
 
@@ -113,38 +117,21 @@
     const params = new URLSearchParams(window.location.search);
     const resId  = params.get('res');
 
-    /*
-     * BACKEND NOTE:
-     * fetch(`RoomDetailServlet?reservationId=${resId}`)
-     * .then(r => r.json()).then(data => populate(data));
-     *
-     * Expected object:
-     * { reservationId, roomNumber, suiteType, building, floor, city, country,
-     *   checkin, checkout, status, guestName, guestEmail, guestPhone,
-     *   verifyMethod, pricePerNight, totalPrice, roomService, additionalCharges }
-     */
-
-    // PLACEHOLDER — remove when backend ready
-    const PLACEHOLDER_DETAIL = {
-      reservationId: resId || 'RES-001',
-      roomNumber:    'FRPA.A56.03',
-      suiteType:     'Executive Suite',
-      building:      'A',
-      floor:         56,
-      city:          'Paris',
-      country:       'France',
-      checkin:       '2026-04-10',
-      checkout:      '2026-04-15',
-      status:        'Confirmed',
-      guestName:     'Emily Clarke',
-      guestEmail:    'emily@email.com',
-      guestPhone:    '+1 555 0102',
-      verifyMethod:  'Email',
-      pricePerNight: 351,
-      totalPrice:    1755,
-      roomService:   0,
-      additionalCharges: 0,
-    };
+    fetch('/ViewReservationsServlet?reservationId='
+          + encodeURIComponent(resId))
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.reservation) {
+        populate(data.reservation);
+      } else {
+        document.getElementById('bannerRoomNum')
+                .textContent = 'Reservation not found';
+      }
+    })
+    .catch(() => {
+      document.getElementById('bannerRoomNum')
+              .textContent = 'Could not load reservation';
+    });
 
     function populate(d) {
       document.getElementById('bannerRoomNum').textContent = 'Room ' + d.roomNumber;
@@ -172,7 +159,6 @@
       document.getElementById('d-total').textContent = '$' + grand.toLocaleString();
     }
 
-    populate(PLACEHOLDER_DETAIL);
   </script>
 </body>
 </html>

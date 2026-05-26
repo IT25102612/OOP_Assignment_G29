@@ -10,9 +10,9 @@ const CITY_DATA = {
     name: 'Paris',
     country: 'France',
     slides: [
-      'assets/images/cities/paris-1.jpg',
-      'assets/images/cities/paris-2.jpg',
-      'assets/images/cities/paris-3.jpg',
+      'assets/images/locations/paris-1.jpg',
+      'assets/images/locations/paris-2.jpg',
+      'assets/images/locations/paris-3.jpg',
     ],
     intro: 'Paris, the City of Light, is one of the most visited and beloved cities on earth. With its grand boulevards, world-class museums, legendary cuisine and unmistakable romantic atmosphere, Paris offers an experience unlike anywhere else. From the glittering Eiffel Tower to the winding streets of Montmartre, every corner of this city tells a story.',
     things: [
@@ -31,9 +31,9 @@ const CITY_DATA = {
     name: 'Nice',
     country: 'France',
     slides: [
-      'assets/images/cities/nice-1.jpg',
-      'assets/images/cities/nice-2.jpg',
-      'assets/images/cities/nice-3.jpg',
+      'assets/images/locations/nice-1.jpg',
+      'assets/images/locations/nice-2.jpg',
+      'assets/images/locations/nice-3.jpg',
     ],
     intro: 'Nestled between the Alps and the Mediterranean, Nice is the crown jewel of the French Riviera. Famous for its pebble beaches, vivid azure waters, and vibrant Old Town, Nice blends Italian flair with French elegance. The warm climate and relaxed pace of life make it a year-round paradise.',
     things: [
@@ -52,9 +52,9 @@ const CITY_DATA = {
     name: 'Lyon',
     country: 'France',
     slides: [
-      'assets/images/cities/lyon-1.jpg',
-      'assets/images/cities/lyon-2.jpg',
-      'assets/images/cities/lyon-3.jpg',
+      'assets/images/locations/lyon-1.jpg',
+      'assets/images/locations/lyon-2.jpg',
+      'assets/images/locations/lyon-3.jpg',
     ],
     intro: 'Lyon is France\'s gastronomic capital and a UNESCO World Heritage city. Located at the confluence of the Rhône and Saône rivers, Lyon enchants visitors with its Renaissance architecture, traboules (hidden passageways), thriving arts scene and world-renowned cuisine. A quieter alternative to Paris with just as much depth.',
     things: [
@@ -74,9 +74,9 @@ const CITY_DATA = {
     name: 'Barcelona',
     country: 'Spain',
     slides: [
-      'assets/images/cities/barcelona-1.jpg',
-      'assets/images/cities/barcelona-2.jpg',
-      'assets/images/cities/barcelona-3.jpg',
+      'assets/images/locations/barcelona-1.jpg',
+      'assets/images/locations/barcelona-2.jpg',
+      'assets/images/locations/barcelona-3.jpg',
     ],
     intro: 'Barcelona is a city of extraordinary energy — where modernist architecture, golden beaches, world-class food and a passionate culture all coexist. The legacy of Antoni Gaudí is written into the skyline, and the streets hum with life from morning to well past midnight. There is no city quite like it.',
     things: [
@@ -95,9 +95,9 @@ const CITY_DATA = {
     name: 'Madrid',
     country: 'Spain',
     slides: [
-      'assets/images/cities/madrid-1.jpg',
-      'assets/images/cities/madrid-2.jpg',
-      'assets/images/cities/madrid-3.jpg',
+      'assets/images/locations/madrid-1.jpg',
+      'assets/images/locations/madrid-2.jpg',
+      'assets/images/locations/madrid-3.jpg',
     ],
     intro: 'Madrid is Spain\'s bold, sun-drenched capital — a city of grand art museums, lively plazas, late-night tapas bars and passionate football. At 667 metres above sea level, it is the highest capital in the EU, and its energy matches its altitude. Culture, history and nightlife blend here in a uniquely Spanish way.',
     things: [
@@ -116,9 +116,9 @@ const CITY_DATA = {
     name: 'Seville',
     country: 'Spain',
     slides: [
-      'assets/images/cities/seville-1.jpg',
-      'assets/images/cities/seville-2.jpg',
-      'assets/images/cities/seville-3.jpg',
+      'assets/images/locations/seville-1.jpg',
+      'assets/images/locations/seville-2.jpg',
+      'assets/images/locations/seville-3.jpg',
     ],
     intro: 'Seville is the soul of Andalusia — a passionate, sun-soaked city where flamenco was born, orange trees line every street, and Moorish architecture takes your breath away. With Europe\'s largest Gothic cathedral and a magnificent Alcázar palace, Seville is a city that leaves a deep and lasting impression.',
     things: [
@@ -137,9 +137,9 @@ const CITY_DATA = {
     name: 'Valencia',
     country: 'Spain',
     slides: [
-      'assets/images/cities/valencia-1.jpg',
-      'assets/images/cities/valencia-2.jpg',
-      'assets/images/cities/valencia-3.jpg',
+      'assets/images/locations/valencia-1.jpg',
+      'assets/images/locations/valencia-2.jpg',
+      'assets/images/locations/valencia-3.jpg',
     ],
     intro: 'Valencia is Spain\'s third-largest city and the birthplace of paella — a sunny, laid-back Mediterranean city with futuristic architecture, beautiful beaches and a thriving arts scene. The City of Arts and Sciences is one of Europe\'s most spectacular modern landmarks, rising alongside the old riverbed turned urban park.',
     things: [
@@ -159,9 +159,9 @@ const CITY_DATA = {
     name: 'New York',
     country: 'United States',
     slides: [
-      'assets/images/cities/new-york-1.jpg',
-      'assets/images/cities/new-york-2.jpg',
-      'assets/images/cities/new-york-3.jpg',
+      'assets/images/locations/newyork-1.jpg',
+      'assets/images/locations/newyork-2.jpg',
+      'assets/images/locations/newyork-3.jpg',
     ],
     intro: 'New York City is the city that never sleeps — an electric, towering metropolis of ambition, culture and extraordinary diversity. From the neon of Times Square to the calm of Central Park, from world-class museums to legendary pizza slices, New York rewards every kind of traveller with something unforgettable.',
     things: [
@@ -180,9 +180,9 @@ const CITY_DATA = {
     name: 'Las Vegas',
     country: 'United States',
     slides: [
-      'assets/images/cities/las-vegas-1.jpg',
-      'assets/images/cities/las-vegas-2.jpg',
-      'assets/images/cities/las-vegas-3.jpg',
+      'assets/images/locations/lasvegas-1.jpg',
+      'assets/images/locations/lasvegas-2.jpg',
+      'assets/images/locations/lasvegas-3.jpg',
     ],
     intro: 'Las Vegas is the world\'s entertainment capital — a glittering desert oasis of casinos, world-class shows, fine dining and non-stop excitement. The Strip is one of the most recognisable streets on earth, and beyond the neon lights, the natural wonders of the Mojave Desert and the Grand Canyon await just a short drive away.',
     things: [
@@ -201,9 +201,9 @@ const CITY_DATA = {
     name: 'Orlando',
     country: 'United States',
     slides: [
-      'assets/images/cities/orlando-1.jpg',
-      'assets/images/cities/orlando-2.jpg',
-      'assets/images/cities/orlando-3.jpg',
+      'assets/images/locations/orlando-1.jpg',
+      'assets/images/locations/orlando-2.jpg',
+      'assets/images/locations/orlando-3.jpg',
     ],
     intro: 'Orlando is the theme park capital of the world and one of the most visited cities on the planet. Home to Walt Disney World, Universal Studios and countless other attractions, Orlando delivers magic, adventure and wonder for visitors of every age. Beyond the parks, the city offers beautiful lakes, nature reserves and a growing arts scene.',
     things: [
@@ -222,9 +222,9 @@ const CITY_DATA = {
     name: 'Los Angeles',
     country: 'United States',
     slides: [
-      'assets/images/cities/los-angeles-1.jpg',
-      'assets/images/cities/los-angeles-2.jpg',
-      'assets/images/cities/los-angeles-3.jpg',
+      'assets/images/locations/losangeles-1.jpg',
+      'assets/images/locations/losangeles-2.jpg',
+      'assets/images/locations/losangeles-3.jpg',
     ],
     intro: 'Los Angeles is the city of dreams — a vast, sun-drenched sprawl of beaches, canyons, Hollywood glamour and cutting-edge culture. From the surf of Malibu to the galleries of DTLA, from hiking Griffith Park to dining in Beverly Hills, LA is less a single city and more a collection of worlds, each one worth exploring.',
     things: [
@@ -244,9 +244,9 @@ const CITY_DATA = {
     name: 'Istanbul',
     country: 'Turkey',
     slides: [
-      'assets/images/cities/istanbul-1.jpg',
-      'assets/images/cities/istanbul-2.jpg',
-      'assets/images/cities/istanbul-3.jpg',
+      'assets/images/locations/istanbul-1.jpg',
+      'assets/images/locations/istanbul-2.jpg',
+      'assets/images/locations/istanbul-3.jpg',
     ],
     intro: 'Istanbul is one of the great cities of the world — a place where East meets West, where minarets and church domes share the skyline, and where the call to prayer echoes across the Bosphorus. Straddling two continents, Istanbul is ancient yet dynamic, steeped in the legacy of the Byzantine and Ottoman empires while buzzing with modern energy.',
     things: [
@@ -265,9 +265,9 @@ const CITY_DATA = {
     name: 'Antalya',
     country: 'Turkey',
     slides: [
-      'assets/images/cities/antalya-1.jpg',
-      'assets/images/cities/antalya-2.jpg',
-      'assets/images/cities/antalya-3.jpg',
+      'assets/images/locations/antalya-1.jpg',
+      'assets/images/locations/antalya-2.jpg',
+      'assets/images/locations/antalya-3.jpg',
     ],
     intro: 'Antalya is Turkey\'s turquoise coast paradise — a stunning resort city on the Mediterranean where ancient ruins meet crystal-clear waters and the Taurus Mountains rise dramatically in the background. Known as the gateway to the Turkish Riviera, Antalya offers a perfect blend of history, natural beauty and beach bliss.',
     things: [
@@ -287,9 +287,9 @@ const CITY_DATA = {
     name: 'Rome',
     country: 'Italy',
     slides: [
-      'assets/images/cities/rome-1.jpg',
-      'assets/images/cities/rome-2.jpg',
-      'assets/images/cities/rome-3.jpg',
+      'assets/images/locationsrome-1.jpg',
+      'assets/images/locations/rome-2.jpg',
+      'assets/images/locations/rome-3.jpg',
     ],
     intro: 'Rome is the Eternal City — a living museum of 3,000 years of history where ancient ruins, Renaissance art and baroque fountains coexist with vibrant street life and world-class cuisine. Every piazza tells a story, every cobblestone street leads somewhere beautiful. Rome is not just visited — it is felt.',
     things: [
@@ -308,9 +308,9 @@ const CITY_DATA = {
     name: 'Venice',
     country: 'Italy',
     slides: [
-      'assets/images/cities/venice-1.jpg',
-      'assets/images/cities/venice-2.jpg',
-      'assets/images/cities/venice-3.jpg',
+      'assets/images/locations/venice-1.jpg',
+      'assets/images/locations/venice-2.jpg',
+      'assets/images/locations/venice-3.jpg',
     ],
     intro: 'Venice is unlike any other city on earth — a masterpiece of human ingenuity built on 118 islands in a lagoon, connected by over 400 bridges and navigated entirely by water. Gondolas glide along narrow canals, palaces rise from the water, and the absence of cars creates a silence that feels almost magical. Venice is a dream made real.',
     things: [
@@ -329,9 +329,9 @@ const CITY_DATA = {
     name: 'Milan',
     country: 'Italy',
     slides: [
-      'assets/images/cities/milan-1.jpg',
-      'assets/images/cities/milan-2.jpg',
-      'assets/images/cities/milan-3.jpg',
+      'assets/images/locations/milan-1.jpg',
+      'assets/images/locations/milan-2.jpg',
+      'assets/images/locations/milan-3.jpg',
     ],
     intro: 'Milan is Italy\'s most cosmopolitan city — the world capital of fashion and design, home to Leonardo da Vinci\'s Last Supper, one of the world\'s most spectacular Gothic cathedrals, and some of Europe\'s finest restaurants and boutiques. Beneath the polished exterior lies a city of immense culture, creativity and Italian passion.',
     things: [
@@ -351,9 +351,9 @@ const CITY_DATA = {
     name: 'London',
     country: 'England',
     slides: [
-      'assets/images/cities/london-1.jpg',
-      'assets/images/cities/london-2.jpg',
-      'assets/images/cities/london-3.jpg',
+      'assets/images/locations/london-1.jpg',
+      'assets/images/locations/london-2.jpg',
+      'assets/images/locations/london-3.jpg',
     ],
     intro: 'London is one of the world\'s greatest cities — a global hub of history, culture, theatre, fashion and food. From the Tower of London to Tate Modern, from Buckingham Palace to Borough Market, London offers an almost overwhelming wealth of experiences. With over 300 languages spoken and every cuisine imaginable, it is also one of the most diverse cities on earth.',
     things: [
@@ -372,9 +372,9 @@ const CITY_DATA = {
     name: 'Manchester',
     country: 'England',
     slides: [
-      'assets/images/cities/manchester-1.jpg',
-      'assets/images/cities/manchester-2.jpg',
-      'assets/images/cities/manchester-3.jpg',
+      'assets/images/locations/manchester-1.jpg',
+      'assets/images/locations/manchester-2.jpg',
+      'assets/images/locations/manchester-3.jpg',
     ],
     intro: 'Manchester is the beating heart of the north of England — a proud, creative and fiercely independent city that gave the world the Industrial Revolution, the suffragette movement and some of the greatest music of the 20th century. Today it is a vibrant city of world-class football, cutting-edge culture, excellent food and warm northern hospitality.',
     things: [
@@ -394,9 +394,9 @@ const CITY_DATA = {
     name: 'Beijing',
     country: 'China',
     slides: [
-      'assets/images/cities/beijing-1.jpg',
-      'assets/images/cities/beijing-2.jpg',
-      'assets/images/cities/beijing-3.jpg',
+      'assets/images/locations/beijing-1.jpg',
+      'assets/images/locations/beijing-2.jpg',
+      'assets/images/locations/beijing-3.jpg',
     ],
     intro: 'Beijing is China\'s ancient and modern capital — a city of extraordinary imperial grandeur where the Forbidden City and the Great Wall stand as monuments to 3,000 years of history. Yet Beijing is also a dynamic, forward-looking metropolis of art districts, world-class restaurants and sweeping modern architecture. Few cities on earth carry such weight of history and such energy of the present.',
     things: [
@@ -415,9 +415,9 @@ const CITY_DATA = {
     name: 'Shanghai',
     country: 'China',
     slides: [
-      'assets/images/cities/shanghai-1.jpg',
-      'assets/images/cities/shanghai-2.jpg',
-      'assets/images/cities/shanghai-3.jpg',
+      'assets/images/locations/shanghai-1.jpg',
+      'assets/images/locations/shanghai-2.jpg',
+      'assets/images/locations/shanghai-3.jpg',
     ],
     intro: 'Shanghai is China at its most dazzling — a city of soaring skyscrapers, Art Deco grandeur, world-class dining and relentless forward momentum. The Bund waterfront, with its colonial-era buildings facing the futuristic Pudong skyline across the Huangpu River, is one of the most iconic urban views in the world. Shanghai is a city that never stops reinventing itself.',
     things: [
@@ -437,9 +437,9 @@ const CITY_DATA = {
     name: 'Tokyo',
     country: 'Japan',
     slides: [
-      'assets/images/cities/tokyo-1.jpg',
-      'assets/images/cities/tokyo-2.jpg',
-      'assets/images/cities/tokyo-3.jpg',
+      'assets/images/locations/tokyo-1.jpg',
+      'assets/images/locations/tokyo-2.jpg',
+      'assets/images/locations/tokyo-3.jpg',
     ],
     intro: 'Tokyo is the world\'s most populous city and one of its most extraordinary — a place of seamless contrasts where ancient temples sit beside towering skyscrapers, where silence and chaos coexist, and where every neighbourhood offers a completely different world. From the neon of Shinjuku to the tranquility of Yanaka, Tokyo rewards endless exploration.',
     things: [
@@ -458,9 +458,9 @@ const CITY_DATA = {
     name: 'Osaka',
     country: 'Japan',
     slides: [
-      'assets/images/cities/osaka-1.jpg',
-      'assets/images/cities/osaka-2.jpg',
-      'assets/images/cities/osaka-3.jpg',
+      'assets/images/locations/osaka-1.jpg',
+      'assets/images/locations/osaka-2.jpg',
+      'assets/images/locations/osaka-3.jpg',
     ],
     intro: 'Osaka is Japan\'s most deliciously indulgent city — known as the "nation\'s kitchen," it is a place where locals live to eat and the street food culture is unrivalled. Warm, loud and brilliantly chaotic compared to Tokyo, Osaka has a uniquely irreverent spirit. From the neon-drenched streets of Dotonbori to the grand Osaka Castle, the city is endlessly entertaining.',
     things: [
@@ -479,9 +479,9 @@ const CITY_DATA = {
     name: 'Kyoto',
     country: 'Japan',
     slides: [
-      'assets/images/cities/kyoto-1.jpg',
-      'assets/images/cities/kyoto-2.jpg',
-      'assets/images/cities/kyoto-3.jpg',
+      'assets/images/locations/kyoto-1.jpg',
+      'assets/images/locations/kyoto-2.jpg',
+      'assets/images/locations/kyoto-3.jpg',
     ],
     intro: 'Kyoto is the soul of Japan — a city of extraordinary beauty, timeless tradition and spiritual depth. Once the imperial capital for over a thousand years, Kyoto is home to more than 1,600 Buddhist temples, 400 Shinto shrines, 17 UNESCO World Heritage Sites and the last surviving geisha districts. In spring, its cherry blossoms are among the most beautiful sights in the world.',
     things: [
@@ -501,9 +501,9 @@ const CITY_DATA = {
     name: 'Bangkok',
     country: 'Thailand',
     slides: [
-      'assets/images/cities/bangkok-1.jpg',
-      'assets/images/cities/bangkok-2.jpg',
-      'assets/images/cities/bangkok-3.jpg',
+      'assets/images/locations/bangkok-1.jpg',
+      'assets/images/locations/bangkok-2.jpg',
+      'assets/images/locations/bangkok-3.jpg',
     ],
     intro: 'Bangkok is a city of glorious contradictions — golden temples rising above hectic streets, serene monks walking past neon-lit night markets, and world-class fine dining just metres from a legendary street food stall. Thailand\'s capital is overwhelming at first and completely addictive soon after. There is no city in Southeast Asia quite like it.',
     things: [
@@ -522,9 +522,9 @@ const CITY_DATA = {
     name: 'Phuket',
     country: 'Thailand',
     slides: [
-      'assets/images/cities/phuket-1.jpg',
-      'assets/images/cities/phuket-2.jpg',
-      'assets/images/cities/phuket-3.jpg',
+      'assets/images/locations/phuket-1.jpg',
+      'assets/images/locations/phuket-2.jpg',
+      'assets/images/locations/phuket-3.jpg',
     ],
     intro: 'Phuket is Thailand\'s largest island and one of the most beautiful tropical destinations in the world. With powdery white beaches, emerald-green waters, dramatic limestone cliffs and a vibrant Old Town, Phuket offers the perfect combination of relaxation, adventure and culture. Whether you seek solitude or nightlife, the island has a side just for you.',
     things: [
@@ -543,9 +543,9 @@ const CITY_DATA = {
     name: 'Chiang Mai',
     country: 'Thailand',
     slides: [
-      'assets/images/cities/chiang-mai-1.jpg',
-      'assets/images/cities/chiang-mai-2.jpg',
-      'assets/images/cities/chiang-mai-3.jpg',
+      'assets/images/locations/chiangmai-1.jpg',
+      'assets/images/locations/chiangmai-2.jpg',
+      'assets/images/locations/chiangmai-3.jpg',
     ],
     intro: 'Chiang Mai is the cultural heart of northern Thailand — a city of over 300 ancient temples, vibrant night bazaars, misty mountain landscapes and warm, unhurried charm. Far removed from the frenetic energy of Bangkok, Chiang Mai moves at a gentler pace, offering deep immersion in Thai traditions, world-class trekking and some of the most extraordinary food in the country.',
     things: [
@@ -565,9 +565,9 @@ const CITY_DATA = {
     name: 'Cancun',
     country: 'Mexico',
     slides: [
-      'assets/images/cities/cancun-1.jpg',
-      'assets/images/cities/cancun-2.jpg',
-      'assets/images/cities/cancun-3.jpg',
+      'assets/images/locations/cancun-1.jpg',
+      'assets/images/locations/cancun-2.jpg',
+      'assets/images/locations/cancun-3.jpg',
     ],
     intro: 'Cancun is Mexico\'s most celebrated resort destination — a stunning stretch of Caribbean coastline blessed with turquoise waters, powdery white sand and year-round sunshine. Beyond the beautiful Hotel Zone lies a world of ancient Mayan ruins, spectacular cenotes, colourful local markets and the extraordinary biodiversity of the Mesoamerican Reef.',
     things: [
@@ -586,9 +586,9 @@ const CITY_DATA = {
     name: 'Mexico City',
     country: 'Mexico',
     slides: [
-      'assets/images/cities/mexico-city-1.jpg',
-      'assets/images/cities/mexico-city-2.jpg',
-      'assets/images/cities/mexico-city-3.jpg',
+      'assets/images/locations/mexicocity-1.jpg',
+      'assets/images/locations/mexicocity-2.jpg',
+      'assets/images/locations/mexicocity-3.jpg',
     ],
     intro: 'Mexico City is one of the great capitals of the Americas — an ancient, sprawling, culturally rich megacity built on the ruins of the Aztec capital Tenochtitlan. With world-class museums, outstanding cuisine, vibrant neighbourhoods, incredible street art and warm, welcoming people, Mexico City has become one of the most exciting destinations in the world.',
     things: [
@@ -608,9 +608,9 @@ const CITY_DATA = {
     name: 'Rio de Janeiro',
     country: 'Brazil',
     slides: [
-      'assets/images/cities/rio-de-janeiro-1.jpg',
-      'assets/images/cities/rio-de-janeiro-2.jpg',
-      'assets/images/cities/rio-de-janeiro-3.jpg',
+      'assets/images/locations/riodejaneiro-1.jpg',
+      'assets/images/locations/riodejaneiro-2.jpg',
+      'assets/images/locations/riodejaneiro-3.jpg',
     ],
     intro: 'Rio de Janeiro is one of the most dramatically beautiful cities in the world — a place where mountains plunge into the sea, golden beaches stretch for miles and the rhythm of samba fills the air. Home to Christ the Redeemer, Copacabana and the world\'s greatest carnival, Rio is a city of breathtaking natural splendour and irresistible human energy.',
     things: [
@@ -629,9 +629,9 @@ const CITY_DATA = {
     name: 'São Paulo',
     country: 'Brazil',
     slides: [
-      'assets/images/cities/sao-paulo-1.jpg',
-      'assets/images/cities/sao-paulo-2.jpg',
-      'assets/images/cities/sao-paulo-3.jpg',
+      'assets/images/locations/saopaulo-1.jpg',
+      'assets/images/locations/saopaulo-2.jpg',
+      'assets/images/locations/saopaulo-3.jpg',
     ],
     intro: 'São Paulo is the financial and cultural powerhouse of South America — an immense, endlessly energetic city of extraordinary diversity, world-class gastronomy and a thriving arts scene. The largest city in the southern hemisphere, São Paulo rewards those willing to dig beneath its dense urban exterior with remarkable museums, vibrant neighbourhoods and the best food in Brazil.',
     things: [
@@ -651,9 +651,9 @@ const CITY_DATA = {
     name: 'Lima',
     country: 'Peru',
     slides: [
-      'assets/images/cities/lima-1.jpg',
-      'assets/images/cities/lima-2.jpg',
-      'assets/images/cities/lima-3.jpg',
+      'assets/images/locations/lima-1.jpg',
+      'assets/images/locations/lima-2.jpg',
+      'assets/images/locations/lima-3.jpg',
     ],
     intro: 'Lima is one of South America\'s most underrated capitals — a coastal city of ancient ruins, colonial grandeur, world-famous cuisine and rugged Pacific clifftops. Repeatedly voted home to the world\'s best restaurant, Lima has firmly established itself as a global culinary destination. Its historic centre, pre-Incan ruins and vibrant Miraflores district make it a city of compelling contrasts.',
     things: [
@@ -672,9 +672,9 @@ const CITY_DATA = {
     name: 'Cusco',
     country: 'Peru',
     slides: [
-      'assets/images/cities/cusco-1.jpg',
-      'assets/images/cities/cusco-2.jpg',
-      'assets/images/cities/cusco-3.jpg',
+      'assets/images/locations/cusco-1.jpg',
+      'assets/images/locations/cusco-2.jpg',
+      'assets/images/locations/cusco-3.jpg',
     ],
     intro: 'Cusco is the ancient heart of the Inca Empire — a high-altitude city of extraordinary historical depth, where Inca stonework merges seamlessly with Spanish colonial architecture, and where every street leads to something awe-inspiring. Sitting at 3,400 metres in the Andes, Cusco is the gateway to Machu Picchu and one of the most spiritually powerful cities in the Americas.',
     things: [
@@ -694,9 +694,9 @@ const CITY_DATA = {
     name: 'Colombo',
     country: 'Sri Lanka',
     slides: [
-      'assets/images/cities/colombo-1.jpg',
-      'assets/images/cities/colombo-2.jpg',
-      'assets/images/cities/colombo-3.jpg',
+      'assets/images/locations/colombo-1.jpg',
+      'assets/images/locations/colombo-2.jpg',
+      'assets/images/locations/colombo-3.jpg',
     ],
     intro: 'Colombo is Sri Lanka\'s vibrant, cosmopolitan capital — a city where colonial Dutch and British architecture stands alongside gleaming modern towers, ancient Buddhist temples and some of the most delicious cuisine in Asia. Compact, walkable and full of energy, Colombo is a city of markets, museums, seafront parks and warm, welcoming people.',
     things: [
@@ -715,9 +715,9 @@ const CITY_DATA = {
     name: 'Kandy',
     country: 'Sri Lanka',
     slides: [
-      'assets/images/cities/kandy-1.jpg',
-      'assets/images/cities/kandy-2.jpg',
-      'assets/images/cities/kandy-3.jpg',
+      'assets/images/locations/kandy-1.jpg',
+      'assets/images/locations/kandy-2.jpg',
+      'assets/images/locations/kandy-3.jpg',
     ],
     intro: 'Kandy is the cultural capital of Sri Lanka — a sacred, beautiful hill city nestled among misty mountains and tea estates, and home to the Temple of the Tooth Relic, one of the most revered Buddhist shrines in the world. The city\'s spectacular Esala Perahera festival, scenic lake and surrounding gardens make it one of the most enchanting destinations in all of Asia.',
     things: [
@@ -736,9 +736,9 @@ const CITY_DATA = {
     name: 'Galle',
     country: 'Sri Lanka',
     slides: [
-      'assets/images/cities/galle-1.jpg',
-      'assets/images/cities/galle-2.jpg',
-      'assets/images/cities/galle-3.jpg',
+      'assets/images/locations/galle-1.jpg',
+      'assets/images/locations/galle-2.jpg',
+      'assets/images/locations/galle-3.jpg',
     ],
     intro: 'Galle is one of the most charming and atmospheric cities in Sri Lanka — a perfectly preserved Dutch colonial fort town on the southern coast, where whitewashed ramparts meet the Indian Ocean, boutique hotels fill centuries-old buildings and the streets are lined with art galleries, cafés and craft shops. Galle Fort is a UNESCO World Heritage Site of rare beauty.',
     things: [
@@ -758,9 +758,9 @@ const CITY_DATA = {
     name: 'North Malé Atoll',
     country: 'Maldives',
     slides: [
-      'assets/images/cities/north-male-atoll-1.jpg',
-      'assets/images/cities/north-male-atoll-2.jpg',
-      'assets/images/cities/north-male-atoll-3.jpg',
+      'assets/images/locations/northmaleatoll-1.jpg',
+      'assets/images/locations/northmaleatoll-2.jpg',
+      'assets/images/locations/northmaleatoll-3.jpg',
     ],
     intro: 'North Malé Atoll is the Maldives at its most iconic — a constellation of coral islands surrounded by waters of impossible blue, where overwater bungalows sit above glass-clear lagoons and house reefs teem with marine life. Home to the country\'s capital Malé and the international airport, this atoll is the gateway to paradise and a breathtaking destination in its own right.',
     things: [
@@ -779,9 +779,9 @@ const CITY_DATA = {
     name: 'Baa Atoll',
     country: 'Maldives',
     slides: [
-      'assets/images/cities/baa-atoll-1.jpg',
-      'assets/images/cities/baa-atoll-2.jpg',
-      'assets/images/cities/baa-atoll-3.jpg',
+      'assets/images/locations/baaatoll-1.jpg',
+      'assets/images/locations/baaatoll-2.jpg',
+      'assets/images/locations/baaatoll-3.jpg',
     ],
     intro: 'Baa Atoll is a UNESCO Biosphere Reserve and one of the most ecologically extraordinary places on earth. Famous for Hanifaru Bay — where hundreds of manta rays and whale sharks gather to feed — Baa Atoll combines world-class marine biodiversity with some of the Maldives\' most luxurious and secluded resorts. This is the Maldives for those who want both natural wonder and absolute serenity.',
     things: [

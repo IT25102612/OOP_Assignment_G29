@@ -5,32 +5,13 @@ import com.tranquility.dao.ServiceDAO;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
-/**
- * DeleteServiceServlet.java
- * URL:    POST /DeleteServiceServlet
- * Access: Admin only
- *
- * Called from: admin service management page
- *
- * Parameters:
- *   serviceId — the ID of the service to delete e.g. "SVC003"
- *
- * Response:
- *   { "success": true,  "message": "Service deleted." }
- *   { "success": false, "message": "Service not found." }
- *
- * NOTE: This permanently deletes the service from the database.
- * If you only want to hide it from guests, use UpdateServiceServlet
- * with available=false instead.
- */
 @WebServlet("/DeleteServiceServlet")
 public class DeleteServiceServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req,
-                          HttpServletResponse res)
-            throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         try {
             String serviceId = req.getParameter("serviceId");
@@ -40,8 +21,8 @@ public class DeleteServiceServlet extends HttpServlet {
                 return;
             }
 
-            ServiceDAO dao     = new ServiceDAO();
-            boolean    deleted = dao.deleteService(serviceId.trim());
+            ServiceDAO dao = new ServiceDAO();
+            boolean deleted = dao.deleteService(serviceId.trim());
 
             if (deleted) {
                 JsonHelper.ok(res, "Service deleted.");
@@ -49,7 +30,12 @@ public class DeleteServiceServlet extends HttpServlet {
                 JsonHelper.err(res, "Service not found.");
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JsonHelper.err(res, "Database error: " + e.getMessage());
+
         } catch (Exception e) {
+            e.printStackTrace();
             JsonHelper.err(res, "Server error: " + e.getMessage());
         }
     }

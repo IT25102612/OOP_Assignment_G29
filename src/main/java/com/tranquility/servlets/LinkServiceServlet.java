@@ -5,32 +5,13 @@ import com.tranquility.dao.ServiceDAO;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
-/**
- * LinkServiceServlet.java
- * URL:    POST /LinkServiceServlet
- * Access: Called after a reservation is confirmed
- *
- * Called from:
- *   meal-options.html → proceedToPayment() stores the meal choice,
- *   then payment-gateway.html → processPayment() calls this servlet
- *   after the reservation is created to link the chosen services.
- *
- * Parameters:
- *   reservationId  — e.g. "RES001"
- *   serviceId      — e.g. "SVC001"
- *
- * Response:
- *   { "success": true,  "message": "Service linked." }
- *   { "success": false, "message": "Already linked." }
- */
 @WebServlet("/LinkServiceServlet")
 public class LinkServiceServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req,
-                          HttpServletResponse res)
-            throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         try {
             String reservationId = req.getParameter("reservationId");
@@ -41,23 +22,25 @@ public class LinkServiceServlet extends HttpServlet {
                 serviceId == null ||
                 serviceId.trim().isEmpty()) {
 
-                JsonHelper.err(res,
-                    "reservationId and serviceId are required.");
+                JsonHelper.err(res, "reservationId and serviceId are required.");
                 return;
             }
 
             ServiceDAO dao = new ServiceDAO();
-            boolean linked = dao.linkServiceToReservation(
-                reservationId.trim(), serviceId.trim());
+            boolean linked = dao.linkServiceToReservation(reservationId.trim(), serviceId.trim());
 
             if (linked) {
                 JsonHelper.ok(res, "Service linked to reservation.");
             } else {
-                JsonHelper.err(res,
-                    "Service already linked to this reservation.");
+                JsonHelper.err(res, "Service already linked to this reservation.");
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JsonHelper.err(res, "Database error: " + e.getMessage());
+
         } catch (Exception e) {
+            e.printStackTrace();
             JsonHelper.err(res, "Server error: " + e.getMessage());
         }
     }

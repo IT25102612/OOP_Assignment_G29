@@ -13,7 +13,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 80px 16px 40px;
+      padding: 0px 16px 40px;
       background: var(--bg);
     }
 
@@ -81,43 +81,81 @@
       align-items: center;
       gap: 12px;
     }
+
+    .verify-field { display: flex; flex-direction: column; gap: 6px; }
+    .verify-field label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .verify-field input {
+      padding: 13px 18px;
+      border: 1.5px solid rgba(30,100,65,0.2);
+      border-radius: 12px; background: var(--bg); color: var(--text);
+      font-family: 'Raleway', sans-serif; font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box; width: 100%;
+    }
+    .verify-field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(30,100,65,0.1); }
+    .verify-field input::placeholder { color: var(--muted); }
+
   </style>
 </head>
 <body>
 
   <!-- Simple header — same look, no nav -->
-  <header class="site-header" style="display:flex; justify-content:space-between; align-items:center; padding:0 20px;">
-    <div class="brand"><a href="index.html" style="color:#fff;text-decoration:none;font-weight:bold;font-size:20px;">Tranquility.com</a></div>
-    <div style="display:flex;justify-content:center;">
-      <div class="logo-placeholder" style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);display:grid;place-items:center;font-size:18px;color:#fff;">✦</div>
-    </div>
-    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
-  </header>
-
+  <header class="site-header">
+  <div class="brand"><a href="index.html">Tranquility.com</a></div>
+  <div class="header-logo">
+    <img src="assets/images/logo.jpg"
+         alt="Tranquility Logo"
+         class="site-logo">
+  </div>
+  <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+</header>
+  <div style="margin-top:56px; height:100px;
+              background:linear-gradient(135deg,#0d1510,#1e6441);
+              display:flex; align-items:center; justify-content:center;
+              position:relative; overflow:hidden;">
+  <div style="position:absolute;inset:0;
+              background:repeating-linear-gradient(45deg,transparent,
+              transparent 24px,rgba(255,255,255,0.02) 24px,
+              rgba(255,255,255,0.02) 48px);"></div>
+  <h1 style="color:#fff; font-family:'Cormorant Garamond',serif;
+             font-size:clamp(20px,3vw,32px); letter-spacing:0.14em;
+             text-transform:uppercase; margin:0; font-weight:300;
+             position:relative; z-index:1;">
+    Admin Login
+  </h1>
+</div>
   <div class="login-page">
     <div class="login-card">
 
-      <div class="login-logo">✦</div>
+      <div class="header-logo">
+        <img src="assets/images/logo.jpg"
+          alt="Tranquility Logo"
+          class="site-logo">
+      </div>
 
       <div class="login-fields">
-        <div class="login-input-wrap">
-          <input type="text" id="adminId" placeholder="ID" autocomplete="off" />
+
+        <div class="verify-field">
+          <label>Staff ID</label>
+          <div class="login-input-wrap">
+            <input type="text" id="adminId" placeholder="ID" autocomplete="off" />
+          </div>
         </div>
-        <div class="login-input-wrap">
-          <input type="password" id="adminPassword" placeholder="Password" autocomplete="off" />
+        <div class="verify-field">
+          <label>Staff Password</label>
+          <div class="login-input-wrap">
+            <input type="password" id="adminPassword" placeholder="Password" autocomplete="off" />
+          </div>
         </div>
       </div>
 
       <p class="login-error" id="loginError"></p>
 
       <div class="login-actions">
-        <a href="index.html" class="btn btn-outline">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
-        </a>
-        <button class="btn btn-primary" onclick="attemptLogin()">
-          Next
+        <button class="btn btn-primary" onclick="attemptLogin()" style="margin-left:auto; display:block;">
+          Log in
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          
         </button>
       </div>
 
@@ -146,35 +184,27 @@
 
       err.textContent = '';
 
-      /*
-       * BACKEND NOTE:
-       * Replace this fetch with your actual authentication servlet.
-       *
-       * fetch('AdminLoginServlet', {
-       *   method: 'POST',
-       *   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-       *   body: `adminId=${encodeURIComponent(id)}&password=${encodeURIComponent(pw)}`
-       * })
-       * .then(r => r.json())
-       * .then(data => {
-       *   if (data.success) {
-       *     sessionStorage.setItem('adminLoggedIn', 'true');
-       *     sessionStorage.setItem('adminId', id);
-       *     window.location.href = 'admin-main.html';
-       *   } else {
-       *     err.textContent = data.message || 'Invalid credentials.';
-       *   }
-       * });
-       *
-       * TEMPORARY — remove when backend is ready:
-       */
-      if (id === 'admin' && pw === 'tranquility123') {
-        sessionStorage.setItem('adminLoggedIn', 'true');
-        sessionStorage.setItem('adminId', id);
-        window.location.href = 'admin-main.html';
-      } else {
-        err.textContent = 'Invalid ID or password.';
-      }
+      fetch('/AdminLoginServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'adminId=' + encodeURIComponent(id)
+            + '&password=' + encodeURIComponent(pw)
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          sessionStorage.setItem('adminLoggedIn', 'true');
+          sessionStorage.setItem('adminId', id);
+          window.location.href = 'admin-main.html';
+        } else {
+          err.textContent = data.message || 'Invalid credentials.';
+        }
+      })
+      .catch(() => {
+        err.textContent = 'Could not connect to server.';
+      });
     }
   </script>
 </body>

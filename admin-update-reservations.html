@@ -61,14 +61,18 @@
 
   <header class="admin-header">
     <span class="admin-brand">Tranquility.com</span>
-    <div class="header-logo"><div class="logo-placeholder">✦</div></div>
+    <div class="header-logo">
+      <img src="assets/images/logo.jpg"
+          alt="Tranquility Logo"
+          class="site-logo">
+  </div>
     <button id="themeToggle" aria-label="Toggle theme">🌙</button>
   </header>
 
   <div class="admin-page">
 
     <div class="admin-banner">
-      <div class="banner-badge">✏️</div>
+      
       <h1>Update Reservation</h1>
     </div>
 
@@ -240,21 +244,25 @@
       if (method==='email' && !email) { showToast('Please enter the guest email.','error'); return; }
       if (method==='otp'   && !phone) { showToast('Please enter the guest phone.','error'); return; }
 
-      /*
-       * BACKEND NOTE:
-       * fetch(`GetReservationServlet?method=${method}&contact=${method==='email'?email:phone}`)
-       * .then(r=>r.json()).then(data => { currentRes = data; loadStep2(); });
-       */
+      const contact = method === 'email'
+        ? document.getElementById('guestEmail').value.trim()
+        : document.getElementById('guestPhone').value.trim();
 
-      // PLACEHOLDER
-      currentRes = {
-        reservationId: 'RES-001', roomNumber: 'FRPA.A56.03',
-        suite: 'executive', suiteLabel: 'Executive Suite',
-        checkin: '2026-04-10', checkout: '2026-04-15',
-        food: 'breakfast', foodLabel: 'Breakfast only',
-        pricePerNight: 351, totalPrice: 1755,
-      };
-      loadStep2();
+      fetch('/ViewReservationsServlet?contact='
+            + encodeURIComponent(contact)
+            + '&method=' + method)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.reservation) {
+          currentRes = data.reservation;
+          loadStep2();
+        } else {
+          showToast('No reservation found for that contact.','error');
+        }
+      })
+      .catch(() => {
+        showToast('Could not connect to server.','error');
+      });
     }
 
     function loadStep2() {
@@ -313,8 +321,56 @@
 
     function backToStep1() { setStep(1); }
     function backToStep2() { setStep(2); }
-    function goToPayment() { window.location.href = 'payment.html?type=update&res=' + currentRes.reservationId; }
-    function goToRefund()  { window.location.href = 'refund.html?res=' + currentRes.reservationId; }
+    function goToPayment() {
+      // Save new details then go to payment
+      fetch('/UpdateReservationServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'reservationId=' + currentRes.reservationId
+            + '&checkinDate='  + document.getElementById('new-checkin').value
+            + '&checkoutDate=' + document.getElementById('new-checkout').value
+            + '&suiteType='    + document.getElementById('new-suite').value
+            + '&mealPlan='     + document.getElementById('new-food').value
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          showToast('Reservation updated.','success');
+          setTimeout(() => {
+            window.location.href = 'payment-gateway.html?type=update';
+          }, 1500);
+        } else {
+          showToast(data.message || 'Update failed.','error');
+        }
+      });
+    }
+
+    function goToRefund() {
+      fetch('/UpdateReservationServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'reservationId=' + currentRes.reservationId
+            + '&checkinDate='  + document.getElementById('new-checkin').value
+            + '&checkoutDate=' + document.getElementById('new-checkout').value
+            + '&suiteType='    + document.getElementById('new-suite').value
+            + '&mealPlan='     + document.getElementById('new-food').value
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          sessionStorage.setItem('updateRefundAmount',
+            document.getElementById('p-refund')
+                    .textContent.replace('$','').replace(',',''));
+          window.location.href = 'refund.html?type=update';
+        } else {
+          showToast(data.message || 'Update failed.','error');
+        }
+      });
+    }
 
     function showToast(msg, type='success') {
       const t = document.getElementById('toast');
