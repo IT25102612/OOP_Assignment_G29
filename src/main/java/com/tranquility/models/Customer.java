@@ -2,12 +2,14 @@ package com.tranquility.models;
 
 public class Customer {
 
+    //attributes
     private String customerId;
     private String name;
     private String nic;
     private String phone;
     private String email;
 
+    //constructor
     public Customer(String customerId, String name, String nic, String phone, String email) {
         this.customerId = customerId;
         this.name = name;
