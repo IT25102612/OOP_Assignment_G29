@@ -1,5 +1,7 @@
 package com.tranquility.servlets;
 
+import com.tranquility.utils.JsonHelper;
+
 import com.tranquility.dao.RoomDAO;
 import com.tranquility.utils.JsonHelper;
 
@@ -18,8 +20,11 @@ public class UpdateRoomServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        try { roomDAO.loadAllRoomsIntoBST(); }
-        catch (SQLException e) { throw new ServletException(e.getMessage(), e); }
+        try {
+            roomDAO.loadAllRoomsIntoBST();
+        } catch (SQLException e) {
+            throw new ServletException("Failed to load rooms into BST: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -32,21 +37,26 @@ public class UpdateRoomServlet extends HttpServlet {
             return;
         }
 
+        String suiteName   = request.getParameter("suiteName");
+        String priceStr    = request.getParameter("pricePerNight");
+        String bedsStr     = request.getParameter("beds");
+        String bathsStr    = request.getParameter("baths");
+        String bedType     = request.getParameter("bedType");
+        String status      = request.getParameter("status");
+        String balcony     = request.getParameter("balcony");
+        String privatePool = request.getParameter("privatePool");
+        String jointRooms  = request.getParameter("jointRooms");
+
         try {
             boolean updated = roomDAO.updateRoom(
-                    roomId,
-                    request.getParameter("suiteName"),
-                    request.getParameter("pricePerNight"),
-                    request.getParameter("beds"),
-                    request.getParameter("baths"),
-                    request.getParameter("bedType"),
-                    request.getParameter("status"),
-                    request.getParameter("balcony"),
-                    request.getParameter("privatePool"),
-                    request.getParameter("jointRooms")
+                    roomId, suiteName, priceStr, bedsStr, bathsStr,
+                    bedType, status, balcony, privatePool, jointRooms
             );
-            if (updated) JsonHelper.ok(response, "Room " + roomId + " updated successfully.");
-            else         JsonHelper.err(response, "Room " + roomId + " not found.");
+            if (updated) {
+                JsonHelper.ok(response, "Room " + roomId + " updated successfully.");
+            } else {
+                JsonHelper.err(response, "Room " + roomId + " not found.");
+            }
         } catch (SQLException e) {
             JsonHelper.err(response, "Database error: " + e.getMessage());
         }

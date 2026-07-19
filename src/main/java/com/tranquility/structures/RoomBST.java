@@ -1,8 +1,8 @@
 // Component 01 - Room Inventory Management - IT25102616
 package com.tranquility.structures;
 
-import com.tranquility.models.Room;
 import java.util.ArrayList;
+import com.tranquility.models.Room;
 import java.util.List;
 
 public class RoomBST {

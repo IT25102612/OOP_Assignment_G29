@@ -1,11 +1,12 @@
 package com.tranquility.servlets;
 
 import com.tranquility.dao.AdminDAO;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+
+
 
 @WebServlet("/AdminLoginServlet")
 public class AdminLoginServlet extends HttpServlet {

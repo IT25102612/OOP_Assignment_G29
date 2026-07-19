@@ -1,9 +1,10 @@
-// Component 01 - Room Inventory Management - IT25102616
 package com.tranquility.servlets;
 
-import com.tranquility.dao.RoomDAO;
-import com.tranquility.models.Room;
 import com.tranquility.utils.JsonHelper;
+
+import com.tranquility.models.Room;
+
+import com.tranquility.dao.RoomDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,11 +21,8 @@ public class AddRoomServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        try {
-            roomDAO.loadAllRoomsIntoBST();
-        } catch (SQLException e) {
-            throw new ServletException("Failed to load rooms into BST: " + e.getMessage(), e);
-        }
+        try { roomDAO.loadAllRoomsIntoBST(); }
+        catch (SQLException e) { throw new ServletException(e.getMessage(), e); }
     }
 
     @Override
@@ -63,7 +61,7 @@ public class AddRoomServlet extends HttpServlet {
             floor         = Integer.parseInt(floorStr);
             roomNum       = Integer.parseInt(roomNumStr);
         } catch (NumberFormatException e) {
-            JsonHelper.err(response, "Invalid number value in one of the fields.");
+            JsonHelper.err(response, "Invalid number in one of the fields.");
             return;
         }
 
@@ -74,17 +72,15 @@ public class AddRoomServlet extends HttpServlet {
         if (isEmpty(jointRooms))  jointRooms  = "no";
 
         Room room = new Room(roomId, suiteName, pricePerNight, beds, baths, bedType, status,
-                building, floor, roomNum, country, city,
-                balcony, privatePool, jointRooms);
+                building, floor, roomNum, country, city, balcony, privatePool, jointRooms);
         try {
             roomDAO.addRoom(room);
             JsonHelper.ok(response, "Room " + roomId + " added successfully.");
         } catch (SQLException e) {
-            if (e.getMessage() != null && e.getMessage().contains("Duplicate entry")) {
+            if (e.getMessage() != null && e.getMessage().contains("Duplicate entry"))
                 JsonHelper.err(response, "Room ID " + roomId + " already exists.");
-            } else {
+            else
                 JsonHelper.err(response, "Database error: " + e.getMessage());
-            }
         }
     }
 
