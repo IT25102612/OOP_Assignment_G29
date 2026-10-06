@@ -2,6 +2,7 @@ package com.tranquility.servlets;
 
 import com.tranquility.dao.ServiceDAO;
 import com.tranquility.models.Service;
+import com.tranquility.utils.JsonHelper;
 
 
 import javax.servlet.annotation.WebServlet;

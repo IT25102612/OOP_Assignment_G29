@@ -1,5 +1,4 @@
-
-// Component 01 - Room Inventory Management - IT25102616package com.tranquility.models;
+package com.tranquility.models;
 
 public class Room {
 
@@ -43,49 +42,34 @@ public class Room {
         this.jointRooms    = jointRooms;
     }
 
-    // Getters and Setters
     public String getRoomId()               { return roomId; }
     public void   setRoomId(String v)       { this.roomId = v; }
-
     public String getSuiteName()            { return suiteName; }
     public void   setSuiteName(String v)    { this.suiteName = v; }
-
     public double getPricePerNight()        { return pricePerNight; }
     public void   setPricePerNight(double v){ this.pricePerNight = v; }
-
     public int    getBeds()                 { return beds; }
     public void   setBeds(int v)            { this.beds = v; }
-
     public int    getBaths()                { return baths; }
     public void   setBaths(int v)           { this.baths = v; }
-
     public String getBedType()              { return bedType; }
     public void   setBedType(String v)      { this.bedType = v; }
-
     public String getStatus()               { return status; }
     public void   setStatus(String v)       { this.status = v; }
-
     public String getBuilding()             { return building; }
     public void   setBuilding(String v)     { this.building = v; }
-
     public int    getFloor()                { return floor; }
     public void   setFloor(int v)           { this.floor = v; }
-
     public int    getRoomNumber()           { return roomNumber; }
     public void   setRoomNumber(int v)      { this.roomNumber = v; }
-
     public String getCountry()              { return country; }
     public void   setCountry(String v)      { this.country = v; }
-
     public String getCity()                 { return city; }
     public void   setCity(String v)         { this.city = v; }
-
     public String getBalcony()              { return balcony; }
     public void   setBalcony(String v)      { this.balcony = v; }
-
     public String getPrivatePool()          { return privatePool; }
     public void   setPrivatePool(String v)  { this.privatePool = v; }
-
     public String getJointRooms()           { return jointRooms; }
     public void   setJointRooms(String v)   { this.jointRooms = v; }
 
